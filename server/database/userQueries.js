@@ -6,7 +6,7 @@ async function getUserByEmail(email) {
     return rows[0];
 }
 
-async function getUserByUsername(username) {
+async function getUserByGamertag(gamertag) {
     const [rows] = await db.query(`SELECT * FROM users WHERE gamertag = ?`, [gamertag]);
     return rows[0];
 }
