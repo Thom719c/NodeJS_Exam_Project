@@ -78,7 +78,7 @@ router.get("/ownedGames", async (req, res) => {
 router.post("/addOwnedGame", async (req, res) => {
     const game = req.body;
 
-    if (!game || !req.session.user.gamertag) {
+    if (!game.steamAppId || !game.name || !req.session.user.gamertag) {
         return res.status(400).send({ message: "Missing the keys in the body" });
     }
 
