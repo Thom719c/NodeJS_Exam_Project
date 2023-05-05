@@ -77,6 +77,28 @@ async function deletePasswordResetToken(token) {
 }
 
 
+/* Owned Games */
+async function getAllOwnedGameByGamertag(gamertag) {
+    const query = 'SELECT og.steam_app_id, og.game_name FROM users u JOIN owned_games og ON u.id = og.user_id WHERE u.gamertag = ?';
+    const values = [gamertag];
+    const [rows] = await db.query(query, values);
+    return rows;
+}
+
+/**
+ * Finds user from gamertag by the method getUserByGamertag(gamertag) so we can get the user id
+ * @param {*} gamertag 
+ * @param {*} game 
+ */
+async function addOwnedGameToUser(gamertag, game) {
+    const user = await getUserByGamertag(gamertag);
+
+    const query = 'INSERT INTO owned_games (user_id, steam_app_id, game_name) VALUES (?, ?, ?)';
+    const values = [user.id, game.steamAppId, game.name];
+    await db.query(query, values);
+}
+
+
 export {
     getUserByEmail,
     getUserByGamertag,
@@ -86,5 +108,7 @@ export {
     updateUserPassword,
     getEmailByPasswordResetToken,
     createPasswordResetTokenInDB,
-    deletePasswordResetToken
+    deletePasswordResetToken,
+    getAllOwnedGameByGamertag,
+    addOwnedGameToUser
 };
