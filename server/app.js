@@ -45,8 +45,8 @@ app.use("/auth", authRouter);
 import mailer from "./routers/mailerRouter.js"
 app.use(mailer);
 
-import communityHub from "./routers/communityHubRouter.js"
-app.use("/communityHub", communityHub);
+//import communityHub from "./routers/communityHubRouter.js"
+//app.use("/communityHub", communityHub);
 
 /**
  * ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓

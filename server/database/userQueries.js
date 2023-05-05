@@ -20,8 +20,10 @@ async function checkIfUserExist(email, gamertag) {
 
 async function create(user) {
     // Insert the new user data into the database
-    const query = 'INSERT INTO users (name, gamertag, phone_number, email, password, owned_games, wish_list_games, events, friends, posts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    const values = [user.name, user.gamertag, user.phoneNumber, user.email, user.encryptedPassword, user.ownedGames, user.wishListGames, user.events, user.friends, user.posts];
+    // const query = 'INSERT INTO users (name, gamertag, phone_number, email, password, owned_games, wish_list_games, events, friends, posts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    // const values = [user.name, user.gamertag, user.phoneNumber, user.email, user.encryptedPassword, user.ownedGames, user.wishListGames, user.events, user.friends, user.posts];
+    const query = 'INSERT INTO users (name, gamertag, phone_number, email, password) VALUES (?, ?, ?, ?, ?)';
+    const values = [user.name, user.gamertag, user.phoneNumber, user.email, user.encryptedPassword];
     await db.query(query, values);
 }
 
@@ -77,7 +79,7 @@ async function deletePasswordResetToken(token) {
 
 export {
     getUserByEmail,
-    getUserByUsername,
+    getUserByGamertag,
     checkIfUserExist,
     create,
     update,
