@@ -42,11 +42,12 @@ app.use("/auth", rateLimit({
 import authRouter from "./routers/authRouter.js"
 app.use("/auth", authRouter);
 
-import authRouter from "./routers/authRouter.js"
-app.use("/auth", authRouter);
+import mailer from "./routers/mailerRouter.js"
+app.use(mailer);
 
 import communityHub from "./routers/communityHubRouter.js"
-app.use(communityHub);
+app.use("/communityHub", communityHub);
+
 /**
  * ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
  * ┃           PORT            ┃
