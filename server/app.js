@@ -39,7 +39,14 @@ app.use("/auth", rateLimit({
 
 // Routes
 
+import authRouter from "./routers/authRouter.js"
+app.use("/auth", authRouter);
 
+import authRouter from "./routers/authRouter.js"
+app.use("/auth", authRouter);
+
+import communityHub from "./routers/communityHubRouter.js"
+app.use(communityHub);
 /**
  * ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
  * ┃           PORT            ┃
