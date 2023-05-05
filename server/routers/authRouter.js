@@ -72,14 +72,14 @@ router.get("/ownedGames", async (req, res) => {
 
     const ownedGames = await getAllOwnedGameByGamertag(gamertag);
 
-    res.status(201).send({ message: 'Game added successfully to owned games', data: ownedGames });
+    res.status(200).send({ message: 'All owned games', data: ownedGames });
 });
 
 router.post("/addOwnedGame", async (req, res) => {
     const game = req.body;
 
     if (!game.steamAppId || !game.name || !req.session.user.gamertag) {
-        return res.status(400).send({ message: "Missing the keys in the body" });
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in." });
     }
 
     await addOwnedGameToUser(req.session.user.gamertag, game);
