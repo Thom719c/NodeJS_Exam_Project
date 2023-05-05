@@ -1,4 +1,4 @@
-import db from "./createConnection.js";
+import db from "./connection.js";
 import { v4 as uuidv4 } from 'uuid';
 
 async function getUserByEmail(email) {
