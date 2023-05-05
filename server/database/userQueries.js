@@ -7,13 +7,13 @@ async function getUserByEmail(email) {
 }
 
 async function getUserByUsername(username) {
-    const [rows] = await db.query(`SELECT * FROM users WHERE username = ?`, [username]);
+    const [rows] = await db.query(`SELECT * FROM users WHERE gamertag = ?`, [gamertag]);
     return rows[0];
 }
 
-async function checkIfUserExist(email, username) {
-    const [rows] = await db.query(`SELECT * FROM users WHERE email = ? OR username = ?`,
-        [email, username]
+async function checkIfUserExist(email, gamertag) {
+    const [rows] = await db.query(`SELECT * FROM users WHERE email = ? OR gamertag = ?`,
+        [email, gamertag]
     );
     return rows[0];
 }

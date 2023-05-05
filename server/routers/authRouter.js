@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
         return res.status(404).send({ message: "Email or password did not match" })
     }
     req.session.user = {
-        username: user.username,
+        gamertag: user.gamertag,
         name: user.name,
         email: user.email
     }
