@@ -3,23 +3,22 @@ import nodemailer from "nodemailer";
 import { Router } from "express";
 const router = Router();
 
-let testAccount = await nodemailer.createTestAccount();
-
 const transporter = nodemailer.createTransport({
+    service: 'gmail',
     host: "smtp.ethereal.email",
     port: 587,
     secure: false,
     auth: {
-        user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass, // generated ethereal password
-    },
+        user: process.env.NODERMAILER_EMAIL,
+        pass: process.env.NODERMAILER_PSWD
+    }
 });
-router.post("/contact", async (req, res) => {
 
+router.post("/contact", async (req, res) => {
     if (req.body && req.body.message !== "") {
         const info = await transporter.sendMail({
-            from: `"Contact" ${req.body.email}`,
-            to: "example@example.com",
+            from: `"Feedback" ${req.body.email}`,
+            to: "nodejskeatp@gmail.com",
             subject: req.body.subject,
             text: req.body.message
         });
@@ -31,6 +30,18 @@ router.post("/contact", async (req, res) => {
         res.status(404)
             .send({ message: "No data: " + req.body });
     }
+});
+
+// TODO Forgot password send mail with token and url to reset password
+router.post("/forgot-password", async (req, res) => {
+    const email = req.body.email;
+
+    // Check if a user with the given email exists
+
+    // Save the token and user's email in the database
+
+    // Send the password reset email
+    
 });
 
 export default router;
