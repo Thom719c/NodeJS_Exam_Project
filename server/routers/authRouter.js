@@ -10,6 +10,7 @@ router.get("/logout", async (req, res) => {
     })
 });
 
+//Route for testing purposes...
 router.get("/allUsers", async (req, res) => {
     const users = await db.all("SELECT * FROM users");
     res.send({ data: users })

@@ -20,16 +20,16 @@ async function checkIfUserExist(email, username) {
 
 async function create(user) {
     // Insert the new user data into the database
-    const query = 'INSERT INTO users (fullname, email, username, password) VALUES (?, ?, ?, ?)';
-    const values = [user.fullname, user.email, user.username, user.encryptedPassword];
+    const query = 'INSERT INTO users (name, gamertag, phone_number, email, password, owned_games, wish_list_games, events, friends, posts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [user.name, user.gamertag, user.phoneNumber, user.email, user.encryptedPassword, user.ownedGames, user.wishListGames, user.events, user.friends, user.posts];
     await db.query(query, values);
 }
 
 async function update(user) {
     await db.query(`UPDATE users 
-        SET fullname = ?, email = ?, password = ?
+        SET name = ?, phone_number = ?, email = ?, password = ?
         WHERE id = ?`,
-        [user.fullname, user.email, user.password, user.id]
+        [user.name, user.phoneNumber, user.email, user.password, user.id]
     );
 }
 
