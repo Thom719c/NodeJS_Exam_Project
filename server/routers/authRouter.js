@@ -82,6 +82,13 @@ router.post("/addOwnedGame", async (req, res) => {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in." });
     }
 
+    // Get all games that user owned and Check if the game is already in the owned games list
+    const ownedGames = await getAllOwnedGameByGamertag(req.session.user.gamertag);
+    const gameExists = ownedGames.find((ownedGame) => ownedGame.steam_app_id === game.steamAppId);
+    if (gameExists) {
+        return res.status(409).send({ message: "Game already on the list" });
+    }
+
     await addOwnedGameToUser(req.session.user.gamertag, game);
 
     res.status(201).send({ message: 'Game added successfully to owned games' });
