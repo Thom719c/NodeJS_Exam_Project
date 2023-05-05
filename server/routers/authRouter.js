@@ -1,7 +1,7 @@
 import { Router } from "express"
 const router = Router();
 import bcrypt from "bcrypt"
-import { getUserByEmail, getUserByUsername, checkIfUserExist, create, update, updateUserPassword, getEmailByPasswordResetToken, deletePasswordResetToken } from "../database/userQueries.js";
+import { getUserByEmail, getUserByGamertag, checkIfUserExist, create, update, updateUserPassword, getEmailByPasswordResetToken, deletePasswordResetToken } from "../database/userQueries.js";
 
 
 router.get("/logout", async (req, res) => {
