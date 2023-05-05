@@ -64,7 +64,7 @@ router.post("/signup", async (req, res) => {
 });
 
 /* Owned games */
-router.post("/ownedGame", async (req, res) => {
+router.get("/ownedGames", async (req, res) => {
     const gamertag = req.session.user.gamertag;
     if (!gamertag || !req.session.user) {
         return res.status(400).send({ message: "Need to be logged in!" });
