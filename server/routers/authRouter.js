@@ -1,13 +1,13 @@
 import { Router } from "express"
 const router = Router();
-import db from "../databases/connection.js";
 import bcrypt from "bcrypt"
+import { getUserByEmail, getUserByUsername, checkIfUserExist, create, update, updateUserPassword, getEmailByPasswordResetToken, deletePasswordResetToken } from "../database/userQueries.js";
+
 
 router.get("/logout", async (req, res) => {
     req.session.destroy(() => {
         res.status(200).send({});
     })
-    
 });
 
 router.get("/allUsers", async (req, res) => {
@@ -16,36 +16,47 @@ router.get("/allUsers", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
+
     if (!email || !password) {
         return res.status(400).send({ message: "Missing the keys (email and password) in the body" })
     }
-    const user = await db.get("SELECT * FROM users WHERE email = ?;", [email]);
+
+    const user = await getUserByEmail(email);
     if (!user) {
         return res.status(404).send({ message: "User was not found" })
-    } 
+    }
 
-    const isSame = await bcrypt.compare(password, user.password);
-    if (!isSame) {
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
         return res.status(404).send({ message: "Email or password did not match" })
     }
     req.session.user = {
-        user_name: user.user_name,
+        username: user.username,
         name: user.name,
         email: user.email
     }
-    res.send({data: user, session: req.session, message: "Login successful"});
+    res.send({ session: req.session, message: "Login successful" });
 });
 
-router.post("/signUp", async (req, res) => {
-    const userData = req.body;
-    if (!userData.email || !userData.password) {
+router.post("/signup", async (req, res) => {
+    const user = req.body;
+
+    if (!user.email || !user.password) {
         return res.status(400).send({ message: "Missing the keys (email and password) in the body" })
     }
-    const encryptedPassword = await bcrypt.hash(userData.password, 12);
 
-    const user = await db.run("INSERT INTO users (user_name, name, email, password) VALUES (?, ?, ?, ?)", [userData.user_name, userData.name, userData.email, encryptedPassword]) 
-    res.status(201).send({data: user, message: "User Created"});
+    // Check if a user with the given username or email exists
+    const userExist = await checkIfUserExist(user.email, user.username);
+    if (userExist) {
+        return res.status(409).json({ message: "User with this username or e-mail already exists" });
+    }
+
+    user.encryptedPassword = await bcrypt.hash(user.password, 12);
+
+    await create(user);
+
+    res.status(201).send({ message: 'User successfully created, you may now login' });
 });
 
 export default router
