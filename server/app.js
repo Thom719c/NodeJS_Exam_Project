@@ -48,6 +48,20 @@ app.use(mailer);
 //import communityHub from "./routers/communityHubRouter.js"
 //app.use("/communityHub", communityHub);
 
+app.get('/api/gameMarket', async (req, res) => {
+    const url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
+    const response = await fetch(url);
+    const data = await response.json();
+    res.send(data);
+});
+
+app.get('/api/gameInfo/:appid', async (req, res) => {
+    const url = 'https://store.steampowered.com/api/appdetails?appids=' + req.params.appid + '&l=english';
+    const response = await fetch(url);
+    const data = await response.json();
+    res.send(data);
+});
+
 /**
  * ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
  * ┃           PORT            ┃
