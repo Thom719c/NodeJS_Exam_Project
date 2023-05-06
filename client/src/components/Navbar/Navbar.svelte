@@ -15,7 +15,7 @@
             <a class="navbar-brand" href="/">
                 <img
                     id="logo"
-                    src="src/assets/logo.png"
+                    src="src/assets/GamingOasisLogoIconTransparrent.png"
                     width="50"
                     alt="Logo"
                 />
