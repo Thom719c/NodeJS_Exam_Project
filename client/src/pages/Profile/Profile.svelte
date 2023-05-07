@@ -223,7 +223,7 @@
                             class="btn btn-outline-primary"
                             on:click={ownedGames}
                         >
-                            <i class="bi bi-pencil-square" />
+                            <i class="bi bi-controller" />
                             Owned Games
                         </button>
                     </div>
