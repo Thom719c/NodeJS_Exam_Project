@@ -35,6 +35,7 @@ app.use("/auth", rateLimit({
     max: 5,
     standardHeaders: true,
     legacyHeaders: false,
+    skipSuccessfulRequests: true,
 }));
 
 // Routes

@@ -1,9 +1,14 @@
 <script>
     import { Router, Link, link, Route } from "svelte-navigator";
-    //import { session } from "../../stores/stores.js";
+    import { session } from "../../stores/stores";
     import Home from "../../pages/Home/Home.svelte";
     import GameMarket from "../../pages/Game/GameMarket.svelte";
     import GameInfo from "../../pages/Game/GameInfo.svelte";
+    import Login from "../../pages/Authentication/Login.svelte";
+    import Profile from "../../pages/Profile/Profile.svelte";
+    import PrivateRoute from "../PrivateRoutes/PrivateRoute.svelte";
+    import Logout from "../Authentication/Logout.svelte";
+    import UserGameList from "../../pages/Game/UserGameList.svelte";
 </script>
 
 <Router>
@@ -37,33 +42,54 @@
                         <a class="nav-link" href="/" use:link>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/gameMarket" use:link
-                            >Game Market</a
-                        >
+                        <a class="nav-link" href="/games" use:link> Games </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gameMarket" use:link>
+                            Game Market
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/video" use:link> Video </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/events" use:link> Events </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/communnityHub" use:link>
+                            Communnity Hub
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/feedback" use:link>
+                            Feedback/Contact us
+                        </a>
                     </li>
                 </ul>
-                <!-- <ul class="navbar-nav">
+                <ul class="navbar-nav">
                     {#if $session}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profile" use:link>Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <Logout isLink={true} />
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile" use:link
+                                >Profile</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <Logout isLink={true} />
+                        </li>
                     {:else}
-                    <li class="nav-item">
-                        <a class="nav-link" href="login" use:link>Login</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login" use:link>Login</a>
+                        </li>
                     {/if}
-                </ul> -->
+                </ul>
             </div>
         </div>
     </nav>
 
     <main>
-        <!-- <Route path="login" primary={false}>
+        <Route path="/login">
             <Login />
-        </Route> -->
+        </Route>
 
         <Route path="/">
             <Home />
@@ -79,12 +105,13 @@
             <Signup />
         </Route> -->
 
-        <!-- <PrivateRoute path="profile" let:location>
-            <header>
-                <h1>Profile</h1>
-            </header>
+        <PrivateRoute path="/profile">
             <Profile />
-        </PrivateRoute> -->
+        </PrivateRoute>
+
+        <PrivateRoute path="/userGameList">
+            <UserGameList />
+        </PrivateRoute>
     </main>
 </Router>
 

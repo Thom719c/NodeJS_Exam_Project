@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { link } from "svelte-navigator";
-    
+
     let games = [];
 
     onMount(async () => {

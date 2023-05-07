@@ -1,6 +1,12 @@
 <script>
     import { onMount } from "svelte";
     import { useLocation } from "svelte-navigator";
+    import {
+        serverURL,
+        serverEndpoints,
+        session,
+    } from "../../stores/stores.js";
+    import toast, { Toaster } from "svelte-french-toast";
 
     const location = useLocation();
 
@@ -20,10 +26,42 @@
         console.log("addToWishlist");
     };
 
-    const addToOwnedGame = () => {
+    const addToOwnedGame = async () => {
         console.log("addToOwnedGame");
+        const url = $serverURL + $serverEndpoints.authentication.addOwnedGame;
+        const ownedGame = {steamAppId: appid, name: gameInfo.name}
+        try {
+            const response = await fetch(url, {
+                credentials: 'include',
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(ownedGame),
+            });
+            const data = await response.json();
+            console.log(data)
+
+            if (response.ok) {
+                toast.success(data.message, {
+                    duration: 5000,
+                    position: "bottom-right",
+                    style: "border-radius: 200px; background: #333; color: #fff;",
+                });
+            } else {
+                toast.error(data.message, {
+                    duration: 5000,
+                    position: "bottom-right",
+                    style: "border-radius: 200px; background: #333; color: #fff;",
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 </script>
+
+<Toaster />
 
 <h1>{gameInfo ? gameInfo.name : "Loading..."}</h1>
 
@@ -42,13 +80,16 @@
                 src={gameInfo.header_image}
                 alt="header_image"
             />
+
             <button class="wishlistButton" on:click={addToWishlist}>
                 Add to Wishlist
             </button>
             <button class="ownedGameButton" on:click={addToOwnedGame}>
-                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill" />
             </button>
+
             <div class="title">{gameInfo.name}</div>
+
             <div class="releaseDate">
                 {#if gameInfo.release_date && gameInfo.release_date.coming_soon}
                     Coming soon
@@ -56,9 +97,11 @@
                     Release date {gameInfo.release_date.date}
                 {/if}
             </div>
+
             <div class="description">
                 {gameInfo.detailed_description}
             </div>
+
             <div class="priceContainer">
                 <div class="priceDetails">
                     {#if gameInfo.price_overview && gameInfo.price_overview.discount_percent}
@@ -78,6 +121,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="categories">
                 {#if gameInfo.categories}
                     {#each gameInfo.categories as category}
@@ -87,6 +131,7 @@
                     <div class="category">Uncategorized</div>
                 {/if}
             </div>
+            
             <div class="genres">
                 {#if gameInfo.genres}
                     {#each gameInfo.genres as genre}
