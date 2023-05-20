@@ -4,7 +4,9 @@ import bcrypt from "bcrypt"
 import { getUserByEmail, getUserByGamertag, checkIfUserExist, 
     create, update, updateUserPassword, 
     getEmailByPasswordResetToken, deletePasswordResetToken,
-    getAllOwnedGameByGamertag, addOwnedGameToUser } from "../database/userQueries.js";
+    getAllOwnedGameByGamertag, addOwnedGameToUser,
+    getAllWishlistGamesByGamertag, addGameToWishlist,
+    removeGameFromWishlist } from "../database/userQueries.js";
 
 
 router.get("/logout", async (req, res) => {
@@ -92,6 +94,51 @@ router.post("/addOwnedGame", async (req, res) => {
     await addOwnedGameToUser(req.session.user.gamertag, game);
 
     res.status(201).send({ message: 'Game added successfully to owned games' });
+});
+
+/* Owned games */
+router.get("/wishlist", async (req, res) => {
+    const gamertag = req.session.user?.gamertag;
+    if (!gamertag || !req.session.user) {
+        return res.status(400).send({ message: "Need to be logged in!" });
+    }
+
+    const wishlist = await getAllWishlistGamesByGamertag(gamertag);
+    console.log(wishlist)
+
+    res.status(200).send({ message: 'All games on wishlist', data: wishlist });
+});
+
+router.post("/wishlist", async (req, res) => {
+    const game = req.body;
+
+    if (!game.steamAppId || !game.name || !req.session.user?.gamertag) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    // Get all games that user owned and Check if the game is already in the owned games list
+    const wishlist = await getAllWishlistGamesByGamertag(req.session.user.gamertag);
+    const gameExists = wishlist.find((wishlistedGame) => wishlistedGame.steam_app_id === game.steamAppId);
+    if (gameExists) {
+        return res.status(409).send({ message: "Game already on the wishlist" });
+    }
+
+    await addGameToWishlist(req.session.user.gamertag, game);
+
+    res.status(201).send({ message: 'Game added successfully to the wishlist' });
+});
+
+router.delete("/wishlist", async (req, res) => {
+    const game = req.body;
+    console.log("delete")
+
+    if (!game.steamAppId || !game.name || !req.session.user?.gamertag) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    await removeGameFromWishlist(req.session.user.gamertag, game);
+
+    res.status(201).send({ message: 'Game removed successfully from the wishlist' });
 });
 
 export default router

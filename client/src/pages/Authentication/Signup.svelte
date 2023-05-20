@@ -1,53 +1,56 @@
 <script>
     import { useNavigate } from "svelte-navigator";
-    import {
-        serverURL,
-        serverEndpoints,
-        session,
-    } from "../../stores/stores.js";
+    import { serverURL, serverEndpoints } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
-    import Cookies from "js-cookie";
     import logo from "../../assets/GamingOasisLogoTransparrent.png";
 
     const navigate = useNavigate();
 
+    let name;
     let email;
+    let gamertag;
+    let phoneNumber;
     let password;
+    let confirmPassword;
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        const url = $serverURL + $serverEndpoints.authentication.login;
-        const userCredentials = { email: email, password: password };
+    async function handleSubmit() {
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match.", {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+            return;
+        }
+
+        const userCredentials = {
+            name: name,
+            email: email,
+            gamertag: gamertag,
+            phoneNumber: phoneNumber,
+            password: password,
+            confirmPassword: confirmPassword,
+        };
 
         try {
+            const url = $serverURL + $serverEndpoints.authentication.signup;
             const response = await fetch(url, {
-                credentials: "include",
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(userCredentials),
             });
+
             const data = await response.json();
 
             if (response.ok) {
-                session.set(data.session);
-                const options = {
-                    expires: 7, // expires in 7 days
-                    // httpOnly: true,  // accessible only via HTTP(S) protocol, not via client-side scripts
-                    // secure: true,    // transmitted only via HTTPS
-                };
-                Cookies.set(
-                    "userSession",
-                    JSON.stringify(data.session),
-                    options
-                );
                 toast.success(data.message, {
                     duration: 5000,
                     position: "bottom-right",
                     style: "border-radius: 200px; background: #333; color: #fff;",
                 });
-                navigate("/profile", { replace: true });
+                navigate("/login", { replace: true });
             } else {
                 toast.error(data.message, {
                     duration: 5000,
@@ -63,7 +66,7 @@
 
 <Toaster />
 
-<div class="container-fluid login-container">
+<div class="container-fluid signup-container">
     <div class="row">
         <div class="col-sm-6 col-xs mx-auto content-box">
             <div class="col-lg-12 mt-5">
@@ -74,10 +77,42 @@
                     alt="Logo"
                 />
             </div>
-            <div class="col-lg-12 login-title text-gradient">Log in</div>
+            <div class="col-lg-12 signup-title text-gradient">
+                Sign Up Free!
+            </div>
 
-            <div class="col-lg-12 login-form">
-                <form on:submit={handleSubmit} method="post">
+            <div class="col-lg-12 signup-form">
+                <form
+                    on:submit|preventDefault={handleSubmit}
+                    method="post"
+                    autocomplete="off"
+                >
+                    <div class="form-group">
+                        <label class="form-control-label" for="name">
+                            NAME
+                        </label>
+                        <input
+                            bind:value={name}
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            placeholder="Elena Michaels"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="gamertag">
+                            GAMERTAG
+                        </label>
+                        <input
+                            bind:value={gamertag}
+                            type="text"
+                            name="gamertag"
+                            class="form-control"
+                            placeholder="LunaRain"
+                            required
+                        />
+                    </div>
                     <div class="form-group">
                         <label class="form-control-label" for="email">
                             E-MAIL
@@ -87,6 +122,20 @@
                             type="email"
                             name="email"
                             class="form-control"
+                            placeholder="Example@domain.com"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="phoneNumber">
+                            PHONE NUMBER
+                        </label>
+                        <input
+                            bind:value={phoneNumber}
+                            type="tel"
+                            name="phoneNumber"
+                            class="form-control"
+                            placeholder="88888888"
                             required
                         />
                     </div>
@@ -102,22 +151,34 @@
                             required
                         />
                     </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="confirmPassword">
+                            CONFIRM PASSWORD
+                        </label>
+                        <input
+                            bind:value={confirmPassword}
+                            type="password"
+                            name="confirmPassword"
+                            class="form-control"
+                            required
+                        />
+                    </div>
 
                     <div class="form-group text-format row mb-2">
                         <p class="col">
-                            Don’t have an account?
-                            <a class="aStyling" href="/signup">
-                                Sign Up Free!
+                            Have an account? <a
+                                class="aStyling"
+                                data-panel=".panel-signup"
+                                href="/login"
+                            >
+                                Login!
                             </a>
                         </p>
-                        <a class="col aStyling text-end" href="/forgot">
-                            Forgot password?
-                        </a>
                     </div>
 
-                    <div class="col-lg-12 login-button text-gradient">
-                        <button type="submit" class="btn btn-outline-primary">
-                            LOGIN
+                    <div class="col-lg-12 signup-button text-gradient">
+                        <button class="btn btn-outline-primary">
+                            Create
                         </button>
                     </div>
                 </form>
@@ -127,11 +188,11 @@
 </div>
 
 <style>
-    .login-container {
+    .signup-container {
         max-width: 50em;
     }
 
-    .login-title {
+    .signup-title {
         margin-top: 35px;
         text-align: center;
         font-size: 30px;
@@ -139,13 +200,12 @@
         font-weight: bold;
     }
 
-    .login-form {
+    .signup-form {
         margin-top: 25px;
         text-align: left;
     }
 
-    input[type="email"],
-    input[type="password"] {
+    input {
         background-color: #1a2226;
         border: none;
         border-bottom: 2px solid #0db8de;
@@ -153,6 +213,10 @@
         font-weight: bold;
         padding-left: 0px;
         color: #ecf0f5;
+    }
+
+    input::placeholder {
+        color: #777777;
     }
 
     .form-group {
@@ -201,7 +265,7 @@
         right: 0px;
     }
 
-    .login-button {
+    .signup-button {
         padding-right: 0px;
         text-align: center;
         margin-bottom: 25px;

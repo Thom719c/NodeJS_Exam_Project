@@ -1,28 +1,63 @@
 <script>
     import { onMount } from "svelte";
-    import { link } from "svelte-navigator";
+    import { link, useNavigate, useLocation } from "svelte-navigator";
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     let games = [];
+    let currentPage = 1;
+    let pageSize = "10";
 
     onMount(async () => {
+        const params = new URLSearchParams($location.search);
+        currentPage = parseInt(params.get("page")) || 1;
+        updateURL();
+        await fetchGames();
+    });
+
+    const fetchGames = async () => {
         // `https://api.steampowered.com/ISteamApps/GetAppList/v2/`                     // All games
         // `https://store.steampowered.com/api/appdetails?appids=${appid}&l=english`    // Gets games information by appid and in english
         // `https://steamcdn-a.akamaihd.net/steam/apps/${game.appid}/header.jpg`        // Gets image by appid
-        const response = await fetch("http://localhost:3000/api/gameMarket");
+        const url = `http://localhost:3000/api/gameMarket?page=${currentPage}&pageSize=${pageSize}`;
+        const response = await fetch(url);
         const data = await response.json();
-        games = data.applist.apps
-            .filter((game) => {
-                return (
-                    game.name !== "" &&
-                    game.name !== "test2" &&
-                    game.name !== "test3"
-                );
-            })
-            .slice(1, 50); // limit to first 50 games for demo purposes
-    });
+        games = data;
+    };
+
+    const nextPage = () => {
+        currentPage += 1;
+        updateURL();
+        fetchGames();
+    };
+
+    const previousPage = () => {
+        if (currentPage > 1) {
+            currentPage -= 1;
+            updateURL();
+            fetchGames();
+        }
+    };
+
+    const updateURL = () => {
+        navigate(`?page=${currentPage}`);
+    };
+
+    const updatePageSize = () => {
+        fetchGames();
+    }
 </script>
 
 <h1>List of Games</h1>
+<div>
+    <label for="pageSize">Games per Page:</label>
+    <select id="pageSize" bind:value={pageSize} on:change={updatePageSize}>
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+    </select>
+</div>
 <ul>
     {#each games as game}
         <a href={`/gameInfo?appid=${game.appid}`} use:link>
@@ -37,6 +72,17 @@
         </a>
     {/each}
 </ul>
+
+<div class="pagination my-4">
+    <button
+        class="pagination-button"
+        on:click={previousPage}
+        disabled={currentPage === 1}
+    >
+        Previous
+    </button>
+    <button class="pagination-button" on:click={nextPage}> Next </button>
+</div>
 
 <style>
     h1 {
@@ -81,5 +127,30 @@
     .game-p {
         font-size: 18px;
         text-align: center;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination-button {
+        background-color: rgba(48, 76, 96, 0.9);
+        border-color: #e5e047;
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 4px;
+        margin: 0 5px;
+        width: 100px;
+        transition: background-color 0.3s;
+    }
+
+    .pagination-button:hover {
+        background-color: rgba(71, 135, 155, 0.255);
+    }
+
+    .pagination-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
     }
 </style>

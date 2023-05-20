@@ -19,14 +19,14 @@
             const response = await fetch(url);
             const data = await response.json();
             if (response.ok) {
-                $session = data.user;
+                session.set(data.user);
                 Cookies.remove("userSession");
             }
         } catch (error) {
             console.log(error);
         }
 
-        navigate("/profile", { replace: true });
+        navigate("/", { replace: true });
     }
 </script>
 

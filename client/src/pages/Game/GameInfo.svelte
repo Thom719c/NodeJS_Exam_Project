@@ -7,6 +7,7 @@
         session,
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
+    import { SyncLoader } from "svelte-loading-spinners";
 
     const location = useLocation();
 
@@ -17,22 +18,41 @@
         const params = new URLSearchParams($location.search);
         appid = params.get("appid");
 
-        const response = await fetch("http://localhost:3000/api/gameInfo/" + appid);
+        const response = await fetch(
+            "http://localhost:3000/api/gameInfo/" + appid
+        );
         const data = await response.json();
         gameInfo = data[appid].data;
     });
 
-    const addToWishlist = () => {
+    /* const addToWishlist = async () => {
         console.log("addToWishlist");
+        const url = $serverURL + $serverEndpoints.authentication.wishlist;
+        const gameToWishlist = { steamAppId: appid, name: gameInfo.name };
+        try {
+            const response = await fetch(url, {
+                credentials: "include",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(gameToWishlist),
+            });
+            const data = await response.json();
+
+            toastMessage(response.ok, data.message);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const addToOwnedGame = async () => {
         console.log("addToOwnedGame");
         const url = $serverURL + $serverEndpoints.authentication.addOwnedGame;
-        const ownedGame = {steamAppId: appid, name: gameInfo.name}
+        const ownedGame = { steamAppId: appid, name: gameInfo.name };
         try {
             const response = await fetch(url, {
-                credentials: 'include',
+                credentials: "include",
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,7 +60,51 @@
                 body: JSON.stringify(ownedGame),
             });
             const data = await response.json();
-            console.log(data)
+
+            toastMessage(response.ok, data.message);
+        } catch (error) {
+            console.log(error);
+        }
+    }; 
+    
+    const toastMessage = (isResponseOk, message) => {
+        if (isResponseOk) {
+            toast.success(message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        } else {
+            toast.error(message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        }
+    };*/
+
+    const addToWishlist = () => {
+        const url = $serverURL + $serverEndpoints.authentication.wishlist;
+        fetchingAddToList(url);
+    };
+
+    const addToOwnedGame = () => {
+        const url = $serverURL + $serverEndpoints.authentication.addOwnedGame;
+        fetchingAddToList(url);
+    };
+
+    const fetchingAddToList = async (url) => {
+        const game = { steamAppId: appid, name: gameInfo.name };
+        try {
+            const response = await fetch(url, {
+                credentials: "include",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(game),
+            });
+            const data = await response.json();
 
             if (response.ok) {
                 toast.success(data.message, {
@@ -62,8 +126,6 @@
 </script>
 
 <Toaster />
-
-<h1>{gameInfo ? gameInfo.name : "Loading..."}</h1>
 
 {#if gameInfo}
     <div class="container">
@@ -131,7 +193,7 @@
                     <div class="category">Uncategorized</div>
                 {/if}
             </div>
-            
+
             <div class="genres">
                 {#if gameInfo.genres}
                     {#each gameInfo.genres as genre}
@@ -142,6 +204,10 @@
                 {/if}
             </div>
         </div>
+    </div>
+{:else}
+    <div class="d-flex justify-content-center">
+        <SyncLoader size="60" color="#FF3E00" unit="px" duration="1s" />
     </div>
 {/if}
 

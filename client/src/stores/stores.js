@@ -14,6 +14,7 @@ export const serverEndpoints = readable({
         validatepassword: "/auth/validatepassword",
         ownedGame: "/auth/ownedGames",
         addOwnedGame: "/auth/addOwnedGame",
+        wishlist: "/auth/wishlist",
     },
     mailer: {
         contact: "/mail/contact",

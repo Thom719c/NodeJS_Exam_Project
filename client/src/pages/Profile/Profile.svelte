@@ -112,10 +112,14 @@
     function ownedGames() {
         navigate("/userGameList", { replace: true });
     }
+
+    function wishlist() {
+        navigate("/wishlist", { replace: true });
+    }
 </script>
 
 <Toaster />
-<!-- svelte-ignore a11y-label-has-associated-control -->
+
 <div class="container-fluid">
     <!-- {#if isPopupOpen}
       <PopUp on:submit={handlePasswordSubmission} on:cancel={handleCancelPopup} />
@@ -138,7 +142,7 @@
                 <h3>Information</h3>
 
                 <div class="form-group">
-                    <label class="form-control-label">Full Name</label>
+                    <label class="form-control-label" for="name"> Name </label>
                     {#if isEditMode}
                         <input
                             type="text"
@@ -157,7 +161,9 @@
 
                 {#if !isEditMode}
                     <div class="form-group">
-                        <label class="form-control-label">Gamertag</label>
+                        <label class="form-control-label" for="gamertag">
+                            Gamertag
+                        </label>
                         <input
                             type="text"
                             value={$session.user.gamertag}
@@ -167,7 +173,9 @@
                     </div>
                 {/if}
                 <div class="form-group">
-                    <label class="form-control-label">E-mail</label>
+                    <label class="form-control-label" for="email">
+                        E-mail
+                    </label>
                     {#if isEditMode}
                         <input
                             type="email"
@@ -225,6 +233,13 @@
                         >
                             <i class="bi bi-controller" />
                             Owned Games
+                        </button>
+                        <button
+                            class="btn btn-outline-primary"
+                            on:click={wishlist}
+                        >
+                            <i class="bi bi-controller" />
+                            Wishlist
                         </button>
                     </div>
                 {/if}

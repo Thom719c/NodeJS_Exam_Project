@@ -11,10 +11,12 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
     "svelte": "^3.55.1",
+    "svelte-loading-spinners": "^0.3.4",
     "vite": "^4.2.0"
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
+    "socket.io-client": "^4.6.1",
     "svelte-french-toast": "^1.0.4-beta.0",
     "svelte-navigator": "^3.2.2"
   }

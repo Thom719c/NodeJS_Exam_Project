@@ -98,6 +98,35 @@ async function addOwnedGameToUser(gamertag, game) {
     await db.query(query, values);
 }
 
+/* wishlist */
+async function getAllWishlistGamesByGamertag(gamertag) {
+    const query = 'SELECT w.steam_app_id, w.game_name FROM users u JOIN wishlist w ON u.id = w.user_id WHERE u.gamertag = ?';
+    const values = [gamertag];
+    const [rows] = await db.query(query, values);
+    return rows;
+}
+
+/**
+ * Finds user from gamertag by the method getUserByGamertag(gamertag) so we can get the user id
+ * @param {*} gamertag 
+ * @param {*} game 
+ */
+async function addGameToWishlist(gamertag, game) {
+    const user = await getUserByGamertag(gamertag);
+
+    const query = 'INSERT INTO wishlist (user_id, steam_app_id, game_name) VALUES (?, ?, ?)';
+    const values = [user.id, game.steamAppId, game.name];
+    await db.query(query, values);
+}
+
+async function removeGameFromWishlist(gamertag, game) {
+    const user = await getUserByGamertag(gamertag);
+
+    const query = 'DELETE FROM wishlist WHERE user_id = ? AND steam_app_id = ?';
+    const values = [user.id, game.steamAppId];
+    await db.query(query, values);
+}
+
 
 export {
     getUserByEmail,
@@ -110,5 +139,8 @@ export {
     createPasswordResetTokenInDB,
     deletePasswordResetToken,
     getAllOwnedGameByGamertag,
-    addOwnedGameToUser
+    addOwnedGameToUser,
+    getAllWishlistGamesByGamertag,
+    addGameToWishlist,
+    removeGameFromWishlist
 };

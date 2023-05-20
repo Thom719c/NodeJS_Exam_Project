@@ -6,7 +6,3 @@
 <SessionCheck />
 
 <Navbar />
-
-<style>
-</style>
-

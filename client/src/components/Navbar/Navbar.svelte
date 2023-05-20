@@ -9,6 +9,9 @@
     import PrivateRoute from "../PrivateRoutes/PrivateRoute.svelte";
     import Logout from "../Authentication/Logout.svelte";
     import UserGameList from "../../pages/Game/UserGameList.svelte";
+    import CommunityHub from "../../pages/CommunityHub/CommunityHub.svelte";
+    import Signup from "../../pages/Authentication/Signup.svelte";
+    import UserWishlist from "../../pages/Game/UserWishlist.svelte";
 </script>
 
 <Router>
@@ -69,9 +72,9 @@
                 <ul class="navbar-nav">
                     {#if $session}
                         <li class="nav-item">
-                            <a class="nav-link" href="/profile" use:link
-                                >Profile</a
-                            >
+                            <a class="nav-link" href="/profile" use:link>
+                                Profile
+                            </a>
                         </li>
                         <li class="nav-item">
                             <Logout isLink={true} />
@@ -87,7 +90,7 @@
     </nav>
 
     <main>
-        <Route path="/login">
+        <Route path="/login" primary={false}>
             <Login />
         </Route>
 
@@ -95,15 +98,16 @@
             <Home />
         </Route>
 
-        <Route path="/gameMarket">
+        <Route path="/gameMarket" primary={false}>
             <GameMarket />
         </Route>
 
         <Route path="/gameInfo" component={GameInfo} />
+        <Route path="/communnityHub" component={CommunityHub} />
 
-        <!-- <Route path="signup" component={Signup} primary={false}>
+        <Route path="/signup" component={Signup} primary={false}>
             <Signup />
-        </Route> -->
+        </Route>
 
         <PrivateRoute path="/profile">
             <Profile />
@@ -111,6 +115,10 @@
 
         <PrivateRoute path="/userGameList">
             <UserGameList />
+        </PrivateRoute>
+
+        <PrivateRoute path="/wishlist">
+            <UserWishlist />
         </PrivateRoute>
     </main>
 </Router>
