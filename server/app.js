@@ -81,11 +81,22 @@ app.get('/api/gameMarket', async (req, res) => {
     res.send(games);
 });
 
+import sanitizeHtml from 'sanitize-html';
 app.get('/api/gameInfo/:appid', async (req, res) => {
     const url = 'https://store.steampowered.com/api/appdetails?appids=' + req.params.appid + '&l=english';
     const response = await fetch(url);
     const data = await response.json();
-    res.send(data);
+
+    if (!data[req.params.appid].data.detailed_description) {
+        res.status(404).send({message: "No detail description found", data})
+    }
+    // Sanitize the detailed description HTML
+    const sanitizedDescription = sanitizeHtml(data[req.params.appid].data.detailed_description);
+    
+    // Update the data object with the sanitized description
+    data[req.params.appid].data.detailed_description = sanitizedDescription;
+
+    res.status(200).send(data);
 });
 
 

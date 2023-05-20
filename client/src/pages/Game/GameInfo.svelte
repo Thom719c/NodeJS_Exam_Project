@@ -13,6 +13,7 @@
 
     let appid;
     let gameInfo;
+    let sanitizedDescription = "";
 
     onMount(async () => {
         const params = new URLSearchParams($location.search);
@@ -161,7 +162,7 @@
             </div>
 
             <div class="description">
-                {gameInfo.detailed_description}
+                {@html gameInfo.detailed_description}
             </div>
 
             <div class="priceContainer">
