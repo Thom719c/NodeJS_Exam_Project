@@ -104,7 +104,6 @@ router.get("/wishlist", async (req, res) => {
     }
 
     const wishlist = await getAllWishlistGamesByGamertag(gamertag);
-    console.log(wishlist)
 
     res.status(200).send({ message: 'All games on wishlist', data: wishlist });
 });
@@ -130,7 +129,6 @@ router.post("/wishlist", async (req, res) => {
 
 router.delete("/wishlist", async (req, res) => {
     const game = req.body;
-    console.log("delete")
 
     if (!game.steamAppId || !game.name || !req.session.user?.gamertag) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
