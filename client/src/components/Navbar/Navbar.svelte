@@ -12,6 +12,9 @@
     import CommunityHub from "../../pages/CommunityHub/CommunityHub.svelte";
     import Signup from "../../pages/Authentication/Signup.svelte";
     import UserWishlist from "../../pages/Game/UserWishlist.svelte";
+    import PostDetails from "../../pages/CommunityHub/PostDetails.svelte";
+    import logoIcon from "../../assets/GamingOasisLogoIconTransparrent.png";
+    import CreatePost from "../ComunnityHub/CreatePost.svelte";
 </script>
 
 <Router>
@@ -23,7 +26,7 @@
             <a class="navbar-brand" href="/">
                 <img
                     id="logo"
-                    src="src/assets/GamingOasisLogoIconTransparrent.png"
+                    src={logoIcon}
                     width="50"
                     alt="Logo"
                 />
@@ -59,8 +62,8 @@
                         <a class="nav-link" href="/events" use:link> Events </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/communnityHub" use:link>
-                            Communnity Hub
+                        <a class="nav-link" href="/communityHub" use:link>
+                            Community Hub
                         </a>
                     </li>
                     <li class="nav-item">
@@ -98,12 +101,16 @@
             <Home />
         </Route>
 
+        <Route path="/games" primary={false} />
+
         <Route path="/gameMarket" primary={false}>
             <GameMarket />
         </Route>
 
         <Route path="/gameInfo" component={GameInfo} />
-        <Route path="/communnityHub" component={CommunityHub} />
+        <Route path="/communityHub" component={CommunityHub} />
+        <Route path="/communityHub/post/:id" component={PostDetails} />
+        <Route path="/communityHub/create-post" component={CreatePost} />
 
         <Route path="/signup" component={Signup} primary={false}>
             <Signup />

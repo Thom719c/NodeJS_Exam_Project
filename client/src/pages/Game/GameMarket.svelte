@@ -46,10 +46,11 @@
 
     const updatePageSize = () => {
         fetchGames();
-    }
+    };
 </script>
 
 <h1>List of Games</h1>
+
 <div>
     <label for="pageSize">Games per Page:</label>
     <select id="pageSize" bind:value={pageSize} on:change={updatePageSize}>
@@ -58,6 +59,7 @@
         <option value="50">50</option>
     </select>
 </div>
+
 <ul>
     {#each games as game}
         <a href={`/gameInfo?appid=${game.appid}`} use:link>

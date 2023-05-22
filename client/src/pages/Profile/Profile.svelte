@@ -306,7 +306,7 @@
     }
 
     .form-control-label {
-        font-size: 10px;
+        font-size: 12px;
         color: rgb(103, 193, 221);
         font-weight: bold;
         letter-spacing: 1px;

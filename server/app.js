@@ -49,6 +49,29 @@ app.use("/auth", rateLimit({
     skipSuccessfulRequests: true,
 }));
 
+io.on("connection", (socket) => {
+    console.log("New client connected");
+
+    socket.on("joinRoom", (roomId) => {
+        console.log("Client joined", roomId);
+        socket.join(roomId);
+    });
+
+    // Handle new comment submission
+    socket.on("newComment", (roomId, comment) => {
+        // Store the comment in the database
+        console.log(roomId, comment)
+
+        // Emit the comment to all connected clients
+        io.to(roomId).emit("commentAdded", comment);
+    });
+
+    // Handle client disconnection
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
+    });
+});
+
 // Routes
 
 import authRouter from "./routers/authRouter.js"
@@ -88,11 +111,11 @@ app.get('/api/gameInfo/:appid', async (req, res) => {
     const data = await response.json();
 
     if (!data[req.params.appid].data.detailed_description) {
-        res.status(404).send({message: "No detail description found", data})
+        res.status(404).send({ message: "No detail description found", data })
     }
     // Sanitize the detailed description HTML
     const sanitizedDescription = sanitizeHtml(data[req.params.appid].data.detailed_description);
-    
+
     // Update the data object with the sanitized description
     data[req.params.appid].data.detailed_description = sanitizedDescription;
 

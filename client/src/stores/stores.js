@@ -23,3 +23,4 @@ export const serverEndpoints = readable({
 });
 
 export const session = writable(null);
+export const postRoom = writable('');
