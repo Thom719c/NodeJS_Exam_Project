@@ -4,6 +4,7 @@
         serverEndpoints,
         postRoom,
     } from "../../stores/stores.js";
+    import toast, { Toaster } from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
 
     const navigate = useNavigate();
@@ -30,27 +31,43 @@
             body: JSON.stringify(post),
         });
 
+        const data = await response.json();
+
         if (response.ok) {
-            const data = await response.json();
-            console.log("Post created:", data);
             postRoom.set(data.postId);
+            toast.success(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
             navigate(`/communityHub/post/${data.postId}`);
         } else {
-            console.error("Failed to create post");
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     }
 </script>
+
+<Toaster />
 
 <div class="post-details">
     <h1 class="title text-gradient">Create a New Post</h1>
 
     <div class="post-content">
         <form on:submit|preventDefault={createPost}>
-            <label for="title">Title:</label>
+            <label for="title">Title</label>
             <input type="text" id="title" bind:value={title} maxlength="50" />
 
-            <label for="content">Content:</label>
-            <textarea id="content" rows="4" bind:value={content} />
+            <label for="content">Content</label>
+            <textarea
+                id="content"
+                rows="4"
+                bind:value={content}
+                maxlength="255"
+            />
 
             <button type="submit" class="post-button">Create Post</button>
         </form>
@@ -83,10 +100,13 @@
     label {
         display: block;
         margin-bottom: 5px;
+        font-weight: bold;
     }
 
     textarea {
         width: 100%;
+        min-height: 100px;
+        max-height: 25em;
         padding: 5px;
         margin-bottom: 10px;
     }
@@ -102,5 +122,10 @@
 
     .post-button:hover {
         background-color: rgba(71, 135, 155, 0.255);
+    }
+
+    input[type="text"] {
+        font-weight: bold;
+        width: 100%;
     }
 </style>

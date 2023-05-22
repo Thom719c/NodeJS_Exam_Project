@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import db from "../database/connection.js";
 import { getUserByGamertag } from "../database/userQueries.js";
 import { Router } from "express"
@@ -42,10 +41,9 @@ router.get("/posts/:id", async (req, res) => {
             comments,
         };
 
-        res.status(200).send({ message: "Post and comments", data: postData });
+        res.status(200).send({ message: "Post and comments.", data: postData });
     } catch (error) {
-        console.error("Failed to retrieve post and comments:", error);
-        res.status(500).send({ message: "Failed to retrieve post and comments" });
+        res.status(500).send({ message: "Failed to retrieve post and comments." });
     }
 });
 
@@ -55,9 +53,13 @@ router.post("/posts", async (req, res) => {
         return res.status(400).send({ message: "Need to be logged in!" });
     }
 
+    if (!req.body.title || !req.body.content) {
+        return res.status(404).send({ message: "Both title and content fields are required." });
+    }
+
     const user = await getUserByGamertag(gamertag);
     if (!user) {
-        return res.status(404).send({ message: "User was not found" });
+        return res.status(404).send({ message: "User was not found." });
     }
 
     const createdDate = new Date().toISOString().split("T")[0];
@@ -73,11 +75,11 @@ router.post("/posts", async (req, res) => {
 
     // Store the post in the database
     const query = "INSERT INTO posts SET ?";
-    const [result] = await db.query(query, post);
+    const [rows] = await db.query(query, post);
 
     // Get the ID of the created post
-    const postId = result.insertId;
-    res.status(201).json({ message: "Comment added successfully", postId });
+    const postId = rows.insertId;
+    res.status(201).send({ message: "Your post has been added successfully.", postId });
 });
 
 router.post("/comments", async (req, res) => {
@@ -86,22 +88,27 @@ router.post("/comments", async (req, res) => {
         return res.status(400).send({ message: "Need to be logged in!" });
     }
 
-    const createdDate = new Date().toISOString().split("T")[0];
-    const comment = {
-        id: uuidv4(),
-        roomId: req.body.roomId,
-        content: req.body.content,
-        created_at: createdDate,
-        gamertag: req.session.user?.gamertag,
-    };
+    if (!req.body.content) {
+        return res.status(404).send({ message: "The comment content cannot be empty." });
+    }
 
-    const user = await getUserByGamertag(comment.gamertag);
+    const createdDate = new Date().toISOString().split("T")[0];
+
+    const user = await getUserByGamertag(gamertag);
     const sql = "INSERT INTO comments (post_id, user_id, gamertag, content, created_at) VALUES (?, ?, ?, ?, ?)";
-    const values = [comment.roomId, user.id, comment.gamertag, comment.content, createdDate];
+    const values = [req.body.roomId, user.id, gamertag, req.body.content, createdDate];
 
     const [rows] = await db.query(sql, values);
 
-    res.status(201).json({ message: "Comment added successfully", comment });
+    const comment = {
+        id: rows.insertId,
+        roomId: req.body.roomId,
+        content: req.body.content,
+        created_at: createdDate,
+        gamertag: gamertag,
+    };
+
+    res.status(201).send({ message: "Comment added successfully.", comment });
 });
 
 export default router;

@@ -14,7 +14,6 @@
     import UserWishlist from "../../pages/Game/UserWishlist.svelte";
     import PostDetails from "../../pages/CommunityHub/PostDetails.svelte";
     import logoIcon from "../../assets/GamingOasisLogoIconTransparrent.png";
-    import CreatePost from "../ComunnityHub/CreatePost.svelte";
 </script>
 
 <Router>
@@ -24,12 +23,7 @@
     >
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img
-                    id="logo"
-                    src={logoIcon}
-                    width="50"
-                    alt="Logo"
-                />
+                <img id="logo" src={logoIcon} width="50" alt="Logo" />
             </a>
             <button
                 class="navbar-toggler"
@@ -107,10 +101,17 @@
             <GameMarket />
         </Route>
 
-        <Route path="/gameInfo" component={GameInfo} />
-        <Route path="/communityHub" component={CommunityHub} />
-        <Route path="/communityHub/post/:id" component={PostDetails} />
-        <Route path="/communityHub/create-post" component={CreatePost} />
+        <Route path="/gameInfo" primary={false}>
+            <GameInfo />
+        </Route>
+
+        <Route path="/communityHub" primary={false}>
+            <CommunityHub />
+        </Route>
+
+        <Route path="/communityHub/post/:id" primary={false}>
+            <PostDetails />
+        </Route>
 
         <Route path="/signup" component={Signup} primary={false}>
             <Signup />
