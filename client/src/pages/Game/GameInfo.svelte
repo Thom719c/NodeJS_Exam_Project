@@ -75,30 +75,34 @@
 <Toaster />
 
 {#if gameInfo}
-<div class="container">
-    <button class="back-button" on:click={goBackToProfile}>
-        Go Back
-    </button>
-    {#if gameInfo.background}
-    <img
-    class="background"
-    src={gameInfo.background}
-    alt="background"
-    />
-    {/if}
-    <div class="content">
+    <div class="container">
+        {#if gameInfo.background}
             <img
-                class="header-image"
-                src={gameInfo.header_image}
-                alt="header_image"
+                class="background"
+                src={gameInfo.background}
+                alt="background"
             />
+        {/if}
+        <div class="content">
+            <div class="me-auto">
+                <button class="back-button" on:click={goBackToProfile}>
+                    Go Back
+                </button>
+            </div>
+            <div class="image-content mt-3">
+                <img
+                    class="header-image"
+                    src={gameInfo.header_image}
+                    alt="header_image"
+                />
 
-            <button class="wishlistButton" on:click={addToWishlist}>
-                Add to Wishlist
-            </button>
-            <button class="ownedGameButton" on:click={addToOwnedGame}>
-                <i class="bi bi-star-fill" />
-            </button>
+                <button class="wishlistButton" on:click={addToWishlist}>
+                    Add to Wishlist
+                </button>
+                <button class="ownedGameButton" on:click={addToOwnedGame}>
+                    <i class="bi bi-star-fill" />
+                </button>
+            </div>
 
             <div class="title">{gameInfo.name}</div>
 
@@ -177,6 +181,10 @@
         z-index: 1;
     }
 
+    .image-content {
+        position: relative;
+    }
+
     .background {
         position: fixed;
         top: 0;
@@ -190,7 +198,7 @@
     .header-image {
         height: 200px;
         width: 100%;
-        object-fit: cover;
+        object-fit: fill;
         border-radius: 10px;
         margin-bottom: 20px;
     }
@@ -305,9 +313,9 @@
 
     .wishlistButton {
         position: absolute;
-        top: 25px;
-        right: 25px;
-        padding: 10px;
+        top: 5px;
+        right: 5px;
+        padding: 5px;
         border-radius: 5px;
         background-color: rgba(48, 76, 96, 0.9);
         color: rgb(103, 193, 221);
@@ -316,29 +324,32 @@
 
     .ownedGameButton {
         position: absolute;
-        top: 25px;
-        left: 25px;
-        padding: 10px;
+        top: 5px;
+        left: 5px;
+        padding: 5px;
         border-radius: 5px;
         background-color: rgba(48, 76, 96, 0.9);
         color: rgb(103, 193, 221);
         font-weight: bold;
+        width: 35px;
     }
 
     .ownedGameButton:hover {
         color: yellow;
     }
     .back-button {
-        position: absolute;
+        /* position: absolute;
         top: 85px;
-        left: 30px;
+        left: 30px; */
+        margin: auto;
+
         background-color: #67c2dd41;
         border-color: #e5e047;
         font-weight: bold;
         font-size: 14px;
         padding: 6px 12px;
         letter-spacing: 1px;
-        z-index: 2;
+        /* z-index: 2; */
     }
 
     .back-button:hover {
