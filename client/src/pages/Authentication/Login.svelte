@@ -32,16 +32,6 @@
 
             if (response.ok) {
                 session.set(data.session);
-                const options = {
-                    expires: 7, // expires in 7 days
-                    // httpOnly: true,  // accessible only via HTTP(S) protocol, not via client-side scripts
-                    // secure: true,    // transmitted only via HTTPS
-                };
-                Cookies.set(
-                    "userSession",
-                    JSON.stringify(data.session),
-                    options
-                );
                 toast.success(data.message, {
                     duration: 5000,
                     position: "bottom-right",

@@ -7,7 +7,7 @@
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
-
+    
     let games = [];
     const navigate = useNavigate();
 
@@ -63,7 +63,7 @@
             Go Back
         </button>
         <h2 class="title text-gradient">
-            Your Wishlist: {$session.user.gamertag}
+            Your Wishlist: {$session.gamertag}
         </h2>
     </div>
 

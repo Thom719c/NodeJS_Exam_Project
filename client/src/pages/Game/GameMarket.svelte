@@ -9,6 +9,7 @@
     let currentPage = 1;
     let pageSize = "10";
     let searchParam;
+    let isImage = true;
 
     onMount(async () => {
         const params = new URLSearchParams($location.search);
@@ -73,7 +74,12 @@
     </div>
 
     <label for="pageSize">Games per Page:</label>
-    <select class="pageSize" id="pageSize" bind:value={pageSize} on:change={handleFetchGames}>
+    <select
+        class="pageSize"
+        id="pageSize"
+        bind:value={pageSize}
+        on:change={handleFetchGames}
+    >
         <option value="10">10</option>
         <option value="25">25</option>
         <option value="50">50</option>

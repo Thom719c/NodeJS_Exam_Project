@@ -33,7 +33,7 @@
             credentials: "include",
         });
         const data = await response.json();
-
+        
         if (response.ok) {
             games = games.filter(
                 (g) => g.steam_app_id !== removeGame.steamAppId
@@ -57,7 +57,7 @@
             Go Back
         </button>
         <h2 class="title text-gradient">
-            The games you own {$session.user.gamertag}
+            The games you own {$session.gamertag}
         </h2>
     </div>
     {#if games.length === 0}

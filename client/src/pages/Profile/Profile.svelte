@@ -6,6 +6,7 @@
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
     import Cookies from "js-cookie";
+    import SessionCheck from "../../components/Authentication/SessionCheck.svelte";
     import Logout from "../../components/Authentication/Logout.svelte";
     import { useNavigate } from "svelte-navigator";
     const navigate = useNavigate();
@@ -16,7 +17,7 @@
 
     function enterEditMode() {
         isEditMode = true;
-        originalUserData = { ...$session.user };
+        originalUserData = { ...$session };
     }
 
     function exitEditMode() {
@@ -33,10 +34,10 @@
     }
 
     async function handlePasswordSubmission(event) {
-        if (!$session.user) return;
+        if (!$session) return;
         if (
-            originalUserData.name === $session.user.name &&
-            originalUserData.email === $session.user.email
+            originalUserData.name === $session.name &&
+            originalUserData.email === $session.email
         ) {
             // No changes made, just exit edit mode
             isPopupOpen = false;
@@ -59,7 +60,7 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                user: $session.user,
+                user: $session,
                 password: password,
             }),
         });
@@ -73,7 +74,7 @@
 
     async function updateProfile() {
         // Password is correct, update the user's profile
-        const updatedUserData = { ...$session.user };
+        const updatedUserData = { ...$session };
         updatedUserData.name = originalUserData.name;
         updatedUserData.email = originalUserData.email;
 
@@ -94,9 +95,9 @@
             const userSession = {
                 userId: $session.userId,
                 user: {
-                    fullname: $session.user.name,
-                    email: $session.user.email,
-                    username: $session.user.gamertag,
+                    fullname: $session.name,
+                    email: $session.email,
+                    username: $session.gamertag,
                 },
             };
             Cookies.set("userSession", JSON.stringify(userSession), {
@@ -119,6 +120,7 @@
 </script>
 
 <Toaster />
+<SessionCheck />
 
 <div class="container-fluid">
     <!-- {#if isPopupOpen}
@@ -135,7 +137,7 @@
                 />
             </div>
             <div class="col-lg-12 title text-gradient">
-                Welcome {$session.user.gamertag}
+                Welcome {$session.gamertag}
             </div>
 
             <div class="col-lg-12 profile-form">
@@ -152,7 +154,7 @@
                     {:else}
                         <input
                             type="text"
-                            value={$session.user.name}
+                            value={$session.name}
                             class="form-control"
                             readonly
                         />
@@ -166,7 +168,7 @@
                         </label>
                         <input
                             type="text"
-                            value={$session.user.gamertag}
+                            value={$session.gamertag}
                             class="form-control"
                             readonly
                         />
@@ -185,7 +187,7 @@
                     {:else}
                         <input
                             type="email"
-                            value={$session.user.email}
+                            value={$session.email}
                             class="form-control"
                             readonly
                         />

@@ -8,9 +8,16 @@
   const location = useLocation();
   let isLoading = true;
 
-  onMount(() => {
+  onMount(async () => {
+    let isSessionInitialized = false;
+
     session.subscribe((value) => {
       isLoading = false;
+      if (!isSessionInitialized) {
+        isSessionInitialized = true;
+        return;
+      }
+
       if (!value) {
         navigate("/login", {
           state: { from: $location.pathname },

@@ -129,6 +129,10 @@ app.get('/api/gameInfo/:appid', async (req, res) => {
     res.status(200).send(data);
 });
 
+app.get("/users/me", (req, res) => {
+    res.send({ data: req.session.user });
+});
+
 
 /**
  * ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
