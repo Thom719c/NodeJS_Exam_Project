@@ -28,11 +28,12 @@ async function create(user) {
 }
 
 async function update(user) {
-    await db.query(`UPDATE users 
-        SET name = ?, phone_number = ?, email = ?, password = ?
+  const [rows] = await db.query(`UPDATE users 
+        SET name = ?, phone_number = ?, gamertag = ?, email = ?, password = ?
         WHERE id = ?`,
-        [user.name, user.phoneNumber, user.email, user.password, user.id]
+        [user.name, user.phoneNumber, user.gamertag, user.email, user.password, user.id]
     );
+    return rows[0];
 }
 
 async function updateUserPassword(encryptedPassword, email) {

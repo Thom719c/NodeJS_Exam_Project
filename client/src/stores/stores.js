@@ -7,7 +7,7 @@ export const serverEndpoints = readable({
         login: "/auth/login",
         logout: "/auth/logout",
         signup: "/auth/signup",
-        updateaccount: "/auth/update-account",
+        updateaccount: "/auth/updateAccount",
         changepassword: "/auth/changepassword",
         resetpassword: "/auth/reset-password",
         deleteaccount: "/auth/delete-account",

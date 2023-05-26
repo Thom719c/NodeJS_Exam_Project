@@ -56,12 +56,12 @@
         const urlValidate =
             $serverURL + $serverEndpoints.authentication.validatepassword;
         const response = await fetch(urlValidate, {
+            credentials: "include",
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                user: $session,
                 password: password,
             }),
         });
@@ -82,6 +82,7 @@
         const urlChangeUser =
             $serverURL + $serverEndpoints.authentication.updateaccount;
         const updateResponse = await fetch(urlChangeUser, {
+            credentials: "include",
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -92,18 +93,7 @@
 
         if (updateResponse.ok) {
             toast.success(data.message);
-            $session = data.session;
-            const userSession = {
-                userId: $session.userId,
-                user: {
-                    fullname: $session.name,
-                    email: $session.email,
-                    username: $session.gamertag,
-                },
-            };
-            Cookies.set("userSession", JSON.stringify(userSession), {
-                expires: 7,
-            });
+            session.set(data.session)
             isPopupOpen = false;
             exitEditMode();
         } else {

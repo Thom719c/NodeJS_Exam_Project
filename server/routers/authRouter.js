@@ -68,6 +68,56 @@ router.post("/signup", async (req, res) => {
     res.status(201).send({ message: 'User successfully created, you may now login' });
 });
 
+router.post("/validatepassword", async (req, res) => {
+    const { password } = req.body;
+console.log(req.session)
+    if (!req.session.user.gamertag || !password) {
+        return res.status(400).json({ message: "The password entered doesn't match your account" });
+    }
+
+    const data = await getUserByGamertag(req.session.user.gamertag);
+    if (!data) {
+        return res.status(401).send({ message: "Email/Gamertag or password is incorrect." });
+    }
+
+    // check if the entered password matches the user's password
+    const isPasswordMatch = await bcrypt.compare(password, data.password);
+    if (isPasswordMatch) {
+        res.status(200).send({ message: 'Password was correct.' });
+    } else {
+        res.status(401).send({ message: "Email/Gamertag or password is not correct." });
+    }
+});
+
+
+
+router.patch("/updateAccount", async (req, res) => {
+
+    if (!req.session.user) {
+        return res.status(404).send({ message: "Need to be logged in!" });
+    }
+
+    const foundUser = await getUserByGamertag(req.session.user.gamertag)
+
+    const user = {
+        userId: foundUser.id,
+        gamertag: req.session.user.gamertag, 
+        name: req.body.name,
+        phoneNumber: foundUser.phone_number,
+        email: req.body.email,
+        password: foundUser.password,
+    }
+    
+    const something = await update(user)
+    console.log(something)
+    req.session.user = {
+        gamertag: user.gamertag,
+        name: user.name,
+        email: user.email
+    }
+    res.send({ session: req.session, message: "Account update successful" });
+})
+
 /* Owned games */
 router.get("/ownedGames", async (req, res) => {
     const gamertag = req.session.user?.gamertag;
