@@ -58,10 +58,10 @@
                     alt="header_image"
                 />
 
-                <button class="wishlistButton" on:click={() => addToWishlist(appid, gameInfo)}>
+                <button class="wishlistButton" on:click={() => addToWishlist(appid, gameInfo.name)}>
                     Add to Wishlist
                 </button>
-                <button class="ownedGameButton" on:click={() => addToOwnedGame(appid, gameInfo)}>
+                <button class="ownedGameButton" on:click={() => addToOwnedGame(appid, gameInfo.name)}>
                     <i class="bi bi-star-fill" />
                 </button>
             </div>

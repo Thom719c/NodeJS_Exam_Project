@@ -1,17 +1,17 @@
     import toast, { Toaster } from "svelte-french-toast";
 
-    export const addToWishlist = (appid, gameInfo) => {
+    export const addToWishlist = (appid, name) => {
         const url = 'http://localhost:3000/auth/wishlist';
-        fetchingAddToList(url, appid, gameInfo);
+        fetchingAddToList(url, appid, name);
     };
 
-   export const addToOwnedGame = (appid, gameInfo) => {
+   export const addToOwnedGame = (appid, name) => {
         const url = 'http://localhost:3000/auth/addOwnedGame';
-        fetchingAddToList(url, appid, gameInfo);
+        fetchingAddToList(url, appid, name);
     };
 
-  const fetchingAddToList = async (url, appid, gameInfo) => {
-        const game = { steamAppId: appid, name: gameInfo.name };
+  const fetchingAddToList = async (url, appid, name) => {
+        const game = { steamAppId: appid, name: name };
         try {
             const response = await fetch(url, {
                 credentials: "include",

@@ -7,7 +7,8 @@
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
-    
+    import { addToOwnedGame } from "../../components/FetchingService/GameListUtils.js";
+
     let games = [];
     const navigate = useNavigate();
 
@@ -20,12 +21,13 @@
 
     const moveGameToOwned = async (game) => {
         // Perform the logic to move the game to the owned games list
-        // ...
+        addToOwnedGame(game.steam_app_id, game.game_name);
         // Show a toast message after successful move
         toast.success(`Game "${game.game_name}" moved to Owned Games.`);
+        removeGameFromWishlist(game, true);
     };
 
-    const removeGameFromWishlist = async (game) => {
+    const removeGameFromWishlist = async (game, moved) => {
         const url = $serverURL + $serverEndpoints.authentication.wishlist;
         const removeGame = {
             steamAppId: game.steam_app_id,
@@ -44,7 +46,9 @@
             games = games.filter(
                 (g) => g.steam_app_id !== removeGame.steamAppId
             );
-            toast.success(`Game "${game.game_name}" removed from Wishlist.`);
+            if (!moved) {
+                toast.success(`Game "${game.game_name}" removed from Wishlist.`);
+            }
         } else {
             toast.error("Failed to remove the game from Wishlist.");
         }
