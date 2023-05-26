@@ -39,6 +39,12 @@
             fetchGames();
         }
     };
+    const handlePageChange = () => {
+        if (currentPage != 0) {
+            updateURL();
+            fetchGames();
+        }
+    };
 
     const updateURL = () => {
         navigate(`?page=${currentPage}`);
@@ -83,6 +89,7 @@
     >
         Previous
     </button>
+    <input class="pageChange" bind:value={currentPage} on:change={handlePageChange} />
     <button class="pagination-button" on:click={nextPage}> Next </button>
 </div>
 
@@ -154,5 +161,15 @@
     .pagination-button:disabled {
         background-color: #ccc;
         cursor: not-allowed;
+    }
+    .pageChange {
+        background-color: rgba(48, 76, 96, 0.9);
+        border-color: #e5e047;
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 4px;
+        margin: 0 5px;
+        max-width: 50px;
+        text-align: center;
     }
 </style>
