@@ -8,6 +8,7 @@
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
     import { SyncLoader } from "svelte-loading-spinners";
+    import {addToWishlist, addToOwnedGame } from '../../components/FetchingService/GameListUtils.js';
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -27,46 +28,7 @@
         gameInfo = data[appid].data;
     });
 
-    const addToWishlist = () => {
-        const url = $serverURL + $serverEndpoints.authentication.wishlist;
-        fetchingAddToList(url);
-    };
-
-    const addToOwnedGame = () => {
-        const url = $serverURL + $serverEndpoints.authentication.addOwnedGame;
-        fetchingAddToList(url);
-    };
-
-    const fetchingAddToList = async (url) => {
-        const game = { steamAppId: appid, name: gameInfo.name };
-        try {
-            const response = await fetch(url, {
-                credentials: "include",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(game),
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                toast.success(data.message, {
-                    duration: 5000,
-                    position: "bottom-right",
-                    style: "border-radius: 200px; background: #333; color: #fff;",
-                });
-            } else {
-                toast.error(data.message, {
-                    duration: 5000,
-                    position: "bottom-right",
-                    style: "border-radius: 200px; background: #333; color: #fff;",
-                });
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    
     const goBackToProfile = () => {
         navigate("/gameMarket");
     };
@@ -96,10 +58,10 @@
                     alt="header_image"
                 />
 
-                <button class="wishlistButton" on:click={addToWishlist}>
+                <button class="wishlistButton" on:click={() => addToWishlist(appid, gameInfo)}>
                     Add to Wishlist
                 </button>
-                <button class="ownedGameButton" on:click={addToOwnedGame}>
+                <button class="ownedGameButton" on:click={() => addToOwnedGame(appid, gameInfo)}>
                     <i class="bi bi-star-fill" />
                 </button>
             </div>
