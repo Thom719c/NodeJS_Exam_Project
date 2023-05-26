@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-router.post("/contact", async (req, res) => {
+router.post("/mail/contact", async (req, res) => {
     if (req.body && req.body.message !== "") {
         const info = await transporter.sendMail({
             from: `"Feedback" ${req.body.email}`,
@@ -33,7 +33,7 @@ router.post("/contact", async (req, res) => {
 });
 
 // TODO Forgot password send mail with token and url to reset password
-router.post("/forgot-password", async (req, res) => {
+router.post("/mail/forgot-password", async (req, res) => {
     const email = req.body.email;
 
     // Check if a user with the given email exists

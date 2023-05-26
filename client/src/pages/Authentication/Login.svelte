@@ -76,7 +76,7 @@
                             bind:value={email}
                             type="email"
                             name="email"
-                            class="form-control"
+                            class="form-control form-input"
                             required
                         />
                     </div>
@@ -88,7 +88,7 @@
                             bind:value={password}
                             type="password"
                             name="password"
-                            class="form-control"
+                            class="form-control form-input"
                             required
                         />
                     </div>
@@ -134,17 +134,6 @@
         text-align: left;
     }
 
-    input[type="email"],
-    input[type="password"] {
-        background-color: #1a2226;
-        border: none;
-        border-bottom: 2px solid #0db8de;
-        border-radius: 0px;
-        font-weight: bold;
-        padding-left: 0px;
-        color: #ecf0f5;
-    }
-
     .form-group {
         margin-bottom: 40px;
         outline: 0px;
@@ -173,8 +162,8 @@
     }
 
     .form-control-label {
-        font-size: 10px;
-        color: #6c6c6c;
+        font-size: 12px;
+        color: rgb(103, 193, 221);
         font-weight: bold;
         letter-spacing: 1px;
     }
@@ -188,7 +177,6 @@
     .btn-outline-primary:hover {
         background-color: #67c2dd41;
         color: white;
-        right: 0px;
     }
 
     .login-button {

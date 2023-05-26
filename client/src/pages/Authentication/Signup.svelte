@@ -95,7 +95,7 @@
                             bind:value={name}
                             type="text"
                             name="name"
-                            class="form-control"
+                            class="form-control form-input"
                             placeholder="Elena Michaels"
                             required
                         />
@@ -108,7 +108,7 @@
                             bind:value={gamertag}
                             type="text"
                             name="gamertag"
-                            class="form-control"
+                            class="form-control form-input"
                             placeholder="LunaRain"
                             required
                         />
@@ -121,7 +121,7 @@
                             bind:value={email}
                             type="email"
                             name="email"
-                            class="form-control"
+                            class="form-control form-input"
                             placeholder="Example@domain.com"
                             required
                         />
@@ -134,7 +134,7 @@
                             bind:value={phoneNumber}
                             type="tel"
                             name="phoneNumber"
-                            class="form-control"
+                            class="form-control form-input"
                             placeholder="88888888"
                             required
                         />
@@ -147,7 +147,7 @@
                             bind:value={password}
                             type="password"
                             name="password"
-                            class="form-control"
+                            class="form-control form-input"
                             required
                         />
                     </div>
@@ -159,7 +159,7 @@
                             bind:value={confirmPassword}
                             type="password"
                             name="confirmPassword"
-                            class="form-control"
+                            class="form-control form-input"
                             required
                         />
                     </div>
@@ -205,20 +205,6 @@
         text-align: left;
     }
 
-    input {
-        background-color: #1a2226;
-        border: none;
-        border-bottom: 2px solid #0db8de;
-        border-radius: 0px;
-        font-weight: bold;
-        padding-left: 0px;
-        color: #ecf0f5;
-    }
-
-    input::placeholder {
-        color: #777777;
-    }
-
     .form-group {
         margin-bottom: 40px;
         outline: 0px;
@@ -247,8 +233,8 @@
     }
 
     .form-control-label {
-        font-size: 10px;
-        color: #6c6c6c;
+        font-size: 12px;
+        color: rgb(103, 193, 221);
         font-weight: bold;
         letter-spacing: 1px;
     }

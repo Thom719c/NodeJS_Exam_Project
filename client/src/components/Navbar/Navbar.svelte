@@ -14,6 +14,7 @@
     import UserWishlist from "../../pages/Game/UserWishlist.svelte";
     import PostDetails from "../../pages/CommunityHub/PostDetails.svelte";
     import logoIcon from "../../assets/GamingOasisLogoIconTransparrent.png";
+    import Contact from "../../pages/Feedback/Contact.svelte";
 </script>
 
 <Router>
@@ -104,13 +105,17 @@
         <Route path="/gameInfo" primary={false}>
             <GameInfo />
         </Route>
-
+        
         <Route path="/communityHub" primary={false}>
             <CommunityHub />
         </Route>
-
+        
         <Route path="/communityHub/post/:id" primary={false}>
             <PostDetails />
+        </Route>
+        
+        <Route path="/feedback" primary={false}>
+            <Contact />
         </Route>
 
         <Route path="/signup" component={Signup} primary={false}>

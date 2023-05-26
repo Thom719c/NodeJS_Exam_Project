@@ -93,7 +93,7 @@
 
         if (updateResponse.ok) {
             toast.success(data.message);
-            session.set(data.session.user)
+            session.set(data.session.user);
             isPopupOpen = false;
             exitEditMode();
         } else {
@@ -115,7 +115,10 @@
 
 <div class="container-fluid">
     {#if isPopupOpen}
-      <PopUp on:submit={handlePasswordSubmission} on:cancel={handleCancelPopup} />
+        <PopUp
+            on:submit={handlePasswordSubmission}
+            on:cancel={handleCancelPopup}
+        />
     {/if}
     <div class="row">
         <div class="col-sm-6 col-xs mx-auto content-box">
@@ -140,13 +143,13 @@
                         <input
                             type="text"
                             bind:value={originalUserData.name}
-                            class="form-control"
+                            class="form-control form-input"
                         />
                     {:else}
                         <input
                             type="text"
                             value={$session.name}
-                            class="form-control"
+                            class="form-control form-input"
                             readonly
                         />
                     {/if}
@@ -160,7 +163,7 @@
                         <input
                             type="text"
                             value={$session.gamertag}
-                            class="form-control"
+                            class="form-control form-input"
                             readonly
                         />
                     </div>
@@ -173,29 +176,29 @@
                         <input
                             type="email"
                             bind:value={originalUserData.email}
-                            class="form-control"
+                            class="form-control form-input"
                         />
                     {:else}
                         <input
                             type="email"
                             value={$session.email}
-                            class="form-control"
+                            class="form-control form-input"
                             readonly
                         />
                     {/if}
                 </div>
 
                 {#if isEditMode}
-                    <div class="profile-button">
+                    <div class="profile-button text-gradient">
                         <button
-                            class="btn btn-outline-secondary"
+                            class="button cancel-button"
                             on:click={exitEditMode}
                         >
                             <i class="bi bi-x-circle" />
                             Cancel
                         </button>
                         <button
-                            class="btn btn-outline-primary"
+                            class="button save-button"
                             on:click={handleOpenPopup}
                         >
                             <i class="bi bi-save" />
@@ -256,21 +259,6 @@
         text-align: left;
     }
 
-    input[type="text"],
-    input[type="email"] {
-        background-color: #1a2226;
-        color: #ecf0f5;
-        border: none;
-        border-bottom: 2px solid #0db8de;
-        border-radius: 0px;
-        font-weight: bold;
-        padding-left: 0px;
-    }
-
-    input::placeholder {
-        color: #777777;
-    }
-
     .form-group {
         margin-bottom: 40px;
         outline: 0px;
@@ -321,5 +309,23 @@
         padding-right: 0px;
         text-align: center;
         margin-bottom: 25px;
+    }
+
+    .button {
+        margin: auto;
+        background-color: #67c2dd41;
+        border-color: #e5e047;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 6px 12px;
+        letter-spacing: 1px;
+    }
+
+    .save-button:hover {
+        background-color: #47879b41;
+    }
+
+    .cancel-button:hover {
+        background-color: #ff000041;
     }
 </style>
