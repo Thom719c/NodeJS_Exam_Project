@@ -93,7 +93,7 @@
 
         if (updateResponse.ok) {
             toast.success(data.message);
-            session.set(data.session)
+            session.set(data.session.user)
             isPopupOpen = false;
             exitEditMode();
         } else {
