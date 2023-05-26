@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { useLocation } from "svelte-navigator";
+    import { useLocation, useNavigate } from "svelte-navigator";
     import {
         serverURL,
         serverEndpoints,
@@ -10,6 +10,7 @@
     import { SyncLoader } from "svelte-loading-spinners";
 
     const location = useLocation();
+    const navigate = useNavigate();
 
     let appid;
     let gameInfo;
@@ -124,20 +125,26 @@
             console.log(error);
         }
     };
+    const goBackToProfile = () => {
+        navigate("/gameMarket");
+    };
 </script>
 
 <Toaster />
 
 {#if gameInfo}
-    <div class="container">
-        {#if gameInfo.background}
-            <img
-                class="background"
-                src={gameInfo.background}
-                alt="background"
-            />
-        {/if}
-        <div class="content">
+<div class="container">
+    <button class="back-button" on:click={goBackToProfile}>
+        Go Back
+    </button>
+    {#if gameInfo.background}
+    <img
+    class="background"
+    src={gameInfo.background}
+    alt="background"
+    />
+    {/if}
+    <div class="content">
             <img
                 class="header-image"
                 src={gameInfo.header_image}
@@ -378,5 +385,21 @@
 
     .ownedGameButton:hover {
         color: yellow;
+    }
+    .back-button {
+        position: absolute;
+        top: 85px;
+        left: 30px;
+        background-color: #67c2dd41;
+        border-color: #e5e047;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 6px 12px;
+        letter-spacing: 1px;
+        z-index: 2;
+    }
+
+    .back-button:hover {
+        background-color: rgba(71, 135, 155, 0.255);
     }
 </style>

@@ -138,6 +138,6 @@
         align-self: center;
         font-size: 18px;
         gap: 20px;
-        z-index: 2;
+        z-index: 3;
     }
 </style>
