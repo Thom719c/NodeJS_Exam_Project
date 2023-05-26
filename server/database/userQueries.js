@@ -98,6 +98,14 @@ async function addOwnedGameToUser(gamertag, game) {
     await db.query(query, values);
 }
 
+async function removeGameFromOwnedList(gamertag, game) {
+    const user = await getUserByGamertag(gamertag);
+
+    const query = 'DELETE FROM owned_games WHERE user_id = ? AND steam_app_id = ?';
+    const values = [user.id, game.steamAppId];
+    await db.query(query, values);
+}
+
 /* wishlist */
 async function getAllWishlistGamesByGamertag(gamertag) {
     const query = 'SELECT w.steam_app_id, w.game_name FROM users u JOIN wishlist w ON u.id = w.user_id WHERE u.gamertag = ?';
@@ -140,6 +148,7 @@ export {
     deletePasswordResetToken,
     getAllOwnedGameByGamertag,
     addOwnedGameToUser,
+    removeGameFromOwnedList,
     getAllWishlistGamesByGamertag,
     addGameToWishlist,
     removeGameFromWishlist

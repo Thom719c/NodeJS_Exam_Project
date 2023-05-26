@@ -19,7 +19,7 @@
     });
 
     const removeGameFromList = async (game) => {
-        /* const url = $serverURL + $serverEndpoints.authentication.wishlist;
+        const url = $serverURL + $serverEndpoints.authentication.ownedGame;
         const removeGame = {
             steamAppId: game.steam_app_id,
             name: game.game_name,
@@ -32,15 +32,16 @@
             body: JSON.stringify(removeGame),
             credentials: "include",
         });
+        const data = await response.json();
 
         if (response.ok) {
             games = games.filter(
                 (g) => g.steam_app_id !== removeGame.steamAppId
             );
-            toast.success(`Game "${game.game_name}" removed from Wishlist.`);
+            toast.success(data.message);
         } else {
-            toast.error("Failed to remove the game from Wishlist.");
-        } */
+            toast.error(data.message);
+        }
     };
 
     const goBackToProfile = () => {

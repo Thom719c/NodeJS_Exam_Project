@@ -73,7 +73,7 @@
     </div>
 
     <label for="pageSize">Games per Page:</label>
-    <select id="pageSize" bind:value={pageSize} on:change={handleFetchGames}>
+    <select class="pageSize" id="pageSize" bind:value={pageSize} on:change={handleFetchGames}>
         <option value="10">10</option>
         <option value="25">25</option>
         <option value="50">50</option>
@@ -211,5 +211,15 @@
 
     .search::placeholder {
         color: #d1d1d1e6;
+    }
+
+    .pageSize {
+        background-color: #67c2dd41;
+        border-color: #e5e047;
+        border-radius: 5px;
+    }
+
+    option {
+        color: black;
     }
 </style>

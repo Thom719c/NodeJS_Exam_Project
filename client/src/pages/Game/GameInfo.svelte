@@ -338,11 +338,7 @@
         color: yellow;
     }
     .back-button {
-        /* position: absolute;
-        top: 85px;
-        left: 30px; */
         margin: auto;
-
         background-color: #67c2dd41;
         border-color: #e5e047;
         font-weight: bold;

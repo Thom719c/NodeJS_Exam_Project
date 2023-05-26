@@ -1,12 +1,15 @@
 import { Router } from "express"
 const router = Router();
 import bcrypt from "bcrypt"
-import { getUserByEmail, getUserByGamertag, checkIfUserExist, 
-    create, update, updateUserPassword, 
+import {
+    getUserByEmail, getUserByGamertag, checkIfUserExist,
+    create, update, updateUserPassword,
     getEmailByPasswordResetToken, deletePasswordResetToken,
     getAllOwnedGameByGamertag, addOwnedGameToUser,
+    removeGameFromOwnedList,
     getAllWishlistGamesByGamertag, addGameToWishlist,
-    removeGameFromWishlist } from "../database/userQueries.js";
+    removeGameFromWishlist
+} from "../database/userQueries.js";
 
 
 router.get("/logout", async (req, res) => {
@@ -96,7 +99,19 @@ router.post("/addOwnedGame", async (req, res) => {
     res.status(201).send({ message: 'Game added successfully to owned games' });
 });
 
-/* Owned games */
+router.delete("/ownedGames", async (req, res) => {
+    const game = req.body;
+
+    if (!game.steamAppId || !game.name || !req.session.user?.gamertag) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    await removeGameFromOwnedList(req.session.user.gamertag, game);
+
+    res.status(201).send({ message: game.name + ' removed successfully from the owned games' });
+});
+
+/* Wishlist */
 router.get("/wishlist", async (req, res) => {
     const gamertag = req.session.user?.gamertag;
     if (!gamertag || !req.session.user) {
