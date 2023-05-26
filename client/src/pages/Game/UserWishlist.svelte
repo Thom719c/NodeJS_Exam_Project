@@ -47,7 +47,9 @@
                 (g) => g.steam_app_id !== removeGame.steamAppId
             );
             if (!moved) {
-                toast.success(`Game "${game.game_name}" removed from Wishlist.`);
+                toast.success(
+                    `Game "${game.game_name}" removed from Wishlist.`
+                );
             }
         } else {
             toast.error("Failed to remove the game from Wishlist.");

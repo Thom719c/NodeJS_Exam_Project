@@ -8,6 +8,7 @@
     import Cookies from "js-cookie";
     import SessionCheck from "../../components/Authentication/SessionCheck.svelte";
     import Logout from "../../components/Authentication/Logout.svelte";
+    import PopUp from "../../components/Authentication/PopUp.svelte";
     import { useNavigate } from "svelte-navigator";
     const navigate = useNavigate();
 
@@ -123,9 +124,9 @@
 <SessionCheck />
 
 <div class="container-fluid">
-    <!-- {#if isPopupOpen}
+    {#if isPopupOpen}
       <PopUp on:submit={handlePasswordSubmission} on:cancel={handleCancelPopup} />
-    {/if} -->
+    {/if}
     <div class="row">
         <div class="col-sm-6 col-xs mx-auto content-box">
             <div class="col-lg-12 mt-5">
