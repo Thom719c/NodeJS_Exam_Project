@@ -83,23 +83,30 @@ app.use(mailer);
 import communityHub from "./routers/communityHubRouter.js"
 app.use("/communityHub", communityHub);
 
+/* app.get('/api/games', async (req, res) => {
+    const url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
+    const response = await fetch(url);
+    const data = await response.json();
+    res.send(data);
+}); */
 
-app.get('/api/gameMarket', async (req, res) => {
+app.get('/api/gameMarket:name', async (req, res) => {
+    let name = req.params.name || '';
+    if (name === "undefined") {
+        name = '';
+    }
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
     let startIndex = (page - 1) * pageSize;
     let endIndex = page * pageSize;
 
-    if (page === 1) {
-        startIndex++;
-        endIndex++;
-    }
-
     const url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
     const response = await fetch(url);
     const data = await response.json();
     const games = data.applist.apps
-        .filter(game => game.name !== "" && game.name !== "test2" && game.name !== "test3")
+        .filter(game => game.name !== "" && game.name !== "test2" &&
+            game.name !== "test3" && game.name.toLowerCase().includes(name) &&
+            !game.name.includes('Pieterw test app76'))
         .slice(startIndex, endIndex);
     res.send(games);
 });

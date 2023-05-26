@@ -8,6 +8,7 @@
     let games = [];
     let currentPage = 1;
     let pageSize = "10";
+    let searchParam;
 
     onMount(async () => {
         const params = new URLSearchParams($location.search);
@@ -20,7 +21,7 @@
         // `https://api.steampowered.com/ISteamApps/GetAppList/v2/`                     // All games
         // `https://store.steampowered.com/api/appdetails?appids=${appid}&l=english`    // Gets games information by appid and in english
         // `https://steamcdn-a.akamaihd.net/steam/apps/${game.appid}/header.jpg`        // Gets image by appid
-        const url = `http://localhost:3000/api/gameMarket?page=${currentPage}&pageSize=${pageSize}`;
+        const url = `http://localhost:3000/api/gameMarket${searchParam}?page=${currentPage}&pageSize=${pageSize}`;
         const response = await fetch(url);
         const data = await response.json();
         games = data;
@@ -50,16 +51,29 @@
         navigate(`?page=${currentPage}`);
     };
 
-    const updatePageSize = () => {
+    const handleFetchGames = () => {
         fetchGames();
     };
 </script>
 
 <h1>List of Games</h1>
 
-<div>
+<div class="container-fluid">
+    <div class="search-bar mb-2">
+        <input
+            class="search"
+            type="text"
+            bind:value={searchParam}
+            placeholder="Search..."
+            on:change={handleFetchGames}
+        />
+        <button class="search me-4" on:click={handleFetchGames}
+            ><i class="bi bi-search" /></button
+        >
+    </div>
+
     <label for="pageSize">Games per Page:</label>
-    <select id="pageSize" bind:value={pageSize} on:change={updatePageSize}>
+    <select id="pageSize" bind:value={pageSize} on:change={handleFetchGames}>
         <option value="10">10</option>
         <option value="25">25</option>
         <option value="50">50</option>
@@ -89,7 +103,11 @@
     >
         Previous
     </button>
-    <input class="pageChange" bind:value={currentPage} on:change={handlePageChange} />
+    <input
+        class="pageChange"
+        bind:value={currentPage}
+        on:change={handlePageChange}
+    />
     <button class="pagination-button" on:click={nextPage}> Next </button>
 </div>
 
@@ -162,6 +180,7 @@
         background-color: #ccc;
         cursor: not-allowed;
     }
+
     .pageChange {
         background-color: rgba(48, 76, 96, 0.9);
         border-color: #e5e047;
@@ -171,5 +190,26 @@
         margin: 0 5px;
         max-width: 50px;
         text-align: center;
+    }
+
+    .search-bar {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .search {
+        display: flex;
+        align-items: center;
+        height: 35px;
+        background-color: rgba(48, 76, 96, 0.9);
+        border-color: #e5e047;
+        border-radius: 10px;
+        padding: 5px 10px;
+    }
+
+    .search::placeholder {
+        color: #d1d1d1e6;
     }
 </style>
