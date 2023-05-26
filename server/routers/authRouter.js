@@ -100,22 +100,26 @@ router.patch("/updateAccount", async (req, res) => {
     const foundUser = await getUserByGamertag(req.session.user.gamertag)
 
     const user = {
-        userId: foundUser.id,
-        gamertag: req.session.user.gamertag, 
-        name: req.body.name,
+        id: foundUser.id,
+        gamertag: foundUser.gamertag, 
+        name: req.body.name || foundUser.name,
         phoneNumber: foundUser.phone_number,
-        email: req.body.email,
+        email: req.body.email || foundUser.email,
         password: foundUser.password,
     }
     
-    const something = await update(user)
-    console.log(something)
-    req.session.user = {
-        gamertag: user.gamertag,
-        name: user.name,
-        email: user.email
-    }
-    res.send({ session: req.session, message: "Account update successful" });
+    await update(user)
+    req.session.regenerate((error) => {
+        if (error) {
+            return res.status(500).send({ message: "Failed to regenerate session." });
+        }      
+        req.session.user = {
+            gamertag: foundUser.gamertag,
+            name: user.name,
+            email: user.email
+        }
+        res.status(200).send({ session: req.session, message: "Account update successful" });
+    });
 })
 
 /* Owned games */
