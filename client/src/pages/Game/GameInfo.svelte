@@ -26,64 +26,6 @@
         gameInfo = data[appid].data;
     });
 
-    /* const addToWishlist = async () => {
-        console.log("addToWishlist");
-        const url = $serverURL + $serverEndpoints.authentication.wishlist;
-        const gameToWishlist = { steamAppId: appid, name: gameInfo.name };
-        try {
-            const response = await fetch(url, {
-                credentials: "include",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(gameToWishlist),
-            });
-            const data = await response.json();
-
-            toastMessage(response.ok, data.message);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const addToOwnedGame = async () => {
-        console.log("addToOwnedGame");
-        const url = $serverURL + $serverEndpoints.authentication.addOwnedGame;
-        const ownedGame = { steamAppId: appid, name: gameInfo.name };
-        try {
-            const response = await fetch(url, {
-                credentials: "include",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(ownedGame),
-            });
-            const data = await response.json();
-
-            toastMessage(response.ok, data.message);
-        } catch (error) {
-            console.log(error);
-        }
-    }; 
-    
-    const toastMessage = (isResponseOk, message) => {
-        if (isResponseOk) {
-            toast.success(message, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
-        } else {
-            toast.error(message, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
-        }
-    };*/
-
     const addToWishlist = () => {
         const url = $serverURL + $serverEndpoints.authentication.wishlist;
         fetchingAddToList(url);
