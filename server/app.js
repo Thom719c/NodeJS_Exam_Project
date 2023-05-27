@@ -121,7 +121,9 @@ app.get('/api/gameInfo/:appid', async (req, res) => {
         res.status(404).send({ message: "No detail description found", data })
     }
     // Sanitize the detailed description HTML
-    const sanitizedDescription = sanitizeHtml(data[req.params.appid].data.detailed_description);
+    const sanitizedDescription = sanitizeHtml(data[req.params.appid].data.detailed_description, {
+        allowedTags: ['img', 'ul', 'li'],
+      });
 
     // Update the data object with the sanitized description
     data[req.params.appid].data.detailed_description = sanitizedDescription;
