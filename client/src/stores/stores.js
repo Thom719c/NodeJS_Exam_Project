@@ -22,7 +22,7 @@ export const serverEndpoints = readable({
     },
     communityHub: {
         posts: "/communityHub/posts/",
-        comment: "/communityHub/comment/"
+        comments: "/communityHub/comments/"
     }
 });
 

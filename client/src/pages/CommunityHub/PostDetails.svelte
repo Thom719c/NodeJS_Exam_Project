@@ -17,12 +17,53 @@
     let post = {};
     let comments = [];
     let newComment = "";
+    let editCommentId = "";
+
+    let isEditMode = false;
+    let originalUserData = null;
+
+    function enterEditMode() {
+        isEditMode = true;
+        originalUserData = JSON.parse(JSON.stringify(comments));
+        }
+
+    function exitEditMode(comment) {
+        const editIndex = originalUserData.findIndex((c) => c.id === comment.id);
+        if (originalUserData[editIndex].content !== comment.content) {
+            editComment(comment);
+        }
+        isEditMode = false;
+        originalUserData = null;
+    }
+
+    function toggleEditMode(comment) {
+        if (isEditMode) {
+            exitEditMode(comment);
+        } else {
+            editCommentId = comment.id;
+            enterEditMode();
+        }
+    }
 
     const socket = io("localhost:3000"); // Connect to the Socket.IO server
     // Handle commentAdded event
     socket.on("commentAdded", (comment) => {
         comments = [...comments, comment];
     });
+
+    socket.on("commentEdited", (comment) => {
+        comments = comments.map((c) => {
+            if (c.id === comment.id) {
+                return { ...c, content: comment.content };
+            }
+            return c;
+        });
+        console.log(comment);
+    });
+
+    socket.on("commentRemoved", (comment) => {
+        comments = comments.filter((c) => c.id !== comment.id);
+    })
 
     onMount(async () => {
         socket.emit("subscribeToCommentAdded");
@@ -54,20 +95,61 @@
     });
 
     async function addComment() {
-        const response = await fetch($serverURL + "/communityHub/comments", {
-            credentials: "include",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ content: newComment, roomId: $postRoom }),
-        });
+        const response = await fetch(
+            $serverURL + $serverEndpoints.communityHub.comments,
+            {
+                credentials: "include",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    content: newComment,
+                    roomId: $postRoom,
+                }),
+            }
+        );
         const data = await response.json();
 
         if (response.ok) {
             // Emit the new comment to all connected clients
             socket.emit("newComment", roomId, data.comment);
             newComment = "";
+
+            toast.success(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        } else {
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        }
+    }
+
+    async function editComment(comment) {
+        const response = await fetch(
+            $serverURL + $serverEndpoints.communityHub.comments,
+            {
+                credentials: "include",
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    content: comment.content,
+                    id: comment.id,
+                }),
+            }
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+            // Emit the comment to all connected clients
+            socket.emit("editComment", roomId, comment);
 
             toast.success(data.message, {
                 duration: 5000,
@@ -99,9 +181,12 @@
         });
 
         if (response.ok) {
-            toast.success(`Your post: "${post.title}" is now removed from CommunityHub.`);
+
+            toast.success(
+                `Your post: "${post.title}" is now removed from CommunityHub.`
+            );
             setTimeout(() => {
-                goBackToProfile();;
+                goBackToProfile();
             }, 2000);
         } else {
             toast.error("Failed to remove the post from CommunityHub.");
@@ -111,27 +196,29 @@
     const goBackToProfile = () => {
         navigate("/communityHub");
     };
-    const removeComment = async (commentId) => {
-        const url = $serverURL + $serverEndpoints.communityHub.comment;
-    
+    const removeComment = async (comment) => {
+        const url = $serverURL + $serverEndpoints.communityHub.comments;
+
         const response = await fetch(url + post.id, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({id: commentId}),
+            body: JSON.stringify({ id: comment.id }),
             credentials: "include",
         });
 
         if (response.ok) {
-            toast.success(`Your comment was removed successfully from CommunityHub.`);
-            setTimeout(() => {
-                goBackToProfile();;
-            }, 2000);
+             // Emit the comment to all connected clients
+             socket.emit("removeComment", roomId, comment);
+            toast.success(
+                `Your comment was removed successfully from CommunityHub.`
+            );
+            comments = comments.filter((c) => c.id !== comment.id);
         } else {
             toast.error("Failed to remove the post from CommunityHub.");
         }
-    }
+    };
 </script>
 
 <Toaster />
@@ -159,7 +246,10 @@
             <p class="m-auto my-2">{post?.content}</p>
             <div class="button-container">
                 {#if post?.gamertags == $session.gamertag}
-                    <button class="small-button cancel-button" on:click={removePost}>
+                    <button
+                        class="small-button cancel-button"
+                        on:click={removePost}
+                    >
                         <i class="bi bi-x-circle" />
                     </button>
                     <button class="small-button btn btn-outline-primary">
@@ -182,14 +272,27 @@
                 <li class="post-content my-4">
                     <div class="row">
                         <div class="post-content-container">
-                            <p class="m-auto my-2">{comment.content}</p>
+                            {#if isEditMode && editCommentId === comment.id}
+                                <textarea
+                                    class="m-auto my-2 me-2"
+                                    bind:value={comment.content}
+                                />
+                            {:else}
+                                <p class="m-auto my-2">{comment.content}</p>
+                            {/if}
                             <div class="button-container my-2">
                                 {#if comment.gamertag == $session.gamertag}
-                                    <button class="small-button cancel-button" on:click={() => removeComment(comment.id)}>
+                                    <button
+                                        class="small-button cancel-button"
+                                        on:click={() =>
+                                            removeComment(comment)}
+                                    >
                                         <i class="bi bi-x-circle" />
                                     </button>
+
                                     <button
                                         class="small-button btn btn-outline-primary"
+                                        on:click={() => toggleEditMode(comment)}
                                     >
                                         <i class="bi bi-pencil-square" />
                                     </button>

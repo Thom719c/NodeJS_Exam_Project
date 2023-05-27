@@ -96,10 +96,10 @@ router.post("/comments", async (req, res) => {
     const createdDate = new Date().toISOString().split("T")[0];
 
     const user = await getUserByGamertag(gamertag);
-    const sql = "INSERT INTO comments (post_id, user_id, gamertag, content, created_at) VALUES (?, ?, ?, ?, ?)";
+    const query = "INSERT INTO comments (post_id, user_id, gamertag, content, created_at) VALUES (?, ?, ?, ?, ?)";
     const values = [req.body.roomId, user.id, gamertag, req.body.content, createdDate];
 
-    const [rows] = await db.query(sql, values);
+    const [rows] = await db.query(query, values);
 
     const comment = {
         id: rows.insertId,
@@ -110,6 +110,26 @@ router.post("/comments", async (req, res) => {
     };
 
     res.status(201).send({ message: "Comment added successfully.", comment });
+});
+
+router.patch("/comments", async (req, res) => {
+    const gamertag = req.session.user?.gamertag;
+    if (!gamertag || !req.session.user) {
+        return res.status(400).send({ message: "Need to be logged in!" });
+    }
+    
+    if (!req.body.content) {
+        return res.status(404).send({ message: "The comment content cannot be empty." });
+    }
+    
+    const query = "UPDATE comments SET content = ? WHERE id = ?;";
+    
+    const values = [req.body.content, req.body.id];
+    console.log(values)
+
+    await db.query(query, values);
+
+    res.status(201).send({ message: "Comment edited successfully." });
 });
 
 router.delete("/posts/:id", async (req, res) => {
@@ -125,7 +145,7 @@ router.delete("/posts/:id", async (req, res) => {
     res.status(201).send({ message:'Your post: ' + postTitle + ' was removed successfully from communityHub' });
 })
 
-router.delete("/comment/:id", async (req, res) => {
+router.delete("/comments/:id", async (req, res) => {
     const postId = req.params.id;
     const commentId = req.body.id;
 
