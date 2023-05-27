@@ -122,8 +122,8 @@ app.get('/api/gameInfo/:appid', async (req, res) => {
     }
     // Sanitize the detailed description HTML
     const sanitizedDescription = sanitizeHtml(data[req.params.appid].data.detailed_description, {
-        allowedTags: ['img', 'ul', 'li'],
-      });
+        allowedTags: ['img', 'ul', 'li', 'br'],
+    }).replace(/<img /g, '<img class="description-img" ');
 
     // Update the data object with the sanitized description
     data[req.params.appid].data.detailed_description = sanitizedDescription;

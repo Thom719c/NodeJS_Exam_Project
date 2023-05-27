@@ -8,7 +8,10 @@
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
     import { SyncLoader } from "svelte-loading-spinners";
-    import {addToWishlist, addToOwnedGame } from '../../components/FetchingService/GameListUtils.js';
+    import {
+        addToWishlist,
+        addToOwnedGame,
+    } from "../../components/FetchingService/GameListUtils.js";
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -28,7 +31,6 @@
         gameInfo = data[appid].data;
     });
 
-    
     const goBackToProfile = () => {
         navigate("/gameMarket");
     };
@@ -58,10 +60,16 @@
                     alt="header_image"
                 />
 
-                <button class="wishlistButton" on:click={() => addToWishlist(appid, gameInfo.name)}>
+                <button
+                    class="wishlistButton"
+                    on:click={() => addToWishlist(appid, gameInfo.name)}
+                >
                     Add to Wishlist
                 </button>
-                <button class="ownedGameButton" on:click={() => addToOwnedGame(appid, gameInfo.name)}>
+                <button
+                    class="ownedGameButton"
+                    on:click={() => addToOwnedGame(appid, gameInfo.name)}
+                >
                     <i class="bi bi-star-fill" />
                 </button>
             </div>

@@ -59,6 +59,14 @@ h1 {
   padding-left: 2px;
 }
 
+.description-img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .form-input::placeholder {
   color: #777777;
 }
