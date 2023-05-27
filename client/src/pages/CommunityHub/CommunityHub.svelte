@@ -67,7 +67,7 @@
 
     .community-posts {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        grid-template-columns: 1fr;
         grid-gap: 20px;
         justify-items: center;
         margin: 20px;

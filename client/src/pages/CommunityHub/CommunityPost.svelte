@@ -8,7 +8,7 @@
 </script>
 
 <button
-    class="post col-lg-4 col-md-6 col-sm-12"
+    class="post"
     on:click={() => {
         postRoom.set(post.id);
         navigate(`/communityHub/post/${post.id}`);
@@ -21,8 +21,11 @@
         </div>
     </div>
     <p class="post-content">{post.content}</p>
-    <div class="post-dates">
-        <p class="post-date">Last Edited: {post.updated_at}</p>
+    <div class="post-author">
+        <p class="post-date">{post.gamertags}</p>
+        <div class="post-dates">
+            <p class="post-date">Last Edited: {post.updated_at}</p>
+        </div>
     </div>
 </button>
 
@@ -47,6 +50,11 @@
         justify-content: space-between;
         align-items: baseline;
         margin-bottom: 10px;
+    }
+    .post-author {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
     }
 
     h2 {

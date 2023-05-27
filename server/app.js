@@ -65,6 +65,15 @@ io.on("connection", (socket) => {
         // Emit the comment to all connected clients
         io.to(roomId).emit("commentAdded", comment);
     });
+    socket.on("editComment", ( roomId, comment) => {
+        console.log(roomId, comment)
+        io.to(roomId).emit("commentEdited", comment);
+    })
+    socket.on("removeComment", ( roomId, comment) => {
+        console.log(roomId, comment)
+        io.to(roomId).emit("commentRemoved", comment);
+    })
+
 
     // Handle client disconnection
     socket.on("disconnect", () => {

@@ -20,6 +20,10 @@ export const serverEndpoints = readable({
         contact: "/mail/contact",
         forgotpassword: "/mail/forgot-password",
     },
+    communityHub: {
+        posts: "/communityHub/posts/",
+        comments: "/communityHub/comments/"
+    }
 });
 
 export const session = writable(null);
