@@ -14,7 +14,7 @@
     import UserWishlist from "../../pages/Game/UserWishlist.svelte";
     import PostDetails from "../../pages/CommunityHub/PostDetails.svelte";
     import logoIcon from "../../assets/GamingOasisLogoIconTransparrent.png";
-    import Contact from "../../pages/Feedback/Contact.svelte";
+    import Contact from "../../pages/Contact/Contact.svelte";
 </script>
 
 <Router>
@@ -62,8 +62,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/feedback" use:link>
-                            Feedback/Contact us
+                        <a class="nav-link" href="/contact" use:link>
+                            Contact us
                         </a>
                     </li>
                 </ul>
@@ -114,7 +114,7 @@
             <PostDetails />
         </Route>
         
-        <Route path="/feedback" primary={false}>
+        <Route path="/contact" primary={false}>
             <Contact />
         </Route>
 
