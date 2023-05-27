@@ -9,6 +9,7 @@
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
+    import { claim_svg_element, comment } from "svelte/internal";
 
     const navigate = useNavigate();
 
@@ -82,9 +83,55 @@
         }
     }
 
+    const removePost = async () => {
+        const url = $serverURL + $serverEndpoints.communityHub.postDetails;
+        const removePost = {
+            id: post.id,
+            title: post.title,
+        };
+        const response = await fetch(url + post.id, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(removePost),
+            credentials: "include",
+        });
+
+        if (response.ok) {
+            toast.success(`Your post: "${post.title}" is now removed from CommunityHub.`);
+            setTimeout(() => {
+                goBackToProfile();;
+            }, 2000);
+        } else {
+            toast.error("Failed to remove the post from CommunityHub.");
+        }
+    };
+
     const goBackToProfile = () => {
         navigate("/communityHub");
     };
+    const removeComment = async (commentId) => {
+        const url = $serverURL + $serverEndpoints.communityHub.comment;
+    
+        const response = await fetch(url + post.id, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({id: commentId}),
+            credentials: "include",
+        });
+
+        if (response.ok) {
+            toast.success(`Your comment was removed successfully from CommunityHub.`);
+            setTimeout(() => {
+                goBackToProfile();;
+            }, 2000);
+        } else {
+            toast.error("Failed to remove the post from CommunityHub.");
+        }
+    }
 </script>
 
 <Toaster />
@@ -108,7 +155,19 @@
     </div>
 
     <div class="post-content">
-        <p>{post?.content}</p>
+        <div class="post-content-container">
+            <p class="m-auto my-2">{post?.content}</p>
+            <div class="button-container">
+                {#if post?.gamertags == $session.gamertag}
+                    <button class="small-button cancel-button" on:click={removePost}>
+                        <i class="bi bi-x-circle" />
+                    </button>
+                    <button class="small-button btn btn-outline-primary">
+                        <i class="bi bi-pencil-square" />
+                    </button>
+                {/if}
+            </div>
+        </div>
         <p class="col comment-user">
             Created by: {post?.gamertags}
         </p>
@@ -122,9 +181,21 @@
             {#each comments as comment (comment.id)}
                 <li class="post-content my-4">
                     <div class="row">
-                        <p>
-                            {comment.content}
-                        </p>
+                        <div class="post-content-container">
+                            <p class="m-auto my-2">{comment.content}</p>
+                            <div class="button-container my-2">
+                                {#if comment.gamertag == $session.gamertag}
+                                    <button class="small-button cancel-button" on:click={() => removeComment(comment.id)}>
+                                        <i class="bi bi-x-circle" />
+                                    </button>
+                                    <button
+                                        class="small-button btn btn-outline-primary"
+                                    >
+                                        <i class="bi bi-pencil-square" />
+                                    </button>
+                                {/if}
+                            </div>
+                        </div>
                         <p class="col comment-user">
                             Posted by: {comment.gamertag}
                         </p>
@@ -226,5 +297,45 @@
     .back-button:hover,
     .post-button:hover {
         background-color: rgba(71, 135, 155, 0.255);
+    }
+
+    .post-content-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .button-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .small-button {
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+
+    .cancel-button {
+        color: red;
+        background-color: rgba(48, 76, 96, 0.9);
+        border: 1px solid red;
+        margin-right: 10px;
+    }
+    .btn-outline-primary {
+        border-color: #e5e047;
+        background-color: rgba(48, 76, 96, 0.9);
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #67c2dd41;
+        color: white;
+    }
+    .cancel-button:hover {
+        background-color: #ff000041;
     }
 </style>

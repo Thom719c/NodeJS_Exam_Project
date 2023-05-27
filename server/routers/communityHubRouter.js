@@ -1,6 +1,7 @@
 import db from "../database/connection.js";
-import { getUserByGamertag } from "../database/userQueries.js";
+import { getUserByGamertag, removePost, removeComment } from "../database/userQueries.js";
 import { Router } from "express"
+
 const router = Router();
 
 
@@ -110,5 +111,33 @@ router.post("/comments", async (req, res) => {
 
     res.status(201).send({ message: "Comment added successfully.", comment });
 });
+
+router.delete("/posts/:id", async (req, res) => {
+    const postId = req.params.id;
+    const postTitle = req.body.title
+
+    if (!req.session.user?.gamertag) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    await removePost(req.session.user.gamertag, postId);
+
+    res.status(201).send({ message:'Your post: ' + postTitle + ' was removed successfully from communityHub' });
+})
+
+router.delete("/comment/:id", async (req, res) => {
+    const postId = req.params.id;
+    const commentId = req.body.id;
+
+    if (!req.session.user?.gamertag) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    await removeComment(req.session.user.gamertag, postId, commentId);
+
+    res.status(201).send({ message:'Your comment was removed successfully from communityHub' });
+
+
+})
 
 export default router;

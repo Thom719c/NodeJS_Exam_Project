@@ -136,6 +136,30 @@ async function removeGameFromWishlist(gamertag, game) {
     await db.query(query, values);
 }
 
+async function removePost(gamertag, postId) {
+    const user = await getUserByGamertag(gamertag);
+
+    await removeCommentsByPostId(user, postId);
+
+    const query = 'DELETE FROM posts WHERE user_id = ? AND id = ?';
+    const values = [user.id, postId];
+    await db.query(query, values);
+}
+
+async function removeComment(gamertag, postId, commentId) {
+    const user = await getUserByGamertag(gamertag);
+
+    const query = 'DELETE FROM comments WHERE user_id = ? AND id = ? AND post_id = ?';
+    const values = [user.id, commentId, postId];
+    await db.query(query, values);
+}
+
+async function removeCommentsByPostId(user, postId) {
+    const query = 'DELETE FROM comments WHERE user_id = ? AND post_id = ?';
+    const values = [user.id, postId];
+    await db.query(query, values);
+}
+
 
 export {
     getUserByEmail,
@@ -152,5 +176,7 @@ export {
     removeGameFromOwnedList,
     getAllWishlistGamesByGamertag,
     addGameToWishlist,
-    removeGameFromWishlist
+    removeGameFromWishlist,
+    removePost,
+    removeComment,
 };
