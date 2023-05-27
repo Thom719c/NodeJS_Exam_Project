@@ -15,6 +15,8 @@
     import PostDetails from "../../pages/CommunityHub/PostDetails.svelte";
     import logoIcon from "../../assets/GamingOasisLogoIconTransparrent.png";
     import Contact from "../../pages/Contact/Contact.svelte";
+    import Games from "../../pages/Game/Games.svelte";
+    import Game from "../../pages/Game/Game.svelte";
 </script>
 
 <Router>
@@ -96,7 +98,13 @@
             <Home />
         </Route>
 
-        <Route path="/games" primary={false} />
+        <Route path="/games" primary={false}>
+            <Games />
+        </Route>
+        
+        <Route path="/games/:id">
+            <Game />
+        </Route>
 
         <Route path="/gameMarket" primary={false}>
             <GameMarket />
@@ -105,15 +113,15 @@
         <Route path="/gameInfo" primary={false}>
             <GameInfo />
         </Route>
-        
+
         <Route path="/communityHub" primary={false}>
             <CommunityHub />
         </Route>
-        
+
         <Route path="/communityHub/post/:id" primary={false}>
             <PostDetails />
         </Route>
-        
+
         <Route path="/contact" primary={false}>
             <Contact />
         </Route>
