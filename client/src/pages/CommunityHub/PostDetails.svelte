@@ -167,7 +167,7 @@
     }
 
     const removePost = async () => {
-        const url = $serverURL + $serverEndpoints.communityHub.postDetails;
+        const url = $serverURL + $serverEndpoints.communityHub.posts;
         const removePost = {
             id: post.id,
             title: post.title,
