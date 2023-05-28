@@ -30,6 +30,12 @@ h1 {
   line-height: 1.1;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .text-gradient {
   background: -webkit-linear-gradient(#5AD594, #E5E047);
   background-clip: text;
@@ -95,6 +101,22 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.back-button,
+.post-button {
+  background-color: #67c2dd41;
+  border-color: #e5e047;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 6px 12px;
+  letter-spacing: 1px;
+}
+
+.back-button:hover,
+.post-button:hover {
+  background-color: rgba(71, 135, 155, 0.255);
+  border-color: #e5e047;
 }
 
 @media (prefers-color-scheme: light) {

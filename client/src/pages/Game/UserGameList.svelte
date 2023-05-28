@@ -176,23 +176,4 @@
     .remove-button:hover {
         background-color: #aa0f0f;
     }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .back-button {
-        background-color: #67c2dd41;
-        border-color: #e5e047;
-        font-weight: bold;
-        font-size: 14px;
-        padding: 6px 12px;
-        letter-spacing: 1px;
-    }
-
-    .back-button:hover {
-        background-color: rgba(71, 135, 155, 0.255);
-    }
 </style>

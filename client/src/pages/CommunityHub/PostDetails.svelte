@@ -8,10 +8,10 @@
         postRoom,
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
-    import { useNavigate } from "svelte-navigator";
-    import { claim_svg_element, comment } from "svelte/internal";
+    import { useNavigate, useLocation } from "svelte-navigator";
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     let roomId = "";
     let post = {};
@@ -25,10 +25,12 @@
     function enterEditMode() {
         isEditMode = true;
         originalUserData = JSON.parse(JSON.stringify(comments));
-        }
+    }
 
     function exitEditMode(comment) {
-        const editIndex = originalUserData.findIndex((c) => c.id === comment.id);
+        const editIndex = originalUserData.findIndex(
+            (c) => c.id === comment.id
+        );
         if (originalUserData[editIndex].content !== comment.content) {
             editComment(comment);
         }
@@ -45,7 +47,7 @@
         }
     }
 
-    const socket = io("localhost:3000"); // Connect to the Socket.IO server
+    const socket = io($serverURL); // Connect to the Socket.IO server
     // Handle commentAdded event
     socket.on("commentAdded", (comment) => {
         comments = [...comments, comment];
@@ -63,13 +65,12 @@
 
     socket.on("commentRemoved", (comment) => {
         comments = comments.filter((c) => c.id !== comment.id);
-    })
+    });
 
     onMount(async () => {
         socket.emit("subscribeToCommentAdded");
         // Fetch post details and comments from API or any other data source
-        // Example data
-
+        postRoom.set($location.pathname.split("/").pop()); // extracting the last segment using pop() to get the "id" from the URL (after last "/").
         const response = await fetch(
             $serverURL + "/communityHub/posts/" + $postRoom
         );
@@ -181,7 +182,6 @@
         });
 
         if (response.ok) {
-
             toast.success(
                 `Your post: "${post.title}" is now removed from CommunityHub.`
             );
@@ -193,9 +193,6 @@
         }
     };
 
-    const goBackToProfile = () => {
-        navigate("/communityHub");
-    };
     const removeComment = async (comment) => {
         const url = $serverURL + $serverEndpoints.communityHub.comments;
 
@@ -209,8 +206,8 @@
         });
 
         if (response.ok) {
-             // Emit the comment to all connected clients
-             socket.emit("removeComment", roomId, comment);
+            // Emit the comment to all connected clients
+            socket.emit("removeComment", roomId, comment);
             toast.success(
                 `Your comment was removed successfully from CommunityHub.`
             );
@@ -218,6 +215,10 @@
         } else {
             toast.error("Failed to remove the post from CommunityHub.");
         }
+    };
+
+    const goBackToProfile = () => {
+        navigate("/communityHub");
     };
 </script>
 
@@ -245,7 +246,7 @@
         <div class="post-content-container">
             <p class="m-auto my-2">{post?.content}</p>
             <div class="button-container">
-                {#if post?.gamertags == $session.gamertag}
+                {#if post?.gamertags == $session?.gamertag}
                     <button
                         class="small-button cancel-button"
                         on:click={removePost}
@@ -281,11 +282,10 @@
                                 <p class="m-auto my-2">{comment.content}</p>
                             {/if}
                             <div class="button-container my-2">
-                                {#if comment.gamertag == $session.gamertag}
+                                {#if comment.gamertag == $session?.gamertag}
                                     <button
                                         class="small-button cancel-button"
-                                        on:click={() =>
-                                            removeComment(comment)}
+                                        on:click={() => removeComment(comment)}
                                     >
                                         <i class="bi bi-x-circle" />
                                     </button>
@@ -361,12 +361,6 @@
         justify-content: end;
     }
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
     .title {
         text-align: center;
         font-size: 30px;
@@ -388,18 +382,7 @@
 
     .back-button,
     .post-button {
-        background-color: #67c2dd41;
-        border-color: #e5e047;
-        font-weight: bold;
-        font-size: 14px;
-        padding: 6px 12px;
-        letter-spacing: 1px;
         min-width: 90px;
-    }
-
-    .back-button:hover,
-    .post-button:hover {
-        background-color: rgba(71, 135, 155, 0.255);
     }
 
     .post-content-container {

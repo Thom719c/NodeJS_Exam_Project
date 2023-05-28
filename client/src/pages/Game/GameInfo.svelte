@@ -307,18 +307,4 @@
     .ownedGameButton:hover {
         color: yellow;
     }
-    .back-button {
-        margin: auto;
-        background-color: #67c2dd41;
-        border-color: #e5e047;
-        font-weight: bold;
-        font-size: 14px;
-        padding: 6px 12px;
-        letter-spacing: 1px;
-        /* z-index: 2; */
-    }
-
-    .back-button:hover {
-        background-color: rgba(71, 135, 155, 0.255);
-    }
 </style>
