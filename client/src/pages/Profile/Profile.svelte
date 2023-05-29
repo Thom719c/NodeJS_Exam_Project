@@ -22,6 +22,7 @@
     let isPopupOpen = false;
     let originalUserData = null;
     let selectedFile;
+    let previewImageUrl = null;
 
     onMount(async () => {
         const url = $serverURL + $serverEndpoints.authentication.profileimage;
@@ -151,6 +152,15 @@
     function handleFileInputChange(event) {
         const file = event.target.files[0];
         selectedFile = file;
+
+        // Create a preview URL for the selected image
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImageUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     function ownedGames() {
@@ -177,7 +187,7 @@
             <div class="col-lg-12 mt-5">
                 <img
                     class="img-fluid mx-auto d-block rounded-4"
-                    src={imageUrl}
+                    src={previewImageUrl || imageUrl}
                     width="150"
                     alt="Profile_image"
                 />

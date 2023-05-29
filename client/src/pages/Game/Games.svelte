@@ -1,12 +1,14 @@
 <script>
   import { onMount } from "svelte";
   import {
+    session,
     selectedGame,
     serverURL,
     serverEndpoints,
   } from "../../stores/stores.js";
   import defaultGameImage from "../../assets/defaultGameImage.png";
   import { useNavigate } from "svelte-navigator";
+  import AddGame from "../../components/Game/AddGame.svelte";
 
   const navigate = useNavigate();
 
@@ -15,6 +17,7 @@
   let searchQuery = "";
   let selectedRadioValue = "all";
   let selectedGenre = "all";
+  let showAddGamePopup = false;
 
   onMount(async () => {
     const url = $serverURL + "/games";
@@ -51,6 +54,26 @@
 <div>
   <h1>Games</h1>
 </div>
+
+{#if $session}
+  <button
+    class="post-button"
+    on:click={() => (showAddGamePopup = !showAddGamePopup)}
+  >
+    Add Game
+  </button>
+{/if}
+
+{#if showAddGamePopup}
+  <div class="create-post-overlay">
+    <div class="create-post-popup container">
+      <AddGame />
+      <button class="close-button" on:click={() => (showAddGamePopup = false)}>
+        <i class="bi bi-x-lg" />
+      </button>
+    </div>
+  </div>
+{/if}
 
 <div class="container-fluid row">
   <div class="col game-container mt-4">
@@ -300,8 +323,7 @@
     width: 100%;
   }
 
-  .search,
-  .search-button {
+  .search {
     display: flex;
     align-items: center;
     height: 35px;
@@ -326,19 +348,44 @@
     cursor: pointer;
   }
 
-  .genres input[type="checkbox"],
   .genres input[type="radio"] {
     margin-right: 10px;
     transform: scale(1.25);
   }
 
-  .pageSize {
-    background-color: #67c2dd41;
-    border-color: #e5e047;
-    border-radius: 5px;
+  .create-post-popup {
+    background-color: #242424;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 35em;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    z-index: 2;
   }
 
-  option {
-    color: black;
+  .create-post-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .close-button {
+    background-color: #67c2dd41;
+    border-color: #e5e047;
+    padding: 5px 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .close-button:hover {
+    background-color: #f35348ce;
   }
 </style>
