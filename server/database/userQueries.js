@@ -1,6 +1,12 @@
 import db from "./connection.js";
 import { v4 as uuidv4 } from 'uuid';
 
+async function getAllUsers() {
+    const query = 'SELECT gamertag, profile_image, name, email FROM users';
+    const [rows] = await db.query(query);
+    return rows;
+}
+
 async function getUserByEmail(email) {
     const [rows] = await db.query(`SELECT * FROM users WHERE email = ?`, [email]);
     return rows[0];
@@ -141,6 +147,8 @@ async function removeGameFromWishlist(gamertag, game) {
     await db.query(query, values);
 }
 
+/*Community Hub*/
+
 async function removePost(gamertag, postId) {
     const user = await getUserByGamertag(gamertag);
 
@@ -165,8 +173,25 @@ async function removeCommentsByPostId(user, postId) {
     await db.query(query, values);
 }
 
+/* Friendlist */
+
+async function getAllFriendlistByGamertag(gamertag) {
+    const query = 'SELECT * FROM users u JOIN friendlist f ON u.id = f.user_id WHERE u.gamertag = ?';
+    const values = [gamertag];
+    const [rows] = await db.query(query, values);
+    return rows;
+}
+
+async function addUserToFriendlist(gamertag, friend) {
+    const user = await getUserByGamertag(gamertag);
+
+    const query = 'INSERT INTO friendlist (user_id, id, name) VALUES (?, ?, ?)';
+    const values = [user.id, friend.id, friend.name];
+    await db.query(query, values);
+}
 
 export {
+    getAllUsers,
     getUserByEmail,
     getUserByGamertag,
     getProfileImageByGamertag,
@@ -185,4 +210,6 @@ export {
     removeGameFromWishlist,
     removePost,
     removeComment,
+    getAllFriendlistByGamertag,
+    addUserToFriendlist,
 };

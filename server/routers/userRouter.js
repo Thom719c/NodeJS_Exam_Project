@@ -6,8 +6,18 @@ import {
     getAllOwnedGameByGamertag, addOwnedGameToUser,
     removeGameFromOwnedList,
     getAllWishlistGamesByGamertag, addGameToWishlist,
-    removeGameFromWishlist
+    removeGameFromWishlist,
+    getAllFriendlistByGamertag
 } from "../database/userQueries.js";
+
+router.get("/users", async (req, res) => {
+    if (!req.session.user) {
+        return res.status(404).send({ message: "Need to be logged in!" });
+    }
+    const user = await getAllUsers();
+    res.status(200).send({ data: user });
+});
+
 
 router.get("/profileImage", async (req, res) => {
     if (!req.session.user) {
@@ -101,6 +111,37 @@ router.delete("/wishlist", async (req, res) => {
     await removeGameFromWishlist(req.session.user.gamertag, game);
 
     res.status(201).send({ message: 'Game removed successfully from the wishlist' });
+});
+
+/*Friendlist */
+router.get("/friendlist", async (req, res) => {
+    const gamertag = req.session.user?.gamertag;
+    if (!gamertag || !req.session.user) {
+        return res.status(400).send({ message: "Need to be logged in!" });
+    }
+
+    const friendlist = await getAllFriendlistByGamertag(gamertag);
+
+    res.status(200).send({ message: 'All your friends', data: friendlist });
+});
+
+router.post("/friendlist", async (req, res) => {
+    const friend = req.body;
+
+    if (!friend.id || !friend.name || !req.session.user?.gamertag) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    // Get all friends that user has and Check if the friend is already in the friendlist
+    const friendlist = await getAllFriendlistByGamertag(req.session.user.gamertag);
+    const friendExists = friendlist.find((listedFriend) => listedFriend.id === friend.id);
+    if (friendExists) {
+        return res.status(409).send({ message: "Friend already on the friendlist" });
+    }
+
+    await addUserToFriendlist(req.session.user.gamertag, friend);
+
+    res.status(201).send({ message: 'User added successfully to the friendlist' });
 });
 
 export default router
