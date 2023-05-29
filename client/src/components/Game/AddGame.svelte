@@ -94,7 +94,13 @@
     <div class="post-content">
         <form on:submit|preventDefault={createGame}>
             <label for="name">Name</label>
-            <input type="text" id="name" bind:value={name} maxlength="50" />
+            <input
+                type="text"
+                id="name"
+                bind:value={name}
+                maxlength="50"
+                placeholder="Name of the game here"
+            />
 
             <hr />
 
@@ -111,6 +117,7 @@
                     id="image"
                     class="mt-2"
                     name="image"
+                    placeholder="Public url link here"
                     bind:value={image}
                     maxlength="50"
                     disabled
@@ -121,6 +128,7 @@
                     id="image"
                     class="mt-2"
                     name="image"
+                    placeholder="Public url link here"
                     bind:value={image}
                     maxlength="50"
                 />
@@ -128,8 +136,13 @@
 
             <hr />
 
-            <label for="src">Source</label>
-            <input type="text" id="src" bind:value={src} />
+            <label for="src">Game Source</label>
+            <input
+                type="text"
+                id="src"
+                bind:value={src}
+                placeholder="Source to the game here"
+            />
 
             <label for="genre">Genre</label>
             <select class="genre" id="genre" bind:value={genre}>
@@ -221,9 +234,17 @@
         background-color: rgba(71, 135, 155, 0.255);
     }
 
-    input[type="text"] {
+    input[type="text"],
+    input[type="file"] {
+        background-color: #67c2dd41;
+        border-color: #e5e047;
         font-weight: bold;
         width: 100%;
+    }
+
+    input[type="text"]::placeholder,
+    input[type="file"]::placeholder {
+        color: #a0a0a0;
     }
 
     .owner {
@@ -248,7 +269,8 @@
         background-color: #67c2dd41;
         border-color: #e5e047;
         border-radius: 5px;
-        width: 200px;
+        width: 100%;
+        height: 30px;
     }
 
     option {
