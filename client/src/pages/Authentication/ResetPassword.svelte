@@ -23,7 +23,6 @@
         const params = new URLSearchParams($location.search);
         const token = params.get("token");
         const url = $serverURL + $serverEndpoints.authentication.resetpassword;
-
         try {
             const response = await fetch(url, {
                 method: "PUT",

@@ -68,27 +68,4 @@ router.post("/mail/forgot-password", async (req, res) => {
     }
 });
 
-
-router.put("/reset-password", async (req, res) => {
-    const { newPassword, confirmPassword, token } = req.body;
-
-    // Validate the new password
-    if (newPassword !== confirmPassword) {
-        return res.status(400).send({ message: 'Passwords do not match.' });
-    }
-
-    // Check if token is valid
-    const data = await getEmailByPasswordResetToken(token);
-    if (!data) {
-        return res.status(401).send({ message: 'Invalid token.' });
-    }
-
-    const encryptedPassword = await bcrypt.hash(newPassword, 12);
-    // Update the user's password in the database
-    await updateUserPassword(encryptedPassword, data.email);
-    await deletePasswordResetToken(token);
-
-    res.send({ message: 'Password reset successful.' });
-});
-
 export default router;
