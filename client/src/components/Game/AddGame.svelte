@@ -42,7 +42,7 @@
         } else {
             toast.error(data.message);
         }
-    }
+    };
 
     const addGame = async (filename) => {
         const game = {
@@ -77,7 +77,7 @@
                 style: "border-radius: 200px; background: #333; color: #fff;",
             });
         }
-    }
+    };
 
     function handleFileImageInputChange(event) {
         image = "";
@@ -129,10 +129,22 @@
             <hr />
 
             <label for="src">Source</label>
-            <input type="text" id="src" bind:value={src} maxlength="50" />
+            <input type="text" id="src" bind:value={src} />
 
             <label for="genre">Genre</label>
-            <input type="text" id="genre" bind:value={genre} maxlength="50" />
+            <select class="genre" id="genre" bind:value={genre}>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="RPG">RPG</option>
+                <option value="Sport">Sport</option>
+                <option value="Simulation">Simulation</option>
+                <option value="Racing">Racing</option>
+                <option value="Board">Board</option>
+                <option value="Arcade">Arcade</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <hr />
 
             <div class="owner">
                 <label for="owner">Games from</label>
@@ -230,5 +242,16 @@
     .owner input[type="radio"] {
         margin-right: 10px;
         transform: scale(1.25);
+    }
+
+    .genre {
+        background-color: #67c2dd41;
+        border-color: #e5e047;
+        border-radius: 5px;
+        width: 200px;
+    }
+
+    option {
+        color: black;
     }
 </style>

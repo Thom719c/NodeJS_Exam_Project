@@ -49,6 +49,18 @@
       return isMatch && isOwnerMatch && isGenreMatch;
     });
   };
+
+  const showImage = (gameImage) => {
+    if (!gameImage) {
+      return defaultGameImage;
+    }
+
+    if (gameImage.startsWith("http")) {
+      return gameImage;
+    }
+
+    return `${$serverURL}/images/games/${gameImage}`;
+  };
 </script>
 
 <div>
@@ -65,7 +77,7 @@
 {/if}
 
 {#if showAddGamePopup}
-  <div class="create-post-overlay">
+  <div class="create-post-overlay z-1">
     <div class="create-post-popup container">
       <AddGame />
       <button class="close-button" on:click={() => (showAddGamePopup = false)}>
@@ -82,7 +94,7 @@
         <div class="row">
           <img
             class="col game-image"
-            src={game.image}
+            src={showImage(game.image)}
             alt={`Cover image for ${game.name}`}
           />
           <p class="col game-name text-gradient">{game.name}</p>
@@ -90,7 +102,7 @@
       </button>
     {/each}
   </div>
-  <div class="col-2 filter sticky-top">
+  <div class="col-2 sticky-top filter z-0">
     <!-- Fields for filter -->
     <div class="search-bar mb-3">
       <input
@@ -247,6 +259,17 @@
           />
           Arcade
         </label>
+        <label for="other">
+          <input
+            type="radio"
+            id="other"
+            name="genres"
+            value="other"
+            bind:group={selectedGenre}
+            on:change={searchGames}
+          />
+          Other
+        </label>
       </div>
     </div>
   </div>
@@ -305,7 +328,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 200px;
-    height: 455px;
+    height: 475px;
     margin-top: 35px;
     padding: 10px;
     top: 50px;
