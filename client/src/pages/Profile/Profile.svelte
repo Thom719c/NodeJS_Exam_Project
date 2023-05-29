@@ -25,7 +25,7 @@
     let previewImageUrl = null;
 
     onMount(async () => {
-        const url = $serverURL + $serverEndpoints.authentication.profileimage;
+        const url = $serverURL + $serverEndpoints.user.profileimage;
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
         if (response.ok) {

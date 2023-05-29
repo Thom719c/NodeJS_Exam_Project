@@ -1,12 +1,12 @@
     import toast, { Toaster } from "svelte-french-toast";
 
     export const addToWishlist = (appid, name) => {
-        const url = 'http://localhost:3000/auth/wishlist';
+        const url = 'http://localhost:3000/user/wishlist';
         fetchingAddToList(url, appid, name);
     };
 
    export const addToOwnedGame = (appid, name) => {
-        const url = 'http://localhost:3000/auth/addOwnedGame';
+        const url = 'http://localhost:3000/user/ownedGames';
         fetchingAddToList(url, appid, name);
     };
 

@@ -12,14 +12,14 @@
     const navigate = useNavigate();
 
     onMount(async () => {
-        const url = $serverURL + $serverEndpoints.authentication.ownedGame;
+        const url = $serverURL + $serverEndpoints.user.ownedGame;
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
         games = data.data;
     });
 
     const removeGameFromList = async (game) => {
-        const url = $serverURL + $serverEndpoints.authentication.ownedGame;
+        const url = $serverURL + $serverEndpoints.user.ownedGame;
         const removeGame = {
             steamAppId: game.steam_app_id,
             name: game.game_name,
