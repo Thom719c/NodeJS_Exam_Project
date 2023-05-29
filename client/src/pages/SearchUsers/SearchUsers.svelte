@@ -5,7 +5,10 @@
         serverURL,
         serverEndpoints,
     } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import defaultProfileImage from "../../assets/profileDefault.png";
+    import { useNavigate } from "svelte-navigator";
+
+    const navigate = useNavigate();
 
     let users = [];
     let filteredUsers = [];
@@ -16,7 +19,6 @@
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
         users = data.data;
-        console.log(users);
     });
 
     const searchUsers = () => {
@@ -26,9 +28,20 @@
             return isMatch;
         });
     };
-</script>
 
-<Toaster />
+    const showImage = (avatar) => {
+        if (!avatar) {
+            return defaultProfileImage;
+        }
+
+        return `${$serverURL}/images/avatar/${avatar}`;
+    };
+
+    const goToUser = (user) => {
+        searchQuery = "";
+        navigate(`/profile/${user.gamertag}`, { replace: true });
+    };
+</script>
 
 <!-- <div class="search-bar">
     <input
@@ -72,12 +85,14 @@
     {#if searchQuery !== "" && filteredUsers.length > 0}
         <div class="suggestions">
             {#each filteredUsers as user}
-                <div class="card">
+                <div
+                    class="card"
+                    on:click={() => goToUser(user)}
+                    on:keydown={() => goToUser(user)}
+                >
                     <img
                         class="avatar"
-                        src={$serverURL +
-                            "/images/avatar/" +
-                            user.profile_image}
+                        src={showImage(user.profile_image)}
                         alt={user.name}
                     />
                     <span>{user.name}</span>

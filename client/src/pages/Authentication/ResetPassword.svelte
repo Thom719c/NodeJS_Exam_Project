@@ -1,6 +1,6 @@
 <script>
     import { serverURL, serverEndpoints } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import { useNavigate, useLocation } from "svelte-navigator";
 
     const navigate = useNavigate();
@@ -59,8 +59,6 @@
     }
 </script>
 
-<Toaster />
-<!-- svelte-ignore a11y-label-has-associated-control -->
 <div class="container-fluid reset-container">
     <div class="row">
         <div class="col-6 mx-auto box">
@@ -78,7 +76,7 @@
                 <div class="col-lg-12 forgot-reset-form">
                     <form on:submit|preventDefault={handleChangePassword}>
                         <div class="form-group">
-                            <label class="form-control-label">
+                            <label class="form-control-label" for="newPassword">
                                 New password
                             </label>
                             <input
@@ -91,7 +89,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-control-label">
+                            <label class="form-control-label" for="confirmPassword">
                                 Confirm password
                             </label>
                             <input

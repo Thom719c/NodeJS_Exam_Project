@@ -1,6 +1,6 @@
 <script>
     import { serverURL, serverEndpoints } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
 
     const navigate = useNavigate();
@@ -42,8 +42,6 @@
     }
 </script>
 
-<Toaster />
-<!-- svelte-ignore a11y-label-has-associated-control -->
 <div class="container-fluid forgot-container">
     <div class="row">
         <div class="col-6 mx-auto box">
@@ -67,7 +65,7 @@
                         method="post"
                     >
                         <div class="form-group">
-                            <label class="form-control-label">E-Mail</label>
+                            <label class="form-control-label" for="email">E-Mail</label>
                             <input
                                 type="email"
                                 name="email"

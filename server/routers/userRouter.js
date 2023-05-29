@@ -8,7 +8,9 @@ import {
     getAllWishlistGamesByGamertag, addGameToWishlist,
     removeGameFromWishlist,
     getAllFriendlistByGamertag,
-    getAllUsers
+    getAllUsers,
+    getSpecificUserByGamertag,
+    addUserToFriendlist
 } from "../database/userQueries.js";
 
 router.get("/", async (req, res) => {
@@ -16,6 +18,15 @@ router.get("/", async (req, res) => {
         return res.status(404).send({ message: "Need to be logged in!" });
     }
     const user = await getAllUsers();
+    res.status(200).send({ data: user });
+});
+
+router.get("/profile/:gamertag", async (req, res) => {
+    if (!req.session.user) {
+        return res.status(404).send({ message: "Need to be logged in!" });
+    }
+    const gamertag = req.params.gamertag;
+    const user = await getSpecificUserByGamertag(gamertag);
     res.status(200).send({ data: user });
 });
 
@@ -127,9 +138,10 @@ router.get("/friendlist", async (req, res) => {
 });
 
 router.post("/friendlist", async (req, res) => {
-    const friend = req.body;
+    const friend = req.body?.user;
+    console.log(friend)
 
-    if (!friend.id || !friend.name || !req.session.user?.gamertag) {
+    if (!friend.name || !friend.email || !friend.profile_image || !friend.gamertag || !req.session.user?.gamertag) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
     }
 

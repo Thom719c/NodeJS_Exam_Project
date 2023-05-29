@@ -5,8 +5,7 @@
         serverEndpoints,
         session,
     } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
-    import Cookies from "js-cookie";
+    import toast from "svelte-french-toast";
     import logo from "../../assets/GamingOasisLogoTransparrent.png";
 
     const navigate = useNavigate();
@@ -50,8 +49,6 @@
         }
     }
 </script>
-
-<Toaster />
 
 <div class="container-fluid login-container">
     <div class="row">

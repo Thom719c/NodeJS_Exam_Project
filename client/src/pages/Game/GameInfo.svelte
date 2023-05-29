@@ -1,12 +1,6 @@
 <script>
     import { onMount } from "svelte";
     import { useLocation, useNavigate } from "svelte-navigator";
-    import {
-        serverURL,
-        serverEndpoints,
-        session,
-    } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
     import { SyncLoader } from "svelte-loading-spinners";
     import {
         addToWishlist,
@@ -35,8 +29,6 @@
         navigate("/gameMarket");
     };
 </script>
-
-<Toaster />
 
 {#if gameInfo}
     <div class="container">

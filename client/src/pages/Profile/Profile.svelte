@@ -5,7 +5,7 @@
         serverURL,
         serverEndpoints,
     } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import SessionCheck from "../../components/Authentication/SessionCheck.svelte";
     import Logout from "../../components/Authentication/Logout.svelte";
     import PopUp from "../../components/Authentication/PopUp.svelte";
@@ -172,7 +172,6 @@
     }
 </script>
 
-<Toaster />
 <SessionCheck />
 
 <div class="container-fluid">

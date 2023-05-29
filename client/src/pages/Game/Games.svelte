@@ -6,7 +6,7 @@
     serverURL,
     serverEndpoints,
   } from "../../stores/stores.js";
-  import toast, { Toaster } from "svelte-french-toast";
+  import toast from "svelte-french-toast";
   import defaultGameImage from "../../assets/defaultGameImage.png";
   import { useNavigate } from "svelte-navigator";
   import AddGame from "../../components/Game/AddGame.svelte";
@@ -91,8 +91,6 @@
     }
   };
 </script>
-
-<Toaster />
 
 <div>
   <h1>Games</h1>

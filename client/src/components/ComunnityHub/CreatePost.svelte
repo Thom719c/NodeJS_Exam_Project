@@ -4,7 +4,7 @@
         serverEndpoints,
         postRoom,
     } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
 
     const navigate = useNavigate();
@@ -50,8 +50,6 @@
         }
     }
 </script>
-
-<Toaster />
 
 <div class="post-details">
     <h1 class="title text-gradient">Create a New Post</h1>

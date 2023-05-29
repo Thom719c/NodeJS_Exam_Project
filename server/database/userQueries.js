@@ -7,6 +7,12 @@ async function getAllUsers() {
     return rows;
 }
 
+async function getSpecificUserByGamertag(gamertag) {
+    const query = 'SELECT gamertag, profile_image, name, email FROM users where gamertag = ?';
+    const [rows] = await db.query(query, [gamertag]);
+    return rows;
+}
+
 async function getUserByEmail(email) {
     const [rows] = await db.query(`SELECT * FROM users WHERE email = ?`, [email]);
     return rows[0];
@@ -39,7 +45,7 @@ async function create(user) {
 }
 
 async function update(user) {
-  const [rows] = await db.query(`UPDATE users 
+    const [rows] = await db.query(`UPDATE users 
         SET name = ?, phone_number = ?, gamertag = ?, email = ?, password = ?, profile_image = ?, role = ?
         WHERE id = ?`,
         [user.name, user.phoneNumber, user.gamertag, user.email, user.password, user.profileImage, user.role, user.id]
@@ -185,13 +191,14 @@ async function getAllFriendlistByGamertag(gamertag) {
 async function addUserToFriendlist(gamertag, friend) {
     const user = await getUserByGamertag(gamertag);
 
-    const query = 'INSERT INTO friendlist (user_id, id, name) VALUES (?, ?, ?)';
-    const values = [user.id, friend.id, friend.name];
+    const query = 'INSERT INTO friendlist (user_id, name, email, profile_image, gamertag) VALUES (?, ?, ?, ?, ?)';
+    const values = [user.id, friend.name, friend.email, friend.profile_image, friend.gamertag];
     await db.query(query, values);
 }
 
 export {
     getAllUsers,
+    getSpecificUserByGamertag,
     getUserByEmail,
     getUserByGamertag,
     getProfileImageByGamertag,

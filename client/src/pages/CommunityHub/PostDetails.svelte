@@ -7,7 +7,7 @@
         serverEndpoints,
         postRoom,
     } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import { useNavigate, useLocation } from "svelte-navigator";
 
     const navigate = useNavigate();
@@ -221,8 +221,6 @@
         navigate("/communityHub");
     };
 </script>
-
-<Toaster />
 
 <div class="post-details">
     <div class="header my-4">

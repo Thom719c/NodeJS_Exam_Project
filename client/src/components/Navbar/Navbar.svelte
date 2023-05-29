@@ -1,6 +1,7 @@
 <script>
     import { Router, Link, link, Route } from "svelte-navigator";
     import { session } from "../../stores/stores";
+    import toast, { Toaster } from "svelte-french-toast";
     import Home from "../../pages/Home/Home.svelte";
     import GameMarket from "../../pages/Game/GameMarket.svelte";
     import GameInfo from "../../pages/Game/GameInfo.svelte";
@@ -20,6 +21,7 @@
     import ForgotPassword from "../../pages/Authentication/ForgotPassword.svelte";
     import ResetPassword from "../../pages/Authentication/ResetPassword.svelte";
     import SearchUsers from "../../pages/SearchUsers/SearchUsers.svelte";
+    import UserProfile from "../../pages/Profile/UserProfile.svelte";
 </script>
 
 <Router>
@@ -89,6 +91,8 @@
         </div>
     </nav>
 
+    <Toaster />
+
     <main>
         <Route path="/login" primary={false}>
             <Login />
@@ -132,6 +136,10 @@
 
         <PrivateRoute path="/profile">
             <Profile />
+        </PrivateRoute>
+
+        <PrivateRoute path="/profile/:gamertag">
+            <UserProfile />
         </PrivateRoute>
 
         <PrivateRoute path="/userGameList">

@@ -1,7 +1,7 @@
 <script>
     import { useNavigate } from "svelte-navigator";
     import { serverURL, serverEndpoints } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import logo from "../../assets/GamingOasisLogoTransparrent.png";
 
     const navigate = useNavigate();
@@ -46,8 +46,6 @@
         }
     }
 </script>
-
-<Toaster />
 
 <div class="container-fluid">
     <div class="row">

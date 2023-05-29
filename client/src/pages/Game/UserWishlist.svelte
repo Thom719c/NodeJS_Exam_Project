@@ -5,7 +5,7 @@
         serverURL,
         serverEndpoints,
     } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
     import { addToOwnedGame } from "../../components/FetchingService/GameListUtils.js";
 
@@ -60,8 +60,6 @@
         navigate("/profile");
     };
 </script>
-
-<Toaster />
 
 <div class="container">
     <div class="header my-4">

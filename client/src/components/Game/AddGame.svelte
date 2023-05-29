@@ -2,9 +2,8 @@
     import {
         serverURL,
         serverEndpoints,
-        postRoom,
     } from "../../stores/stores.js";
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
 
     const navigate = useNavigate();
@@ -85,8 +84,6 @@
         selectedFile = file;
     }
 </script>
-
-<Toaster />
 
 <div class="post-details">
     <h1 class="title text-gradient">Add Game</h1>
