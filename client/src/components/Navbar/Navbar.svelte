@@ -19,6 +19,7 @@
     import Game from "../../pages/Game/Game.svelte";
     import ForgotPassword from "../../pages/Authentication/ForgotPassword.svelte";
     import ResetPassword from "../../pages/Authentication/ResetPassword.svelte";
+    import SearchUsers from "../../pages/SearchUsers/SearchUsers.svelte";
 </script>
 
 <Router>
@@ -55,12 +56,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/video" use:link> Video </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/events" use:link> Events </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/communityHub" use:link>
                             Community Hub
                         </a>
@@ -73,6 +68,9 @@
                 </ul>
                 <ul class="navbar-nav">
                     {#if $session}
+                        <li class="nav-item my-auto">
+                            <SearchUsers />
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/profile" use:link>
                                 Profile
@@ -103,7 +101,7 @@
         <Route path="/games" primary={false}>
             <Games />
         </Route>
-        
+
         <Route path="/games/:id">
             <Game />
         </Route>
@@ -132,7 +130,7 @@
             <Signup />
         </Route>
 
-        <PrivateRoute path="/profile" >
+        <PrivateRoute path="/profile">
             <Profile />
         </PrivateRoute>
 

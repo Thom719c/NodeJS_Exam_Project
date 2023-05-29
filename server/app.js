@@ -141,7 +141,7 @@ import gameRouter from "./routers/gameRouter.js";
 app.use(gameRouter);
 
 import userRouter from "./routers/userRouter.js";
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 
 app.get('/api/gameMarket:name', async (req, res) => {

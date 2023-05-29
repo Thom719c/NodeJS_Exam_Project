@@ -7,10 +7,11 @@ import {
     removeGameFromOwnedList,
     getAllWishlistGamesByGamertag, addGameToWishlist,
     removeGameFromWishlist,
-    getAllFriendlistByGamertag
+    getAllFriendlistByGamertag,
+    getAllUsers
 } from "../database/userQueries.js";
 
-router.get("/users", async (req, res) => {
+router.get("/", async (req, res) => {
     if (!req.session.user) {
         return res.status(404).send({ message: "Need to be logged in!" });
     }

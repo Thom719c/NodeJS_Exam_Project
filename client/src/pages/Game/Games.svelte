@@ -417,14 +417,11 @@
   }
 
   .search {
-    margin-right: 5px;
-    width: 100%;
-  }
-
-  .search {
     display: flex;
     align-items: center;
     height: 35px;
+    margin-right: 5px;
+    width: 100%;
     background-color: rgba(48, 76, 96, 0.9);
     border-color: #e5e047;
     border-radius: 10px;

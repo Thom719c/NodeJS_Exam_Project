@@ -22,9 +22,11 @@ export const serverEndpoints = readable({
         comments: "/communityHub/comments/"
     },
     user: {
-        profileimage: "/user/profileImage",
-        ownedGame: "/user/ownedGames",
-        wishlist: "/user/wishlist",
+        profileimage: "/users/profileImage",
+        ownedGame: "/users/ownedGames",
+        wishlist: "/users/wishlist",
+        friendlist: "/users/friendlist",
+        searchUsers: "/users",
     }
 });
 
