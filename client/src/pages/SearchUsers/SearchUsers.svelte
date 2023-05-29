@@ -16,7 +16,7 @@
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
         users = data.data;
-        console.log(users)
+        console.log(users);
     });
 
     const searchUsers = () => {
@@ -25,11 +25,41 @@
             const isMatch = user.name.toLowerCase().includes(query);
             return isMatch;
         });
-        console.log(filteredUsers)
     };
 </script>
 
 <Toaster />
+
+<!-- <div class="search-bar">
+    <input
+        class="search-input"
+        type="text"
+        bind:value={searchQuery}
+        placeholder="Search..."
+        on:input={searchUsers}
+        list="user-suggestions"
+    />
+    <datalist id="user-suggestions">
+        {#each filteredUsers as user}
+            <option value={user.name}>
+                <div class="user-option">
+                    <img
+                        src={$serverURL +
+                            "/images/avatar/" +
+                            user.profile_image}
+                        alt={user.name}
+                        width="30"
+                        height="30"
+                    />
+                    <span>{user.name}</span>
+                </div>
+            </option>
+        {/each}
+    </datalist>
+    <button class="search-button me-4" on:click={searchUsers}>
+        <i class="bi bi-search" />
+    </button>
+</div> -->
 
 <div class="search-bar">
     <input
@@ -37,11 +67,27 @@
         type="text"
         bind:value={searchQuery}
         placeholder="Search..."
-        on:change={searchUsers}
+        on:input={searchUsers}
     />
-    <button class="search-button me-4" on:click={searchUsers}
-        ><i class="bi bi-search" /></button
-    >
+    {#if searchQuery !== "" && filteredUsers.length > 0}
+        <div class="suggestions">
+            {#each filteredUsers as user}
+                <div class="card">
+                    <img
+                        class="avatar"
+                        src={$serverURL +
+                            "/images/avatar/" +
+                            user.profile_image}
+                        alt={user.name}
+                    />
+                    <span>{user.name}</span>
+                </div>
+            {/each}
+        </div>
+    {/if}
+    <button class="search-button me-4" on:click={searchUsers}>
+        <i class="bi bi-search" />
+    </button>
 </div>
 
 <style>
@@ -50,6 +96,7 @@
         justify-content: center;
         align-items: center;
         gap: 5px;
+        position: relative;
     }
     .search-button,
     .search-input {
@@ -68,5 +115,38 @@
 
     .search-input::placeholder {
         color: #d1d1d1e6;
+    }
+
+    .suggestions {
+        position: absolute;
+        top: 100%;
+        left: 5px;
+        right: 0;
+        max-width: 190px;
+        background-color: #67c2dd41;
+        border: 1px solid #e5e047;
+        border-top: none;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .card {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    .card:hover {
+        background-color: rgba(71, 135, 155, 0.255);
+    }
+
+    .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 8px;
     }
 </style>
