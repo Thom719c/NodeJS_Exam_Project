@@ -343,7 +343,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     max-width: 400px;
-    max-height: 250px;
+    max-height: 400px;
     min-height: 200px;
     margin: 10px;
     padding: 10px;
@@ -351,7 +351,11 @@
   }
 
   .game {
+    background-color: rgba(48, 76, 96, 0.9);
     border-color: #e5e047;
+    margin: 10px;
+    padding: 10px;
+    min-height: 200px;
   }
   .game-user {
     background-color: rgba(48, 76, 96, 0.9);

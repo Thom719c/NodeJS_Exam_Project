@@ -8,10 +8,13 @@
     import toast from "svelte-french-toast";
     import defaultProfileImage from "../../assets/profileDefault.png";
     import { useNavigate, useLocation } from "svelte-navigator";
+    import AddFriend from "../../components/Users/AddFriend.svelte";
     const navigate = useNavigate();
     const location = useLocation();
 
     let user = {};
+    let friends = [];
+    let isFriend = false;
     let gamertag = "";
 
     onMount(() => {
@@ -20,9 +23,13 @@
 
     afterUpdate(() => {
         fetchUser();
+        isFriend =
+            friends.find((friend) => friend.gamertag === user.gamertag) !==
+            undefined;
     });
 
     async function fetchUser() {
+        checkFriendslist();
         gamertag = $location.pathname.split("/").pop();
         const url =
             $serverURL +
@@ -38,6 +45,21 @@
         }
     }
 
+    const checkFriendslist = async () => {
+        const url = $serverURL + $serverEndpoints.user.friendlist;
+        const response = await fetch(url, { credentials: "include" });
+        const data = await response.json();
+        if (response.ok) {
+            friends = data.data;
+        } else {
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        }
+    };
+
     const showImage = (avatar) => {
         if (!avatar) {
             return defaultProfileImage;
@@ -52,33 +74,6 @@
 
     function wishlist() {
         navigate("/wishlist", { replace: true });
-    }
-
-    async function addFriend() {
-        console.log(user)
-        const url = $serverURL + $serverEndpoints.user.friendlist;
-        const response = await fetch(url, {
-            credentials: "include",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ user }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-            toast.success(data.message, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
-        } else {
-            toast.error(data.message, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
-        }
     }
 </script>
 
@@ -149,13 +144,11 @@
                         <i class="bi bi-controller" />
                         Wishlist
                     </button>
-                    <button
-                        class="btn btn-outline-primary"
-                        on:click={addFriend}
-                    >
-                        <i class="bi bi-controller" />
-                        Add Friend
-                    </button>
+                    {#if isFriend}
+                        <p class="mt-3">Already friends</p>
+                    {:else}
+                        <AddFriend {user} />
+                    {/if}
                 </div>
             </div>
         </div>
@@ -229,35 +222,8 @@
         margin-bottom: 25px;
     }
 
-    .edit-button-container {
-        display: flex;
-        align-items: center;
-        padding: 0;
-    }
-
-    .edit-button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 30px;
-        height: 30px;
-    }
-
-    .button {
-        margin: auto;
-        background-color: #67c2dd41;
-        border-color: #e5e047;
-        font-weight: bold;
+    p {
         font-size: 16px;
-        padding: 6px 12px;
-        letter-spacing: 1px;
-    }
-
-    .save-button:hover {
-        background-color: #47879b41;
-    }
-
-    .cancel-button:hover {
-        background-color: #ff000041;
+        line-height: 1.5;
     }
 </style>

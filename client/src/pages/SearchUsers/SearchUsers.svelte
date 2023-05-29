@@ -41,6 +41,17 @@
         searchQuery = "";
         navigate(`/profile/${user.gamertag}`, { replace: true });
     };
+
+    const goToAllUserPage = () => {
+        navigate(`/users/${searchQuery}`, { replace: true });
+        searchQuery = "";
+    };
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            goToAllUserPage();
+        }
+    }
 </script>
 
 <!-- <div class="search-bar">
@@ -78,9 +89,10 @@
     <input
         class="search-input"
         type="text"
-        bind:value={searchQuery}
         placeholder="Search..."
+        bind:value={searchQuery}
         on:input={searchUsers}
+        on:keydown={handleKeyPress}
     />
     {#if searchQuery !== "" && filteredUsers.length > 0}
         <div class="suggestions">
@@ -100,7 +112,7 @@
             {/each}
         </div>
     {/if}
-    <button class="search-button me-4" on:click={searchUsers}>
+    <button class="search-button me-4" on:click={goToAllUserPage}>
         <i class="bi bi-search" />
     </button>
 </div>

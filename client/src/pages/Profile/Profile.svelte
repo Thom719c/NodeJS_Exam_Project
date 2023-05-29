@@ -170,6 +170,10 @@
     function wishlist() {
         navigate("/wishlist", { replace: true });
     }
+
+    function friendList() {
+        navigate("/friendList", { replace: true });
+    }
 </script>
 
 <SessionCheck />
@@ -307,6 +311,10 @@
                         >
                             <i class="bi bi-controller" />
                             Wishlist
+                        </button>
+                        <button class="btn btn-outline-primary" on:click={friendList}>
+                            <i class="bi bi-person-fill-add" />
+                            Friendlist
                         </button>
                     </div>
                 {/if}

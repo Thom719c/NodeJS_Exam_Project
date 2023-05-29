@@ -22,6 +22,8 @@
     import ResetPassword from "../../pages/Authentication/ResetPassword.svelte";
     import SearchUsers from "../../pages/SearchUsers/SearchUsers.svelte";
     import UserProfile from "../../pages/Profile/UserProfile.svelte";
+    import UserList from "../../pages/SearchUsers/UserList.svelte";
+    import FriendList from "../Users/FriendList.svelte";
 </script>
 
 <Router>
@@ -142,6 +144,10 @@
             <UserProfile />
         </PrivateRoute>
 
+        <PrivateRoute path="/users/:searchQuery">
+            <UserList />
+        </PrivateRoute>
+
         <PrivateRoute path="/userGameList">
             <UserGameList />
         </PrivateRoute>
@@ -149,6 +155,11 @@
         <PrivateRoute path="/wishlist">
             <UserWishlist />
         </PrivateRoute>
+
+        <PrivateRoute path="/friendList">
+            <FriendList />
+        </PrivateRoute>
+
         <Route path="/forgot-password" primary={false}>
             <ForgotPassword />
         </Route>

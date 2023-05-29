@@ -66,7 +66,6 @@ async function getEmailByPasswordResetToken(token) {
 
     const expirationTime = new Date(rows[0].expires_at);
     if (expirationTime < new Date()) {
-        console.log("Token has expried")
         // Token has expired, delete it from the database
         await deletePasswordResetToken(token);
         return null; // Invalid token

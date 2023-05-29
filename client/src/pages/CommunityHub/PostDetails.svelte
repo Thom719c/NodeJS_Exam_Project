@@ -60,7 +60,6 @@
             }
             return c;
         });
-        console.log(comment);
     });
 
     socket.on("commentRemoved", (comment) => {

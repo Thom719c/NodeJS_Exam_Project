@@ -67,7 +67,7 @@
             Go Back
         </button>
         <h2 class="title text-gradient">
-            Your Wishlist: {$session.gamertag}
+            Your wishlist {$session.gamertag}
         </h2>
     </div>
 

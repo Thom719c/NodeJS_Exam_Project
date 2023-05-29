@@ -139,7 +139,6 @@ router.get("/friendlist", async (req, res) => {
 
 router.post("/friendlist", async (req, res) => {
     const friend = req.body?.user;
-    console.log(friend)
 
     if (!friend.name || !friend.email || !friend.profile_image || !friend.gamertag || !req.session.user?.gamertag) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
@@ -147,7 +146,7 @@ router.post("/friendlist", async (req, res) => {
 
     // Get all friends that user has and Check if the friend is already in the friendlist
     const friendlist = await getAllFriendlistByGamertag(req.session.user.gamertag);
-    const friendExists = friendlist.find((listedFriend) => listedFriend.id === friend.id);
+    const friendExists = friendlist.find((listedFriend) => listedFriend.gamertag === friend.gamertag);
     if (friendExists) {
         return res.status(409).send({ message: "Friend already on the friendlist" });
     }
