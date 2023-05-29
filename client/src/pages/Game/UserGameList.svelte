@@ -62,7 +62,7 @@
     </div>
     {#if games.length === 0}
         <div class="game">
-            <p class="empty-message">Your wishlist is empty.</p>
+            <p class="empty-message">Your gamelist is empty.</p>
         </div>
     {:else}
         <ul class="game-list">
