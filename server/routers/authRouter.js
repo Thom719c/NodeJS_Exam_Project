@@ -1,5 +1,3 @@
-import { Router } from "express"
-const router = Router();
 import bcrypt from "bcrypt"
 import {
     getUserByEmail, getUserByGamertag, getProfileImageByGamertag, checkIfUserExist,
@@ -10,7 +8,8 @@ import {
     getAllWishlistGamesByGamertag, addGameToWishlist,
     removeGameFromWishlist
 } from "../database/userQueries.js";
-
+import { Router } from "express"
+const router = Router();
 
 router.get("/logout", async (req, res) => {
     req.session.destroy(() => {
@@ -93,7 +92,7 @@ router.patch("/updateAccount", async (req, res) => {
 
     const user = {
         id: foundUser.id,
-        gamertag: foundUser.gamertag, 
+        gamertag: foundUser.gamertag,
         name: req.body.name || foundUser.name,
         phoneNumber: foundUser.phone_number,
         email: req.body.email || foundUser.email,
@@ -101,12 +100,12 @@ router.patch("/updateAccount", async (req, res) => {
         profileImage: req.body.profileImage || foundUser.profile_image,
         role: req.body.role || foundUser.role,
     }
-    
+
     await update(user)
     req.session.regenerate((error) => {
         if (error) {
             return res.status(500).send({ message: "Failed to regenerate session." });
-        }      
+        }
         req.session.user = {
             gamertag: foundUser.gamertag,
             name: user.name,

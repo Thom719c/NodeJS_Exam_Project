@@ -6,7 +6,6 @@
     } from "../../stores/stores.js";
     import { useNavigate } from "svelte-navigator";
     import { link } from "svelte-navigator";
-    import Cookies from "js-cookie";
 
     export let isLink = false;
 
@@ -16,11 +15,10 @@
         const url = $serverURL + $serverEndpoints.authentication.logout;
 
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, {credentials: "include"});
             const data = await response.json();
             if (response.ok) {
                 session.set(data.user);
-                Cookies.remove("userSession");
             }
         } catch (error) {
             console.log(error);
