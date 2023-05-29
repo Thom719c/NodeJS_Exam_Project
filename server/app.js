@@ -140,6 +140,9 @@ app.use("/communityHub", communityHub);
 import gameRouter from "./routers/gameRouter.js";
 app.use(gameRouter);
 
+import userRouter from "./routers/userRouter.js";
+app.use("/user", userRouter);
+
 
 app.get('/api/gameMarket:name', async (req, res) => {
     let name = req.params.name || '';

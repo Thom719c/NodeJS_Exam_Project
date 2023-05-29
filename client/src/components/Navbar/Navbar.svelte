@@ -132,7 +132,7 @@
             <Signup />
         </Route>
 
-        <PrivateRoute path="/profile">
+        <PrivateRoute path="/profile" >
             <Profile />
         </PrivateRoute>
 

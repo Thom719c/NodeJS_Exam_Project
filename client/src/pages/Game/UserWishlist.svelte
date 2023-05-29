@@ -13,7 +13,7 @@
     const navigate = useNavigate();
 
     onMount(async () => {
-        const url = $serverURL + $serverEndpoints.authentication.wishlist;
+        const url = $serverURL + $serverEndpoints.user.wishlist;
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
         games = data.data;
@@ -28,7 +28,7 @@
     };
 
     const removeGameFromWishlist = async (game, moved) => {
-        const url = $serverURL + $serverEndpoints.authentication.wishlist;
+        const url = $serverURL + $serverEndpoints.user.wishlist;
         const removeGame = {
             steamAppId: game.steam_app_id,
             name: game.game_name,

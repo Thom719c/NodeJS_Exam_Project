@@ -12,10 +12,6 @@ export const serverEndpoints = readable({
         resetpassword: "/auth/reset-password",
         deleteaccount: "/auth/delete-account",
         validatepassword: "/auth/validatepassword",
-        profileimage: "/auth/profileImage",
-        ownedGame: "/auth/ownedGames",
-        addOwnedGame: "/auth/addOwnedGame",
-        wishlist: "/auth/wishlist",
     },
     mailer: {
         contact: "/mail/contact",
@@ -24,6 +20,11 @@ export const serverEndpoints = readable({
     communityHub: {
         posts: "/communityHub/posts/",
         comments: "/communityHub/comments/"
+    },
+    user: {
+        profileimage: "/user/profileImage",
+        ownedGame: "/user/ownedGames",
+        wishlist: "/user/wishlist",
     }
 });
 
