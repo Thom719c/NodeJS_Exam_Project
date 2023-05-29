@@ -108,7 +108,6 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const filenameParts = file.originalname.split(".");
-        console.log("filenameParts", filenameParts)
         if (filenameParts.length <= 1) {
             cb(new Error("File has no extension: " + file.originalname));
         }
