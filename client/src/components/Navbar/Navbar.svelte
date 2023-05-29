@@ -17,6 +17,8 @@
     import Contact from "../../pages/Contact/Contact.svelte";
     import Games from "../../pages/Game/Games.svelte";
     import Game from "../../pages/Game/Game.svelte";
+    import ForgotPassword from "../../pages/Authentication/ForgotPassword.svelte";
+    import ResetPassword from "../../pages/Authentication/ResetPassword.svelte";
 </script>
 
 <Router>
@@ -141,6 +143,12 @@
         <PrivateRoute path="/wishlist">
             <UserWishlist />
         </PrivateRoute>
+        <Route path="/forgot-password" primary={false}>
+            <ForgotPassword />
+        </Route>
+        <Route path="/reset-password" primary={false}>
+            <ResetPassword />
+        </Route>
     </main>
 </Router>
 
