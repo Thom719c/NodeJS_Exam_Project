@@ -32,4 +32,21 @@ router.post("/games", async (req, res) => {
     res.status(200).send({ message: "Game added successfully" });
 });
 
+router.delete("/games", async (req, res) => {
+    if (!req.session.user) {
+        return res.status(404).send({ message: "Need to be logged in!" });
+    }
+
+    if (!req.session.user.role === "admin") {
+        return res.status(404).send({ message: "You don't have access to remove game!" });
+    }
+
+    const game = req.body;
+    const query = 'DELETE FROM games WHERE id = ?';
+    const values = [game.id];
+    await db.query(query, values);
+
+    res.status(200).send({ message: "Removed game successfully" });
+});
+
 export default router;

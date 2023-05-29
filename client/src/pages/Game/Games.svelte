@@ -90,16 +90,32 @@
 <div class="container-fluid row">
   <div class="col game-container mt-4">
     {#each filteredGames as game}
-      <button class="game" on:click={() => selectGame(game)}>
-        <div class="row">
-          <img
-            class="col game-image"
-            src={showImage(game.image)}
-            alt={`Cover image for ${game.name}`}
-          />
-          <p class="col game-name text-gradient">{game.name}</p>
+      {#if $session}
+        <div class="game-wrapper">
+          <button class="game" on:click={() => selectGame(game)}>
+            <div class="row">
+              <img
+                class="col game-image"
+                src={showImage(game.image)}
+                alt={`Cover image for ${game.name}`}
+              />
+              <p class="col game-name text-gradient">{game.name}</p>
+            </div>
+          </button>
+          <button class="remove-button"> Remove </button>
         </div>
-      </button>
+      {:else}
+        <button class="game-user" on:click={() => selectGame(game)}>
+          <div class="row">
+            <img
+              class="col game-image"
+              src={showImage(game.image)}
+              alt={`Cover image for ${game.name}`}
+            />
+            <p class="col game-name text-gradient">{game.name}</p>
+          </div>
+        </button>
+      {/if}
     {/each}
   </div>
   <div class="col-2 sticky-top filter z-0">
@@ -290,7 +306,34 @@
     justify-content: center;
   }
 
+  .game-wrapper {
+    background-color: #1b2838;
+    color: #c6d4df;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 400px;
+    max-height: 250px;
+    min-height: 200px;
+    margin: 10px;
+    padding: 10px;
+    transition: transform 0.2s ease-in-out;
+  }
+
   .game {
+    /* background-color: rgba(48, 76, 96, 0.9);
+    color: #c6d4df;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 250px;
+    min-height: 200px;
+    transition: transform 0.2s ease-in-out; */
+    border-color: #e5e047;
+  }
+  .game-user {
     background-color: rgba(48, 76, 96, 0.9);
     color: #c6d4df;
     border: 1px solid #ccc;
@@ -320,6 +363,16 @@
     font-size: 18px;
     text-align: center;
     min-width: 150px;
+  }
+
+  .remove-button {
+    width: 75px;
+    height: 35px;
+    background-color: #ff0000;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-weight: bold;
   }
 
   .filter {
