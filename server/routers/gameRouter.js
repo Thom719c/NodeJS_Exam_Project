@@ -36,8 +36,8 @@ router.delete("/games", async (req, res) => {
     if (!req.session.user) {
         return res.status(404).send({ message: "Need to be logged in!" });
     }
-
-    if (!req.session.user.role === "admin") {
+    
+    if (req.session.user.role !== "admin") {
         return res.status(404).send({ message: "You don't have access to remove game!" });
     }
 

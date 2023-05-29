@@ -36,7 +36,8 @@ router.post("/login", async (req, res) => {
     req.session.user = {
         gamertag: user.gamertag,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role,
     }
     res.send({ session: req.session, message: "Login successful" });
 });

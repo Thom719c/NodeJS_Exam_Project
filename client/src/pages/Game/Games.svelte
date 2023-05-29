@@ -6,6 +6,7 @@
     serverURL,
     serverEndpoints,
   } from "../../stores/stores.js";
+  import toast, { Toaster } from "svelte-french-toast";
   import defaultGameImage from "../../assets/defaultGameImage.png";
   import { useNavigate } from "svelte-navigator";
   import AddGame from "../../components/Game/AddGame.svelte";
@@ -61,7 +62,37 @@
 
     return `${$serverURL}/images/games/${gameImage}`;
   };
+
+  const handleRemoveGame = async (removeGame) => {
+    const url = $serverURL + "/games";
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(removeGame),
+      credentials: "include",
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      filteredGames = games.filter((g) => g.id !== removeGame.id);
+      toast.success(data.message, {
+        duration: 5000,
+        position: "bottom-right",
+        style: "border-radius: 200px; background: #333; color: #fff;",
+      });
+    } else {
+      toast.error(data.message, {
+        duration: 5000,
+        position: "bottom-right",
+        style: "border-radius: 200px; background: #333; color: #fff;",
+      });
+    }
+  };
 </script>
+
+<Toaster />
 
 <div>
   <h1>Games</h1>
@@ -90,7 +121,7 @@
 <div class="container-fluid row">
   <div class="col game-container mt-4">
     {#each filteredGames as game}
-      {#if $session}
+      {#if $session?.role === "admin"}
         <div class="game-wrapper">
           <button class="game" on:click={() => selectGame(game)}>
             <div class="row">
@@ -102,7 +133,9 @@
               <p class="col game-name text-gradient">{game.name}</p>
             </div>
           </button>
-          <button class="remove-button"> Remove </button>
+          <button class="remove-button" on:click={() => handleRemoveGame(game)}>
+            Remove
+          </button>
         </div>
       {:else}
         <button class="game-user" on:click={() => selectGame(game)}>
@@ -320,17 +353,6 @@
   }
 
   .game {
-    /* background-color: rgba(48, 76, 96, 0.9);
-    color: #c6d4df;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 10px;
-    padding: 10px;
-    width: 100%;
-    max-width: 400px;
-    max-height: 250px;
-    min-height: 200px;
-    transition: transform 0.2s ease-in-out; */
     border-color: #e5e047;
   }
   .game-user {
