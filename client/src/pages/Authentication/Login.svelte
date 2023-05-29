@@ -100,7 +100,7 @@
                                 Sign Up Free!
                             </a>
                         </p>
-                        <a class="col aStyling text-end" href="/forgot">
+                        <a class="col aStyling text-end" href="/forgot-password">
                             Forgot password?
                         </a>
                     </div>

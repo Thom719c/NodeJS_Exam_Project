@@ -1,5 +1,6 @@
 import dotenv from "dotenv/config";
 import nodemailer from "nodemailer";
+import { getUserByEmail, createPasswordResetTokenInDB, updateUserPassword, deletePasswordResetToken } from "../database/userQueries.js";
 import { Router } from "express";
 const router = Router();
 
@@ -37,11 +38,57 @@ router.post("/mail/forgot-password", async (req, res) => {
     const email = req.body.email;
 
     // Check if a user with the given email exists
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+        return res.status(400).json({ message: "No user with that email exists" });
+    }
 
     // Save the token and user's email in the database
+    const token = await createPasswordResetTokenInDB(email);
 
     // Send the password reset email
-    
+    const resetUrl = `http://localhost:5173/reset-password?token=${token}`;
+    const info = await transporter.sendMail({
+        from: '"Gaming Oasis - Password Service" <nodejskeatp@gmail.com>',
+        to: email,
+        subject: "Change of Password",
+        html: `
+            <p>You are receiving this email because you (or someone else) has requested a password reset for your account.</p>
+            <p>If this is not you, you should ignore this e-mail.</p>
+            <br>
+            <p>Please click the following link to complete the process:</p>
+            <a href="${resetUrl}">Link</a>
+            <p>This link will expire in 1 hour.</p>
+        `
+    });
+
+    if (info.messageId) {
+        res.status(200).send({ message: "Email has been send to your account" });
+    }
+});
+
+
+router.put("/reset-password", async (req, res) => {
+    const { newPassword, confirmPassword, token } = req.body;
+
+    // Validate the new password
+    if (newPassword !== confirmPassword) {
+        return res.status(400).send({ message: 'Passwords do not match.' });
+    }
+
+    // Check if token is valid
+    const data = await getEmailByPasswordResetToken(token);
+    if (!data) {
+        return res.status(401).send({ message: 'Invalid token.' });
+    }
+
+    const encryptedPassword = await bcrypt.hash(newPassword, 12);
+    // Update the user's password in the database
+    await updateUserPassword(encryptedPassword, data.email);
+    await deletePasswordResetToken(token);
+
+    res.send({ message: 'Password reset successful.' });
 });
 
 export default router;
