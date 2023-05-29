@@ -1,20 +1,38 @@
 <script>
+    import { onMount } from "svelte";
     import {
         session,
         serverURL,
         serverEndpoints,
     } from "../../stores/stores.js";
     import toast, { Toaster } from "svelte-french-toast";
-    import Cookies from "js-cookie";
     import SessionCheck from "../../components/Authentication/SessionCheck.svelte";
     import Logout from "../../components/Authentication/Logout.svelte";
     import PopUp from "../../components/Authentication/PopUp.svelte";
+    import defaultProfileImage from "../../assets/profileDefault.png";
     import { useNavigate } from "svelte-navigator";
     const navigate = useNavigate();
 
+    let profileImage = "";
+    let imageUrl = "";
+    $: imageUrl = profileImage
+        ? `${$serverURL}/images/avatar/${profileImage}`
+        : defaultProfileImage;
     let isEditMode = false;
     let isPopupOpen = false;
     let originalUserData = null;
+    let selectedFile;
+
+    onMount(async () => {
+        const url = $serverURL + $serverEndpoints.authentication.profileimage;
+        const response = await fetch(url, { credentials: "include" });
+        const data = await response.json();
+        if (response.ok) {
+            profileImage = data.data.profile_image;
+        } else {
+            toast.error(data.message);
+        }
+    });
 
     function enterEditMode() {
         isEditMode = true;
@@ -38,7 +56,8 @@
         if (!$session) return;
         if (
             originalUserData.name === $session.name &&
-            originalUserData.email === $session.email
+            originalUserData.email === $session.email &&
+            !selectedFile
         ) {
             // No changes made, just exit edit mode
             isPopupOpen = false;
@@ -70,14 +89,41 @@
             toast.error("Incorrect password.");
             return;
         }
-        updateProfile();
+
+        if (!selectedFile) {
+            updateProfile();
+            return;
+        }
+
+        uploadImage();
     }
 
-    async function updateProfile() {
+    async function uploadImage() {
+        const url = $serverURL + "/fileform?purpose=profile";
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        const response = await fetch(url, {
+            credentials: "include",
+            method: "POST",
+            body: formData,
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+            toast.success(data.message);
+            updateProfile(data.data);
+            exitEditMode();
+        } else {
+            toast.error(data.message);
+        }
+    }
+
+    async function updateProfile(imageName) {
         // Password is correct, update the user's profile
         const updatedUserData = { ...$session };
         updatedUserData.name = originalUserData.name;
         updatedUserData.email = originalUserData.email;
+        updatedUserData.profileImage = imageName;
 
         const urlChangeUser =
             $serverURL + $serverEndpoints.authentication.updateaccount;
@@ -94,11 +140,17 @@
         if (updateResponse.ok) {
             toast.success(data.message);
             session.set(data.session.user);
+            profileImage = imageName;
             isPopupOpen = false;
             exitEditMode();
         } else {
             toast.error(data.message);
         }
+    }
+
+    function handleFileInputChange(event) {
+        const file = event.target.files[0];
+        selectedFile = file;
     }
 
     function ownedGames() {
@@ -124,18 +176,38 @@
         <div class="col-sm-6 col-xs mx-auto content-box">
             <div class="col-lg-12 mt-5">
                 <img
-                    class="img-container img-fluid mx-auto d-block"
-                    src="../src/assets/profileDefault.png"
+                    class="img-fluid mx-auto d-block rounded-4"
+                    src={imageUrl}
                     width="150"
                     alt="Profile_image"
                 />
+                {#if isEditMode}
+                    <input
+                        name="file"
+                        type="file"
+                        accept="image/*"
+                        on:change={handleFileInputChange}
+                    />
+                {/if}
             </div>
             <div class="col-lg-12 title text-gradient">
                 Welcome {$session.gamertag}
             </div>
 
             <div class="col-lg-12 profile-form">
-                <h3>Information</h3>
+                <div class="row">
+                    <h3 class="col-auto">Information</h3>
+                    {#if !isEditMode}
+                        <div class="col text-gradient edit-button-container">
+                            <button
+                                class="btn btn-outline-primary edit-button"
+                                on:click={enterEditMode}
+                            >
+                                <i class="bi bi-pencil-square" />
+                            </button>
+                        </div>
+                    {/if}
+                </div>
 
                 <div class="form-group">
                     <label class="form-control-label" for="name"> Name </label>
@@ -203,16 +275,6 @@
                         >
                             <i class="bi bi-save" />
                             Save Changes
-                        </button>
-                    </div>
-                {:else}
-                    <div class="profile-button text-gradient">
-                        <button
-                            class="btn btn-outline-primary"
-                            on:click={enterEditMode}
-                        >
-                            <i class="bi bi-pencil-square" />
-                            Edit
                         </button>
                     </div>
                 {/if}
@@ -309,6 +371,20 @@
         padding-right: 0px;
         text-align: center;
         margin-bottom: 25px;
+    }
+
+    .edit-button-container {
+        display: flex;
+        align-items: center;
+        padding: 0;
+    }
+
+    .edit-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
     }
 
     .button {

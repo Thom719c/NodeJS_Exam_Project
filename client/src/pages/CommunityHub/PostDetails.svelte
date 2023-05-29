@@ -167,12 +167,12 @@
     }
 
     const removePost = async () => {
-        const url = $serverURL + $serverEndpoints.communityHub.posts;
+        const url = $serverURL + $serverEndpoints.communityHub.posts + post.id;
         const removePost = {
             id: post.id,
             title: post.title,
         };
-        const response = await fetch(url + post.id, {
+        const response = await fetch(url, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -194,9 +194,9 @@
     };
 
     const removeComment = async (comment) => {
-        const url = $serverURL + $serverEndpoints.communityHub.comments;
+        const url = $serverURL + $serverEndpoints.communityHub.comments + post.id;
 
-        const response = await fetch(url + post.id, {
+        const response = await fetch(url, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

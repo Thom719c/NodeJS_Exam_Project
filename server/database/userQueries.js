@@ -11,6 +11,11 @@ async function getUserByGamertag(gamertag) {
     return rows[0];
 }
 
+async function getProfileImageByGamertag(gamertag) {
+    const [rows] = await db.query(`SELECT profile_image FROM users WHERE gamertag = ?`, [gamertag]);
+    return rows[0];
+}
+
 async function checkIfUserExist(email, gamertag) {
     const [rows] = await db.query(`SELECT * FROM users WHERE email = ? OR gamertag = ?`,
         [email, gamertag]
@@ -29,9 +34,9 @@ async function create(user) {
 
 async function update(user) {
   const [rows] = await db.query(`UPDATE users 
-        SET name = ?, phone_number = ?, gamertag = ?, email = ?, password = ?
+        SET name = ?, phone_number = ?, gamertag = ?, email = ?, password = ?, profile_image = ?, role = ?
         WHERE id = ?`,
-        [user.name, user.phoneNumber, user.gamertag, user.email, user.password, user.id]
+        [user.name, user.phoneNumber, user.gamertag, user.email, user.password, user.profileImage, user.role, user.id]
     );
     return rows[0];
 }
@@ -164,6 +169,7 @@ async function removeCommentsByPostId(user, postId) {
 export {
     getUserByEmail,
     getUserByGamertag,
+    getProfileImageByGamertag,
     checkIfUserExist,
     create,
     update,

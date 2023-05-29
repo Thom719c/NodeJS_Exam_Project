@@ -2,6 +2,8 @@ import dotenv from "dotenv/config";
 import express from "express";
 const app = express();
 
+app.use(express.static("uploads"));
+
 import helmet from "helmet";
 app.use(helmet());
 
@@ -66,11 +68,11 @@ io.on("connection", (socket) => {
         // Emit the comment to all connected clients
         io.to(roomId).emit("commentAdded", comment);
     });
-    socket.on("editComment", ( roomId, comment) => {
+    socket.on("editComment", (roomId, comment) => {
         console.log(roomId, comment)
         io.to(roomId).emit("commentEdited", comment);
     })
-    socket.on("removeComment", ( roomId, comment) => {
+    socket.on("removeComment", (roomId, comment) => {
         console.log(roomId, comment)
         io.to(roomId).emit("commentRemoved", comment);
     })
@@ -82,8 +84,51 @@ io.on("connection", (socket) => {
     });
 });
 
-// Routes
+const isUserLoggedIn = (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(404).send({ message: "Need to be logged in!" });
+    }
+    next();
+};
 
+import { v4 as uuidv4 } from 'uuid';
+import multer from "multer";
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        let destinationDir = "";
+        const purpose = req.query.purpose;
+
+        if (purpose === "profile") {
+            destinationDir = "uploads/images/avatar/";
+        } else if (purpose === "game") {
+            destinationDir = "uploads/images/games/";
+        }
+
+        cb(null, destinationDir);
+    },
+    filename: (req, file, cb) => {
+        const filenameParts = file.originalname.split(".");
+        console.log("filenameParts", filenameParts)
+        if (filenameParts.length <= 1) {
+            cb(new Error("File has no extension: " + file.originalname));
+        }
+
+        const extension = filenameParts.pop();
+        const originalFilename = filenameParts.join(".");
+        const uniqueSuffix = Date.now() + "-" + uuidv4();
+
+        const newFileName = uniqueSuffix + "_" + originalFilename + "." + extension;
+
+        cb(null, newFileName);
+    }
+});
+const upload = multer({ storage });
+
+app.post("/fileform", isUserLoggedIn, upload.single("file"), (req, res) => {
+    res.status(200).send({ message: "Image is uploaded successfully", data: req.file.filename });
+});
+
+// Routes
 import authRouter from "./routers/authRouter.js"
 app.use("/auth", authRouter);
 
@@ -93,12 +138,9 @@ app.use(mailer);
 import communityHub from "./routers/communityHubRouter.js"
 app.use("/communityHub", communityHub);
 
-/* app.get('/api/games', async (req, res) => {
-    const url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
-    const response = await fetch(url);
-    const data = await response.json();
-    res.send(data);
-}); */
+import gameRouter from "./routers/gameRouter.js";
+app.use(gameRouter);
+
 
 app.get('/api/gameMarket:name', async (req, res) => {
     let name = req.params.name || '';

@@ -2,7 +2,7 @@ import { Router } from "express"
 const router = Router();
 import bcrypt from "bcrypt"
 import {
-    getUserByEmail, getUserByGamertag, checkIfUserExist,
+    getUserByEmail, getUserByGamertag, getProfileImageByGamertag, checkIfUserExist,
     create, update, updateUserPassword,
     getEmailByPasswordResetToken, deletePasswordResetToken,
     getAllOwnedGameByGamertag, addOwnedGameToUser,
@@ -22,6 +22,14 @@ router.get("/logout", async (req, res) => {
 router.get("/allUsers", async (req, res) => {
     const users = await db.all("SELECT * FROM users");
     res.send({ data: users });
+});
+
+router.get("/profileImage", async (req, res) => {
+    if (!req.session.user) {
+        return res.status(404).send({ message: "Need to be logged in!" });
+    }
+    const user = await getProfileImageByGamertag(req.session.user?.gamertag);
+    res.status(200).send({ data: user });
 });
 
 router.post("/login", async (req, res) => {
@@ -70,8 +78,8 @@ router.post("/signup", async (req, res) => {
 
 router.post("/validatepassword", async (req, res) => {
     const { password } = req.body;
-console.log(req.session)
-    if (!req.session.user.gamertag || !password) {
+
+    if (!req.session.user?.gamertag || !password) {
         return res.status(400).json({ message: "The password entered doesn't match your account" });
     }
 
@@ -106,6 +114,8 @@ router.patch("/updateAccount", async (req, res) => {
         phoneNumber: foundUser.phone_number,
         email: req.body.email || foundUser.email,
         password: foundUser.password,
+        profileImage: req.body.profileImage || foundUser.profile_image,
+        role: req.body.role || foundUser.role,
     }
     
     await update(user)

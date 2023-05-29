@@ -12,6 +12,7 @@ export const serverEndpoints = readable({
         resetpassword: "/auth/reset-password",
         deleteaccount: "/auth/delete-account",
         validatepassword: "/auth/validatepassword",
+        profileimage: "/auth/profileImage",
         ownedGame: "/auth/ownedGames",
         addOwnedGame: "/auth/addOwnedGame",
         wishlist: "/auth/wishlist",
