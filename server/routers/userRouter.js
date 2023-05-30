@@ -140,7 +140,7 @@ router.get("/friendlist", async (req, res) => {
 router.post("/friendlist", async (req, res) => {
     const friend = req.body?.user;
 
-    if (!friend.name || !friend.email || !friend.profile_image || !friend.gamertag || !req.session.user?.gamertag) {
+    if (!friend.name || !friend.email || !friend.gamertag || !req.session.user?.gamertag) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
     }
 
