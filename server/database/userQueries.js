@@ -1,9 +1,9 @@
 import db from "./connection.js";
 import { v4 as uuidv4 } from 'uuid';
 
-async function getAllUsers() {
-    const query = 'SELECT gamertag, profile_image, name, email FROM users';
-    const [rows] = await db.query(query);
+async function getAllUsers(gamertag) {
+    const query = 'SELECT gamertag, profile_image, name, email FROM users WHERE gamertag != ?';
+    const [rows] = await db.query(query, [gamertag]);
     return rows;
 }
 
@@ -187,12 +187,22 @@ async function getAllFriendlistByGamertag(gamertag) {
     return rows;
 }
 
+async function addFriendToUsersFriendlist(user, friend) {
+    const friendFound = await getUserByGamertag(friend.gamertag);
+
+    const queryFriend = 'INSERT INTO friendlist (user_id, name, email, profile_image, gamertag) VALUES (?, ?, ?, ?, ?)';
+    const valuesFriend = [friendFound.id, user.name, user.email, user.profile_image, user.gamertag];
+    await db.query(queryFriend, valuesFriend);
+}
+
 async function addUserToFriendlist(gamertag, friend) {
     const user = await getUserByGamertag(gamertag);
-
+    
     const query = 'INSERT INTO friendlist (user_id, name, email, profile_image, gamertag) VALUES (?, ?, ?, ?, ?)';
     const values = [user.id, friend.name, friend.email, friend.profile_image, friend.gamertag];
     await db.query(query, values);
+
+    addFriendToUsersFriendlist(user, friend);
 }
 
 export {

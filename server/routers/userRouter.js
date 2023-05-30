@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
     if (!req.session.user) {
         return res.status(404).send({ message: "Need to be logged in!" });
     }
-    const user = await getAllUsers();
+    const user = await getAllUsers(req.session.user.gamertag);
     res.status(200).send({ data: user });
 });
 
