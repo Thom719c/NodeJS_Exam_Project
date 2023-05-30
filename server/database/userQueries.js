@@ -189,7 +189,7 @@ async function getAllFriendlistByGamertag(gamertag) {
 
 async function addUserToFriendlist(gamertag, friend) {
     const user = await getUserByGamertag(gamertag);
-    
+
     const query = 'INSERT INTO friendlist (user_id, name, email, profile_image, gamertag) VALUES (?, ?, ?, ?, ?)';
     const values = [user.id, friend.name, friend.email, friend.profile_image, friend.gamertag];
     await db.query(query, values);
@@ -206,11 +206,11 @@ async function addFriendToUsersFriendlist(user, friend) {
 
 async function removeFriendFromFriendList(gamertag, friend) {
     const user = await getUserByGamertag(gamertag);
-    
+
     const query = 'DELETE FROM friendlist WHERE user_id = ? AND gamertag = ?';
     const values = [user.id, friend.gamertag];
     await db.query(query, values);
-    
+
     await removeUserFromFriendsFriendlist(gamertag, friend)
 }
 
@@ -218,6 +218,31 @@ async function removeUserFromFriendsFriendlist(gamertag, friend) {
     const friendFound = await getUserByGamertag(friend.gamertag);
     const query = 'DELETE FROM friendlist WHERE user_id = ? AND gamertag = ?';
     const values = [friendFound.id, gamertag];
+    await db.query(query, values);
+}
+
+/* Messages */
+async function getAllMessages(friend) {
+    const friendFound = getUserByGamertag(friend.gamertag)
+    const query = (`
+        SELECT m.id, m.message, m.created_at, sender.gamertag AS sender_gamertag, sender.profile_image AS sender_profile_image, receiver.gamertag AS receiver_gamertag, receiver.profile_image AS receiver_profile_image 
+        FROM messages m
+        JOIN users sender ON m.sender_id = sender.id
+        JOIN users receiver ON m.receiver_id = receiver.id
+        WHERE (m.sender_id = ? AND m.receiver_id = ?)
+        OR (m.sender_id = ? AND m.receiver_id = ?)
+        ORDER BY m.created_at DESC
+    `);
+    const values = [friend.user_id, friendFound.id, friendFound.id, friend.user_id];
+    const [rows] = await db.query(query, values);
+    return rows;
+}
+async function addMessage(friend, message) {
+    const friendFound = await getUserByGamertag(friend.gamertag);
+    const createdDate = new Date().toISOString().split("T")[0];
+
+    const query = 'INSERT INTO messages (sender_id, receiver_id, message, created_at) VALUES (?, ?, ?, ?)';
+    const values = [friend.user_id, friendFound.id, message, createdDate];
     await db.query(query, values);
 }
 
@@ -246,4 +271,6 @@ export {
     getAllFriendlistByGamertag,
     addUserToFriendlist,
     removeFriendFromFriendList,
+    getAllMessages,
+    addMessage,
 };
