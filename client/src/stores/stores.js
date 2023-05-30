@@ -27,6 +27,7 @@ export const serverEndpoints = readable({
         wishlist: "/users/wishlist",
         friendlist: "/users/friendlist",
         searchUsers: "/users",
+        messages: "/messages",
     }
 });
 

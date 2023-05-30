@@ -13,7 +13,8 @@ import {
     getSpecificUserByGamertag,
     addUserToFriendlist,
     removeFriendFromFriendList,
-    checkIfUserExist
+    checkIfUserExist, getAllMessages,
+    addMessage,
 } from "../database/userQueries.js";
 
 router.get("/", async (req, res) => {
@@ -174,6 +175,33 @@ router.delete("/friendlist", async (req, res) => {
     await removeFriendFromFriendList(req.session.user.gamertag, friend);
 
     res.status(201).send({ message: 'Game removed successfully from the wishlist' });
+});
+
+/* Messages */
+
+router.get("/messages", async (req, res) => {
+    const friend = req.body.friend;
+    if (!friend || !req.session.user) {
+        return res.status(400).send({ message: "Need to be logged in!" });
+    }
+
+    const messages = await getAllMessages(friend);
+
+    res.status(200).send({ message: 'All your messages', data: messages });
+});
+
+router.post("/messages", async (req, res) => {
+    const friend = req.body.friend;
+
+    if (!friend.user_id || !friend.gamertag || !req.session.user) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    // Get all friends that user has and Check if the friend is already in the friendlist
+
+    await addMessage(friend, 'new message');
+
+    res.status(201).send({ message: 'Message was added to messages' });
 });
 
 export default router
