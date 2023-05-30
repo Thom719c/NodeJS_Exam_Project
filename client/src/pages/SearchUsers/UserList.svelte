@@ -6,7 +6,6 @@
         serverEndpoints,
     } from "../../stores/stores.js";
     import { useNavigate, useParams } from "svelte-navigator";
-    import toast from "svelte-french-toast";
     import Users from "../../components/Users/Users.svelte";
 
     const navigate = useNavigate();
@@ -18,7 +17,6 @@
     let searchQuery = "";
 
     onMount(async () => {
-        checkFriendslist();
         searchQuery = $params.searchQuery;
         const url = $serverURL + $serverEndpoints.user.searchUsers;
         const response = await fetch(url, { credentials: "include" });
@@ -32,25 +30,12 @@
         }
     });
 
-    const checkFriendslist = async () => {
-        const url = $serverURL + $serverEndpoints.user.friendlist;
-        const response = await fetch(url, { credentials: "include" });
-        const data = await response.json();
-        if (response.ok) {
-            friends = data.data;
-        } else {
-            toast.error(data.message, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
+    afterUpdate(async () => {
+        const newSearchQuery = $params.searchQuery;
+        if (searchQuery !== newSearchQuery || filteredUsers.length === 0) {
+            searchQuery = newSearchQuery;
+            searchUsers();
         }
-    };
-
-    afterUpdate(() => {
-        searchQuery = $params.searchQuery;
-        searchUsers();
-        checkFriendslist();
     });
 
     const searchUsers = () => {

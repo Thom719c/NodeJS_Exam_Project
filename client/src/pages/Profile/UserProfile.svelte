@@ -9,7 +9,7 @@
     import defaultProfileImage from "../../assets/profileDefault.png";
     import { useNavigate, useParams } from "svelte-navigator";
     import AddFriend from "../../components/Users/AddFriend.svelte";
-    
+
     const navigate = useNavigate();
     const params = useParams();
 
@@ -23,14 +23,13 @@
     });
 
     afterUpdate(() => {
-        fetchUser();
         isFriend =
             friends.find((friend) => friend.gamertag === user.gamertag) !==
             undefined;
     });
 
     async function fetchUser() {
-        checkFriendslist();
+        handleCheckFriendlist();
         gamertag = $params.gamertag;
         const url =
             $serverURL +
@@ -46,7 +45,7 @@
         }
     }
 
-    const checkFriendslist = async () => {
+    const handleCheckFriendlist = async () => {
         const url = $serverURL + $serverEndpoints.user.friendlist;
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
@@ -148,7 +147,7 @@
                     {#if isFriend}
                         <p class="mt-3">Already friends</p>
                     {:else}
-                        <AddFriend {user} />
+                        <AddFriend {user} on:friendAdded={fetchUser} />
                     {/if}
                 </div>
             </div>

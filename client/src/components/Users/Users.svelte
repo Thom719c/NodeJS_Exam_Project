@@ -1,11 +1,12 @@
 <script>
-    import { afterUpdate } from "svelte";
+    import { afterUpdate, onMount } from "svelte";
     import { useNavigate } from "svelte-navigator";
     import {
         session,
         serverURL,
         serverEndpoints,
     } from "../../stores/stores.js";
+    import toast from "svelte-french-toast";
     import defaultProfileImage from "../../assets/profileDefault.png";
     import AddFriend from "./AddFriend.svelte";
 
@@ -28,6 +29,25 @@
             friends.find((friend) => friend.gamertag === user.gamertag) !==
             undefined;
     });
+
+    onMount(() => {
+        handleCheckFriendlist();
+    });
+
+    const handleCheckFriendlist = async () => {
+        const url = $serverURL + $serverEndpoints.user.friendlist;
+        const response = await fetch(url, { credentials: "include" });
+        const data = await response.json();
+        if (response.ok) {
+            friends = data.data;
+        } else {
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        }
+    };
 </script>
 
 <div class="user-container row">
@@ -53,7 +73,7 @@
         {#if isFriend}
             <p>Already friends</p>
         {:else}
-            <AddFriend {user} />
+            <AddFriend {user} on:friendAdded={handleCheckFriendlist} />
         {/if}
     </div>
 </div>

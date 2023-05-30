@@ -1,6 +1,9 @@
 <script>
     import { serverURL, serverEndpoints } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
 
     export let user = {};
 
@@ -21,6 +24,7 @@
                 position: "bottom-right",
                 style: "border-radius: 200px; background: #333; color: #fff;",
             });
+            dispatch("friendAdded");
         } else {
             toast.error(data.message, {
                 duration: 5000,
