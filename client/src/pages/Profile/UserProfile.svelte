@@ -18,6 +18,8 @@
     let isFriend = false;
     let gamertag = "";
 
+    console.log($session.gamertag)
+
     onMount(() => {
         fetchUser();
     });
@@ -145,10 +147,12 @@
                         <i class="bi bi-controller" />
                         Wishlist
                     </button>
+                    {#if gamertag.toLowerCase != $session.gamertag.toLowerCase}
                     {#if isFriend}
                         <p class="mt-3">Already friends</p>
                     {:else}
                         <AddFriend {user} />
+                    {/if}
                     {/if}
                 </div>
             </div>
