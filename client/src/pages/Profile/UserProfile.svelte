@@ -7,10 +7,11 @@
     } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
     import defaultProfileImage from "../../assets/profileDefault.png";
-    import { useNavigate, useLocation } from "svelte-navigator";
+    import { useNavigate, useParams } from "svelte-navigator";
     import AddFriend from "../../components/Users/AddFriend.svelte";
+    
     const navigate = useNavigate();
-    const location = useLocation();
+    const params = useParams();
 
     let user = {};
     let friends = [];
@@ -30,7 +31,7 @@
 
     async function fetchUser() {
         checkFriendslist();
-        gamertag = $location.pathname.split("/").pop();
+        gamertag = $params.gamertag;
         const url =
             $serverURL +
             $serverEndpoints.user.searchUsers +

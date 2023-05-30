@@ -5,12 +5,12 @@
         serverURL,
         serverEndpoints,
     } from "../../stores/stores.js";
-    import { useNavigate, useLocation } from "svelte-navigator";
+    import { useNavigate, useParams } from "svelte-navigator";
     import toast from "svelte-french-toast";
     import Users from "../../components/Users/Users.svelte";
 
     const navigate = useNavigate();
-    const location = useLocation();
+    const params = useParams();
 
     let users = [];
     let friends = [];
@@ -19,7 +19,7 @@
 
     onMount(async () => {
         checkFriendslist();
-        searchQuery = $location.pathname.split("/").pop();
+        searchQuery = $params.searchQuery;
         const url = $serverURL + $serverEndpoints.user.searchUsers;
         const response = await fetch(url, { credentials: "include" });
 
@@ -48,7 +48,7 @@
     };
 
     afterUpdate(() => {
-        searchQuery = $location.pathname.split("/").pop();
+        searchQuery = $params.searchQuery;
         searchUsers();
         checkFriendslist();
     });

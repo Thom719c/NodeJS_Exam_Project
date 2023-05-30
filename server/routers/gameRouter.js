@@ -8,6 +8,17 @@ router.get("/games", async (req, res) => {
     res.status(200).send({ message: "All games", data: rows });
 });
 
+router.get("/games/:id", async (req, res) => {
+    const gameId = req.params.id;
+    const [rows] = await db.query(`SELECT * FROM games WHERE id = ?`, [gameId]);
+
+    if (!rows) {
+        return res.status(404).send({ message: "No game found!" });
+    }
+
+    res.status(200).send({ message: "Specific game found", data: rows });
+});
+
 router.post("/games", async (req, res) => {
     if (!req.session.user) {
         return res.status(404).send({ message: "Need to be logged in!" });
