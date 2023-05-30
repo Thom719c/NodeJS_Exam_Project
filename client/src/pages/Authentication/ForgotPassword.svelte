@@ -44,10 +44,10 @@
 
 <div class="container-fluid forgot-container">
     <div class="row">
-        <div class="col-6 mx-auto box">
+        <div class="col-6 mx-auto content-box">
             <div class="col-lg-12 mt-5">
                 <img
-                    class="img-container img-fluid mx-auto d-block"
+                    class="img-fluid mx-auto d-block"
                     src="../src/assets/GamingOasisLogoIconTransparrent.png"
                     width="150"
                     alt="Logo"
@@ -59,44 +59,40 @@
             </div>
 
             <div class="col-lg-12 forgot-reset-form">
-                <div class="col-lg-12 forgot-reset-form">
-                    <form
-                        on:submit|preventDefault={handleChangePassword}
-                        method="post"
-                    >
-                        <div class="form-group">
-                            <label class="form-control-label" for="email">E-Mail</label>
-                            <input
-                                type="email"
-                                name="email"
-                                class="form-control"
-                                placeholder="Example@domain.com"
-                                required
-                                bind:value={email}
-                            />
-                        </div>
+                <form
+                    on:submit|preventDefault={handleChangePassword}
+                    method="post"
+                >
+                    <div class="form-group">
+                        <label class="form-control-label" for="email"
+                            >E-Mail</label
+                        >
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control form-input"
+                            placeholder="Example@domain.com"
+                            required
+                            bind:value={email}
+                        />
+                    </div>
 
-                        <div class="form-group text-format row mb-2">
-                            <p class="col">
-                                Go to <a
-                                    class="aStyling"
-                                    data-panel=".panel-signup"
-                                    href="/login">Login!</a
-                                >
-                            </p>
-                        </div>
+                    <div class="form-group text-format row mb-2">
+                        <p class="col">
+                            Go to <a
+                                class="aStyling"
+                                data-panel=".panel-signup"
+                                href="/login">Login!</a
+                            >
+                        </p>
+                    </div>
 
-                        <div class="col-lg-12">
-                            <div class="col-lg-12 forgot-reset-button">
-                                <button
-                                    type="submit"
-                                    class="btn btn-outline-primary"
-                                    >Change password</button
-                                >
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <div class="col-lg-12 forgot-reset-button text-gradient">
+                        <button type="submit" class="btn btn-outline-primary">
+                            Change password
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -107,43 +103,17 @@
         max-width: 50em;
     }
 
-    .box {
-        margin-top: 75px;
-        height: auto;
-        min-width: 400px;
-        max-width: 500px;
-        background: #1a2226;
-        text-align: center;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-        border-radius: 15px;
-    }
-
     .title {
         margin-top: 35px;
         text-align: center;
         font-size: 30px;
         letter-spacing: 2px;
         font-weight: bold;
-        color: #ecf0f5;
     }
 
     .forgot-reset-form {
         margin-top: 25px;
         text-align: left;
-    }
-
-    input[type="email"] {
-        background-color: #1a2226;
-        color: #ecf0f5;
-        border: none;
-        border-bottom: 2px solid #0db8de;
-        border-radius: 0px;
-        font-weight: bold;
-        padding-left: 0px;
-    }
-
-    input::placeholder {
-        color: #777777;
     }
 
     .form-group {
@@ -174,23 +144,21 @@
     }
 
     .form-control-label {
-        font-size: 10px;
-        color: #6c6c6c;
+        font-size: 12px;
+        color: rgb(103, 193, 221);
         font-weight: bold;
         letter-spacing: 1px;
     }
 
     .btn-outline-primary {
-        border-color: #0dde29;
-        color: #0dde29;
+        border-color: #e5e047;
         font-weight: bold;
         letter-spacing: 1px;
     }
 
     .btn-outline-primary:hover {
-        background-color: #0dde29;
+        background-color: #67c2dd41;
         color: white;
-        right: 0px;
     }
 
     .forgot-reset-button {

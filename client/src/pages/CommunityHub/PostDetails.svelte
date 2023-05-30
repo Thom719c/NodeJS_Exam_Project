@@ -193,7 +193,8 @@
     };
 
     const removeComment = async (comment) => {
-        const url = $serverURL + $serverEndpoints.communityHub.comments + post.id;
+        const url =
+            $serverURL + $serverEndpoints.communityHub.comments + post.id;
 
         const response = await fetch(url, {
             method: "DELETE",
@@ -310,7 +311,7 @@
 
     {#if $session}
         <form on:submit|preventDefault={addComment}>
-            <label for="comment">Add a comment:</label>
+            <label for="comment">Add a comment</label>
             <textarea id="comment" rows="4" bind:value={newComment} />
             <button type="submit" class="post-button">Post Comment</button>
         </form>
@@ -371,10 +372,24 @@
         margin-bottom: 5px;
     }
 
+    form {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: rgba(48, 76, 96, 0.9);
+    }
+
     textarea {
         width: 100%;
         padding: 5px;
         margin-bottom: 10px;
+        background-color: #1a2226;
+        color: #ecf0f5;
+        border: none;
+        border-bottom: 2px solid #0db8de;
+        border-radius: 5px;
+        font-weight: bold;
     }
 
     .back-button,
