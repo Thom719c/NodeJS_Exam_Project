@@ -7,7 +7,7 @@
     } from "../../stores/stores.js";
     import { useNavigate, useLocation } from "svelte-navigator";
     import toast from "svelte-french-toast";
-    import Users from "./Users.svelte";
+    import Users from "../../components/Users/Users.svelte";
 
     const navigate = useNavigate();
     const location = useLocation();

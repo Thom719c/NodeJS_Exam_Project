@@ -7,7 +7,7 @@
         serverEndpoints,
     } from "../../stores/stores.js";
     import defaultProfileImage from "../../assets/profileDefault.png";
-    import AddFriend from "../../components/Users/AddFriend.svelte";
+    import AddFriend from "./AddFriend.svelte";
 
     const navigate = useNavigate();
 
