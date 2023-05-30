@@ -36,10 +36,18 @@
         const data = await response.json();
 
         if (response.ok) {
-            toast.success(data.message);
+            toast.success(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
             addGame(data.data);
         } else {
-            toast.error(data.message);
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     };
 

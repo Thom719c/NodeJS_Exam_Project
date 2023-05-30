@@ -6,6 +6,7 @@
         serverEndpoints,
     } from "../../stores/stores.js";
     import { useNavigate } from "svelte-navigator";
+    import toast from "svelte-french-toast";
     import defaultProfileImage from "../../assets/profileDefault.png";
 
     const navigate = useNavigate();
@@ -24,7 +25,40 @@
         }
     });
 
-    const removeUserFromFriendList = async () => {};
+    const removeUserFromFriendList = async (friend) => {
+        const url = $serverURL + $serverEndpoints.user.friendlist;
+        const removeFriend = {
+            id: friend.user_id,
+            name: friend.name,
+            gamertag: friend.gamertag
+        };
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(removeFriend),
+            credentials: "include",
+        });
+
+        if (response.ok) {
+            friends = friends.filter(
+                (f) => f.gamertag !== removeFriend.gamertag
+            );
+            toast.success("Friend was removed successfully from friendlist.", {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+
+        } else {
+            toast.error("Failed to remove friend from friendlist.", {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        }
+    };
 
     const showImage = (avatar) => {
         if (!avatar) {
@@ -72,7 +106,7 @@
                             <button class="move-button">Message</button>
                             <button
                                 class="remove-button"
-                                on:click={() => removeUserFromFriendList()}
+                                on:click={() => removeUserFromFriendList(friend)}
                             >
                                 Remove
                             </button>

@@ -111,11 +111,19 @@
         const data = await response.json();
 
         if (response.ok) {
-            toast.success(data.message);
+            toast.success(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
             updateProfile(data.data);
             exitEditMode();
         } else {
-            toast.error(data.message);
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     }
 
@@ -139,13 +147,21 @@
         const data = await updateResponse.json();
 
         if (updateResponse.ok) {
-            toast.success(data.message);
+            toast.success(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
             session.set(data.session.user);
             profileImage = imageName;
             isPopupOpen = false;
             exitEditMode();
         } else {
-            toast.error(data.message);
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     }
 

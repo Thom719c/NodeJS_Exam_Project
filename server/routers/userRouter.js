@@ -2,6 +2,7 @@ import { Router } from "express"
 const router = Router();
 import bcrypt from "bcrypt"
 import {
+    getUserByGamertag,
     getProfileImageByGamertag,
     getAllOwnedGameByGamertag, addOwnedGameToUser,
     removeGameFromOwnedList,
@@ -10,7 +11,9 @@ import {
     getAllFriendlistByGamertag,
     getAllUsers,
     getSpecificUserByGamertag,
-    addUserToFriendlist
+    addUserToFriendlist,
+    removeFriendFromFriendList,
+    checkIfUserExist
 } from "../database/userQueries.js";
 
 router.get("/", async (req, res) => {
@@ -26,7 +29,12 @@ router.get("/profile/:gamertag", async (req, res) => {
         return res.status(404).send({ message: "Need to be logged in!" });
     }
     const gamertag = req.params.gamertag;
+    const userExist = await checkIfUserExist('', gamertag);
+    if (!userExist) {
+        return res.status(404).send({ message: "User not found!" });
+    }
     const user = await getSpecificUserByGamertag(gamertag);
+   
     res.status(200).send({ data: user });
 });
 
@@ -154,6 +162,18 @@ router.post("/friendlist", async (req, res) => {
     await addUserToFriendlist(req.session.user.gamertag, friend);
 
     res.status(201).send({ message: 'User added successfully to the friendlist' });
+});
+
+router.delete("/friendlist", async (req, res) => {
+    const friend = req.body;
+
+    if (!friend.id || !friend.name || !req.session.user?.gamertag) {
+        return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
+    }
+
+    await removeFriendFromFriendList(req.session.user.gamertag, friend);
+
+    res.status(201).send({ message: 'Game removed successfully from the wishlist' });
 });
 
 export default router

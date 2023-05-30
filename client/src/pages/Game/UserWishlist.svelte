@@ -23,7 +23,11 @@
         // Perform the logic to move the game to the owned games list
         addToOwnedGame(game.steam_app_id, game.game_name);
         // Show a toast message after successful move
-        toast.success(`Game "${game.game_name}" moved to Owned Games.`);
+        toast.success(`Game "${game.game_name}" moved to Owned Games.`, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         removeGameFromWishlist(game, true);
     };
 
@@ -48,11 +52,18 @@
             );
             if (!moved) {
                 toast.success(
-                    `Game "${game.game_name}" removed from Wishlist.`
-                );
+                    `Game "${game.game_name}" removed from Wishlist.`, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
             }
         } else {
-            toast.error("Failed to remove the game from Wishlist.");
+            toast.error("Failed to remove the game from Wishlist.", {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     };
 

@@ -181,18 +181,10 @@ async function removeCommentsByPostId(user, postId) {
 /* Friendlist */
 
 async function getAllFriendlistByGamertag(gamertag) {
-    const query = 'SELECT * FROM users u JOIN friendlist f ON u.id = f.user_id WHERE u.gamertag = ?';
+    const query = 'SELECT f.user_id, f.name, f.email, f.gamertag, f.profile_image FROM users u JOIN friendlist f ON u.id = f.user_id WHERE u.gamertag = ?';
     const values = [gamertag];
     const [rows] = await db.query(query, values);
     return rows;
-}
-
-async function addFriendToUsersFriendlist(user, friend) {
-    const friendFound = await getUserByGamertag(friend.gamertag);
-
-    const queryFriend = 'INSERT INTO friendlist (user_id, name, email, profile_image, gamertag) VALUES (?, ?, ?, ?, ?)';
-    const valuesFriend = [friendFound.id, user.name, user.email, user.profile_image, user.gamertag];
-    await db.query(queryFriend, valuesFriend);
 }
 
 async function addUserToFriendlist(gamertag, friend) {
@@ -202,8 +194,33 @@ async function addUserToFriendlist(gamertag, friend) {
     const values = [user.id, friend.name, friend.email, friend.profile_image, friend.gamertag];
     await db.query(query, values);
 
-    addFriendToUsersFriendlist(user, friend);
+    await addFriendToUsersFriendlist(user, friend);
 }
+
+async function addFriendToUsersFriendlist(user, friend) {
+    const friendFound = await getUserByGamertag(friend.gamertag);
+    const queryFriend = 'INSERT INTO friendlist (user_id, name, email, profile_image, gamertag) VALUES (?, ?, ?, ?, ?)';
+    const valuesFriend = [friendFound.id, user.name, user.email, user.profile_image, user.gamertag];
+    await db.query(queryFriend, valuesFriend);
+}
+
+async function removeFriendFromFriendList(gamertag, friend) {
+    const user = await getUserByGamertag(gamertag);
+    
+    const query = 'DELETE FROM friendlist WHERE user_id = ? AND gamertag = ?';
+    const values = [user.id, friend.gamertag];
+    await db.query(query, values);
+    
+    await removeUserFromFriendsFriendlist(gamertag, friend)
+}
+
+async function removeUserFromFriendsFriendlist(gamertag, friend) {
+    const friendFound = await getUserByGamertag(friend.gamertag);
+    const query = 'DELETE FROM friendlist WHERE user_id = ? AND gamertag = ?';
+    const values = [friendFound.id, gamertag];
+    await db.query(query, values);
+}
+
 
 export {
     getAllUsers,
@@ -228,4 +245,5 @@ export {
     removeComment,
     getAllFriendlistByGamertag,
     addUserToFriendlist,
+    removeFriendFromFriendList,
 };

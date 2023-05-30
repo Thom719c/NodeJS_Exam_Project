@@ -182,13 +182,20 @@
 
         if (response.ok) {
             toast.success(
-                `Your post: "${post.title}" is now removed from CommunityHub.`
-            );
+                `Your post: "${post.title}" is now removed from CommunityHub.`, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
             setTimeout(() => {
                 goBackToProfile();
             }, 2000);
         } else {
-            toast.error("Failed to remove the post from CommunityHub.");
+            toast.error("Failed to remove the post from CommunityHub.", {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     };
 
@@ -209,11 +216,18 @@
             // Emit the comment to all connected clients
             socket.emit("removeComment", roomId, comment);
             toast.success(
-                `Your comment was removed successfully from CommunityHub.`
-            );
+                `Your comment was removed successfully from CommunityHub.`, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
             comments = comments.filter((c) => c.id !== comment.id);
         } else {
-            toast.error("Failed to remove the post from CommunityHub.");
+            toast.error("Failed to remove the post from CommunityHub.", {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     };
 

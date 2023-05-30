@@ -38,9 +38,17 @@
             games = games.filter(
                 (g) => g.steam_app_id !== removeGame.steamAppId
             );
-            toast.success(data.message);
+            toast.success(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         } else {
-            toast.error(data.message);
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
         }
     };
 
