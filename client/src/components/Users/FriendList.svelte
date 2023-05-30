@@ -12,6 +12,7 @@
     const navigate = useNavigate();
 
     let friends = [];
+    let messages = [];
 
     onMount(async () => {
         const url = $serverURL + $serverEndpoints.user.friendlist;
@@ -23,10 +24,59 @@
         } else {
             console.error("Failed to get users:");
         }
+        getMessages();
     });
 
-    const messages = async (friend) => {
-        console.log(friend)
+    const getMessages = async () => {
+        const friend = friends[0]
+        const url = $serverURL + "/users/message";
+        // const url = $serverURL + $serverEndpoints.user.messages;
+        const response = await fetch(url, {
+            credentials: "include",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({friend}),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            messages = data.data;
+        } else {
+            console.error("Failed to get users:");
+        }
+    };
+
+    const addMessages = async (friend) => {
+        console.log(friend);
+        const url = $serverURL + $serverEndpoints.user.messages;
+        const response = await fetch(url, {
+            credentials: "include",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ friend }),
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+            session.set(data.session);
+            toast.success(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+            navigate("/profile", { replace: true });
+        } else {
+            toast.error(data.message, {
+                duration: 5000,
+                position: "bottom-right",
+                style: "border-radius: 200px; background: #333; color: #fff;",
+            });
+        }
     };
 
     const removeUserFromFriendList = async (friend) => {
@@ -34,7 +84,7 @@
         const removeFriend = {
             id: friend.user_id,
             name: friend.name,
-            gamertag: friend.gamertag
+            gamertag: friend.gamertag,
         };
         const response = await fetch(url, {
             method: "DELETE",
@@ -54,7 +104,6 @@
                 position: "bottom-right",
                 style: "border-radius: 200px; background: #333; color: #fff;",
             });
-
         } else {
             toast.error("Failed to remove friend from friendlist.", {
                 duration: 5000,
@@ -107,10 +156,15 @@
                             {friend.name}
                         </p>
                         <div class="button-container">
-                            <button class="move-button" on:click={() => messages(friend)}>Message</button>
+                            <button
+                                class="move-button"
+                                on:click={() => addMessages(friend)}
+                                >Message</button
+                            >
                             <button
                                 class="remove-button"
-                                on:click={() => removeUserFromFriendList(friend)}
+                                on:click={() =>
+                                    removeUserFromFriendList(friend)}
                             >
                                 Remove
                             </button>

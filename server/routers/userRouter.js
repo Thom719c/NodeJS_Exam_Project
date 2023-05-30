@@ -179,7 +179,7 @@ router.delete("/friendlist", async (req, res) => {
 
 /* Messages */
 
-router.get("/messages", async (req, res) => {
+router.post("/message", async (req, res) => {
     const friend = req.body.friend;
     if (!friend || !req.session.user) {
         return res.status(400).send({ message: "Need to be logged in!" });
@@ -192,6 +192,7 @@ router.get("/messages", async (req, res) => {
 
 router.post("/messages", async (req, res) => {
     const friend = req.body.friend;
+    console.log(friend)
 
     if (!friend.user_id || !friend.gamertag || !req.session.user) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });

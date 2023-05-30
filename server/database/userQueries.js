@@ -223,7 +223,8 @@ async function removeUserFromFriendsFriendlist(gamertag, friend) {
 
 /* Messages */
 async function getAllMessages(friend) {
-    const friendFound = getUserByGamertag(friend.gamertag)
+    const friendFound = await getUserByGamertag(friend.gamertag)
+    console.log(friendFound, friend)
     const query = (`
         SELECT m.id, m.message, m.created_at, sender.gamertag AS sender_gamertag, sender.profile_image AS sender_profile_image, receiver.gamertag AS receiver_gamertag, receiver.profile_image AS receiver_profile_image 
         FROM messages m
