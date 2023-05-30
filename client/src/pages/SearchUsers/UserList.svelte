@@ -50,6 +50,7 @@
     afterUpdate(() => {
         searchQuery = $location.pathname.split("/").pop();
         searchUsers();
+        checkFriendslist();
     });
 
     const searchUsers = () => {
