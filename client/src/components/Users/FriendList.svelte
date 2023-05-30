@@ -25,6 +25,10 @@
         }
     });
 
+    const messages = async (friend) => {
+        console.log(friend)
+    };
+
     const removeUserFromFriendList = async (friend) => {
         const url = $serverURL + $serverEndpoints.user.friendlist;
         const removeFriend = {
@@ -103,7 +107,7 @@
                             {friend.name}
                         </p>
                         <div class="button-container">
-                            <button class="move-button">Message</button>
+                            <button class="move-button" on:click={() => messages(friend)}>Message</button>
                             <button
                                 class="remove-button"
                                 on:click={() => removeUserFromFriendList(friend)}
