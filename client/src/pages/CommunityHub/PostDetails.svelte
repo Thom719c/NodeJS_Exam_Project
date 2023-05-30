@@ -8,10 +8,10 @@
         postRoom,
     } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
-    import { useNavigate, useLocation } from "svelte-navigator";
+    import { useNavigate, useParams } from "svelte-navigator";
 
     const navigate = useNavigate();
-    const location = useLocation();
+    const params = useParams();
 
     let roomId = "";
     let post = {};
@@ -69,7 +69,7 @@
     onMount(async () => {
         socket.emit("subscribeToCommentAdded");
         // Fetch post details and comments from API or any other data source
-        postRoom.set($location.pathname.split("/").pop()); // extracting the last segment using pop() to get the "id" from the URL (after last "/").
+        postRoom.set($params.id); // extracting the last segment using pop() to get the "id" from the URL (after last "/").
         const response = await fetch(
             $serverURL + "/communityHub/posts/" + $postRoom
         );

@@ -9,6 +9,7 @@
     import defaultProfileImage from "../../assets/profileDefault.png";
     import { useNavigate, useParams } from "svelte-navigator";
     import AddFriend from "../../components/Users/AddFriend.svelte";
+    
     const navigate = useNavigate();
     const params = useParams();
 
