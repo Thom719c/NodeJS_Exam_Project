@@ -12,7 +12,6 @@
 
     let appid;
     let gameInfo;
-    let sanitizedDescription = "";
 
     onMount(async () => {
         const params = new URLSearchParams($location.search);
