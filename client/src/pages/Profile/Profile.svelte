@@ -330,7 +330,7 @@
                         </button>
                         <button class="btn btn-outline-primary" on:click={friendList}>
                             <i class="bi bi-person-fill-add" />
-                            Friendlist
+                            Friends
                         </button>
                     </div>
                 {/if}
@@ -392,6 +392,7 @@
         border-color: #e5e047;
         font-weight: bold;
         letter-spacing: 1px;
+        width: 170px;
     }
 
     .btn-outline-primary:hover {
