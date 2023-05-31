@@ -72,7 +72,7 @@
                 </ul>
                 <ul class="navbar-nav">
                     {#if $session}
-                        <li class="nav-item my-auto">
+                        <li class="nav-item my-auto d-flex align-items-center justify-content-center">
                             <SearchUsers />
                         </li>
                         <li class="nav-item">
