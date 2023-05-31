@@ -18,8 +18,6 @@
     let isFriend = false;
     let gamertag = "";
 
-    console.log($session.gamertag)
-
     onMount(() => {
         fetchUser();
     });
@@ -147,11 +145,11 @@
                         Wishlist
                     </button>
                     {#if gamertag.toLowerCase != $session.gamertag.toLowerCase}
-                    {#if isFriend}
-                        <p class="mt-3">Already friends</p>
-                    {:else}
-                        <AddFriend {user} on:friendAdded={fetchUser} />
-                    {/if}
+                        {#if isFriend}
+                            <p class="mt-3">Already friends</p>
+                        {:else}
+                            <AddFriend {user} on:friendAdded={fetchUser} />
+                        {/if}
                     {/if}
                 </div>
             </div>

@@ -192,17 +192,14 @@ router.post("/message", async (req, res) => {
 
 router.post("/messages", async (req, res) => {
     const friend = req.body.friend;
-    console.log(friend)
 
-    if (!friend.user_id || !friend.gamertag || !req.session.user) {
+    if (!friend.user_id || !friend.gamertag || !req.body.message || !req.session.user) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
     }
 
-    // Get all friends that user has and Check if the friend is already in the friendlist
+    const message = await addMessage(friend, req.body.message);
 
-    await addMessage(friend, 'new message');
-
-    res.status(201).send({ message: 'Message was added to messages' });
+    res.status(201).send({ message: 'Message was added to messages', data: message });
 });
 
 export default router

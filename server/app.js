@@ -77,6 +77,14 @@ io.on("connection", (socket) => {
         io.to(roomId).emit("commentRemoved", comment);
     })
 
+    /* This is for Chat between friends */
+    socket.on("joinChatRoom", (roomId) => {
+        socket.join(roomId);
+    });
+
+    socket.on("sendMessage", (roomId, message) => {
+        io.to(roomId).emit("message", message);
+    });
 
     // Handle client disconnection
     socket.on("disconnect", () => {
@@ -170,7 +178,7 @@ app.get('/api/gameInfo/:appid', async (req, res) => {
     const url = 'https://store.steampowered.com/api/appdetails?appids=' + req.params.appid + '&l=english';
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data[req.params.appid].data.detailed_description )
+    console.log(data[req.params.appid].data.detailed_description)
 
     if (!data[req.params.appid].data.detailed_description) {
         res.status(404).send({ message: "No detail description found", data })

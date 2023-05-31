@@ -226,25 +226,78 @@ async function getAllMessages(friend) {
     const friendFound = await getUserByGamertag(friend.gamertag)
     console.log(friendFound, friend)
     const query = (`
-        SELECT m.id, m.message, m.created_at, sender.gamertag AS sender_gamertag, sender.profile_image AS sender_profile_image, receiver.gamertag AS receiver_gamertag, receiver.profile_image AS receiver_profile_image 
+        SELECT m.id, m.message, m.created_at, sender.gamertag AS sender_gamertag, sender.profile_image AS sender_profile_image, receiver.gamertag AS receiver_gamertag, receiver.profile_image AS receiver_profile_image, room_id 
         FROM messages m
         JOIN users sender ON m.sender_id = sender.id
         JOIN users receiver ON m.receiver_id = receiver.id
         WHERE (m.sender_id = ? AND m.receiver_id = ?)
         OR (m.sender_id = ? AND m.receiver_id = ?)
-        ORDER BY m.created_at DESC
+        ORDER BY m.created_at
     `);
     const values = [friend.user_id, friendFound.id, friendFound.id, friend.user_id];
     const [rows] = await db.query(query, values);
     return rows;
 }
-async function addMessage(friend, message) {
+
+/* async function addMessage(friend, message) {
     const friendFound = await getUserByGamertag(friend.gamertag);
     const createdDate = new Date().toISOString().split("T")[0];
 
     const query = 'INSERT INTO messages (sender_id, receiver_id, message, created_at) VALUES (?, ?, ?, ?)';
     const values = [friend.user_id, friendFound.id, message, createdDate];
     await db.query(query, values);
+} */
+
+async function addMessage(friend, message) {
+    const friendFound = await getUserByGamertag(friend.gamertag);
+    const createdDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    const roomId = await checkIfChatHaveRoomId(friend, friendFound);
+
+    // Insert the message with the room ID
+    const insertQuery = 'INSERT INTO messages (sender_id, receiver_id, message, created_at, room_id) VALUES (?, ?, ?, ?, ?)';
+    const insertValues = [friend.user_id, friendFound.id, message, createdDate, roomId];
+    await db.query(insertQuery, insertValues);
+
+    // Retrieve the inserted message
+    const retrieveQuery = `
+        SELECT m.id, m.message, m.created_at, 
+            sender.gamertag AS sender_gamertag, sender.profile_image AS sender_profile_image, 
+            receiver.gamertag AS receiver_gamertag, receiver.profile_image AS receiver_profile_image,
+            room_id
+        FROM messages m
+        JOIN users sender ON m.sender_id = sender.id
+        JOIN users receiver ON m.receiver_id = receiver.id
+        WHERE m.id = LAST_INSERT_ID()
+    `;
+    const [rows] = await db.query(retrieveQuery);
+
+    if (rows.length > 0) {
+        return rows[0]; // Return the inserted message
+    } else {
+        throw new Error("Failed to retrieve the inserted message");
+    }
+}
+
+async function checkIfChatHaveRoomId(friend, friendFound) {
+    // Check if there is an existing chat between the users
+    const query = `
+      SELECT room_id
+      FROM messages
+      WHERE (sender_id = ? AND receiver_id = ?)
+      OR (sender_id = ? AND receiver_id = ?)
+      LIMIT 1
+    `;
+    const values = [friend.user_id, friendFound.id, friendFound.id, friend.user_id];
+    const [rows] = await db.query(query, values);
+
+    if (rows.length > 0 && rows[0].room_id) {
+        // Reuse the existing chat room
+        return rows[0].room_id;
+    } else {
+        // Create a new chat room by Generate a unique room ID
+        return uuidv4();
+    }
 }
 
 

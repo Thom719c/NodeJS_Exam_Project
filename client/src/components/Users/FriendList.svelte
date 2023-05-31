@@ -8,11 +8,13 @@
     import { useNavigate } from "svelte-navigator";
     import toast from "svelte-french-toast";
     import defaultProfileImage from "../../assets/profileDefault.png";
+    import Chat from "./Chat.svelte";
 
     const navigate = useNavigate();
 
     let friends = [];
-    let messages = [];
+    let showChatPopup = false;
+    let selectedFriend = null;
 
     onMount(async () => {
         const url = $serverURL + $serverEndpoints.user.friendlist;
@@ -24,58 +26,12 @@
         } else {
             console.error("Failed to get users:");
         }
-        getMessages();
     });
 
-    const getMessages = async () => {
-        const friend = friends[0]
-        const url = $serverURL + "/users/message";
-        // const url = $serverURL + $serverEndpoints.user.messages;
-        const response = await fetch(url, {
-            credentials: "include",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({friend}),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-            messages = data.data;
-        } else {
-            console.error("Failed to get users:");
-        }
-    };
-
-    const addMessages = async (friend) => {
-        console.log(friend);
-        const url = $serverURL + $serverEndpoints.user.messages;
-        const response = await fetch(url, {
-            credentials: "include",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ friend }),
-        });
-        const data = await response.json();
-
-        if (response.ok) {
-            session.set(data.session);
-            toast.success(data.message, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
-            navigate("/profile", { replace: true });
-        } else {
-            toast.error(data.message, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
+    const handleOpenCloseChat = async (friend) => {
+        showChatPopup = !showChatPopup;
+        if (showChatPopup) {
+            selectedFriend = friend;
         }
     };
 
@@ -158,9 +114,10 @@
                         <div class="button-container">
                             <button
                                 class="move-button"
-                                on:click={() => addMessages(friend)}
-                                >Message</button
+                                on:click={() => handleOpenCloseChat(friend)}
                             >
+                                Message
+                            </button>
                             <button
                                 class="remove-button"
                                 on:click={() =>
@@ -175,6 +132,10 @@
         </ul>
     {/if}
 </div>
+
+{#if showChatPopup}
+    <Chat {selectedFriend} onOpenCloseChat={handleOpenCloseChat} />
+{/if}
 
 <style>
     .container {
@@ -259,6 +220,7 @@
     .remove-button {
         background-color: #ca2323;
     }
+
     .remove-button:hover {
         background-color: #aa0f0f;
     }
