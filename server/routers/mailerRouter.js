@@ -1,6 +1,6 @@
 import dotenv from "dotenv/config";
 import nodemailer from "nodemailer";
-import { getUserByEmail, createPasswordResetTokenInDB, updateUserPassword, deletePasswordResetToken } from "../database/userQueries.js";
+import { getUserByEmail, createPasswordResetTokenInDB } from "../database/userQueries.js";
 import { Router } from "express";
 const router = Router();
 
@@ -23,8 +23,6 @@ router.post("/mail/contact", async (req, res) => {
             subject: req.body.subject,
             text: req.body.message
         });
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
         res.status(200)
             .send({ message: "Your feedback is sent: " + req.body.message });
     } else {
@@ -33,7 +31,6 @@ router.post("/mail/contact", async (req, res) => {
     }
 });
 
-// TODO Forgot password send mail with token and url to reset password
 router.post("/mail/forgot-password", async (req, res) => {
     const email = req.body.email;
 

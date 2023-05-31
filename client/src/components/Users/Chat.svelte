@@ -36,7 +36,7 @@
     });
 
     const getMessages = async () => {
-        const url = $serverURL + "/users/message";
+        const url = $serverURL + $serverEndpoints.user.message;
         const response = await fetch(url, {
             credentials: "include",
             method: "POST",
@@ -46,8 +46,8 @@
             body: JSON.stringify({ friend: selectedFriend }),
         });
 
+        const data = await response.json();
         if (response.ok) {
-            const data = await response.json();
             messages = data.data;
             roomId = messages.length > 0 ? messages[0].room_id : null;
         } else {

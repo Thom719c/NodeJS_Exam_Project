@@ -1,16 +1,9 @@
 <script>
-    import {
-        serverURL,
-        serverEndpoints,
-    } from "../../stores/stores.js";
+    import { serverURL } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
-    import { useNavigate } from "svelte-navigator";
-
-    const navigate = useNavigate();
 
     let name = "";
     let image = "";
-    let filename = "";
     let src = "";
     let genre = "";
     let isGamingOasis = "others";

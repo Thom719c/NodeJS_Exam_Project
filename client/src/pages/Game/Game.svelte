@@ -1,10 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import {
-        serverURL,
-        serverEndpoints,
-        selectedGame,
-    } from "../../stores/stores.js";
+    import { serverURL, selectedGame } from "../../stores/stores.js";
     import { useNavigate, useParams } from "svelte-navigator";
     import GameEmbed from "../../components/Game/GameEmbed.svelte";
     import { SyncLoader } from "svelte-loading-spinners";

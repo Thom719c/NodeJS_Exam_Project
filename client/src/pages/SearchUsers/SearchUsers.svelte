@@ -1,10 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import {
-        session,
-        serverURL,
-        serverEndpoints,
-    } from "../../stores/stores.js";
+    import { serverURL, serverEndpoints } from "../../stores/stores.js";
     import defaultProfileImage from "../../assets/profileDefault.png";
     import { useNavigate } from "svelte-navigator";
 
@@ -53,37 +49,6 @@
         }
     }
 </script>
-
-<!-- <div class="search-bar">
-    <input
-        class="search-input"
-        type="text"
-        bind:value={searchQuery}
-        placeholder="Search..."
-        on:input={searchUsers}
-        list="user-suggestions"
-    />
-    <datalist id="user-suggestions">
-        {#each filteredUsers as user}
-            <option value={user.name}>
-                <div class="user-option">
-                    <img
-                        src={$serverURL +
-                            "/images/avatar/" +
-                            user.profile_image}
-                        alt={user.name}
-                        width="30"
-                        height="30"
-                    />
-                    <span>{user.name}</span>
-                </div>
-            </option>
-        {/each}
-    </datalist>
-    <button class="search-button me-4" on:click={searchUsers}>
-        <i class="bi bi-search" />
-    </button>
-</div> -->
 
 <div class="search-bar">
     <input

@@ -2,7 +2,6 @@ import { Router } from "express"
 const router = Router();
 import bcrypt from "bcrypt"
 import {
-    getUserByGamertag,
     getProfileImageByGamertag,
     getAllOwnedGameByGamertag, addOwnedGameToUser,
     removeGameFromOwnedList,
@@ -110,7 +109,7 @@ router.post("/wishlist", async (req, res) => {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
     }
 
-    // Get all games that user owned and Check if the game is already in the owned games list
+    // Get all games that user has on his wishlist and Check if the game is already in the wishlist
     const wishlist = await getAllWishlistGamesByGamertag(req.session.user.gamertag);
     const gameExists = wishlist.find((wishlistedGame) => wishlistedGame.steam_app_id === game.steamAppId);
     if (gameExists) {

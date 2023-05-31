@@ -1,13 +1,10 @@
 import bcrypt from "bcrypt"
 import {
-    getUserByEmail, getUserByGamertag, getProfileImageByGamertag, checkIfUserExist,
+    getUserByEmail, getUserByGamertag, checkIfUserExist,
     create, update, updateUserPassword,
-    getEmailByPasswordResetToken, deletePasswordResetToken,
-    getAllOwnedGameByGamertag, addOwnedGameToUser,
-    removeGameFromOwnedList,
-    getAllWishlistGamesByGamertag, addGameToWishlist,
-    removeGameFromWishlist
+    getEmailByPasswordResetToken, deletePasswordResetToken
 } from "../database/userQueries.js";
+
 import { Router } from "express"
 const router = Router();
 

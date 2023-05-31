@@ -22,7 +22,7 @@
             updated_at: createdDate,
         };
 
-        const response = await fetch($serverURL + "/communityHub/posts", {
+        const response = await fetch($serverURL + $serverEndpoints.communityHub.posts, {
             credentials: "include",
             method: "POST",
             headers: {

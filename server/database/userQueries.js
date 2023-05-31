@@ -1,6 +1,8 @@
 import db from "./connection.js";
 import { v4 as uuidv4 } from 'uuid';
 
+/* Users */
+
 async function getAllUsers(gamertag) {
     const query = 'SELECT gamertag, profile_image, name, email FROM users WHERE gamertag != ?';
     const [rows] = await db.query(query, [gamertag]);
@@ -37,10 +39,8 @@ async function checkIfUserExist(email, gamertag) {
 
 async function create(user) {
     // Insert the new user data into the database
-    // const query = 'INSERT INTO users (name, gamertag, phone_number, email, password, owned_games, wish_list_games, events, friends, posts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    // const values = [user.name, user.gamertag, user.phoneNumber, user.email, user.encryptedPassword, user.ownedGames, user.wishListGames, user.events, user.friends, user.posts];
-    const query = 'INSERT INTO users (name, gamertag, phone_number, email, password) VALUES (?, ?, ?, ?, ?)';
-    const values = [user.name, user.gamertag, user.phoneNumber, user.email, user.encryptedPassword];
+    const query = 'INSERT INTO users (name, gamertag, phone_number, email, password, role) VALUES (?, ?, ?, ?, ?, ?)';
+    const values = [user.name, user.gamertag, user.phoneNumber, user.email, user.encryptedPassword, 'user'];
     await db.query(query, values);
 }
 
@@ -77,9 +77,6 @@ async function getEmailByPasswordResetToken(token) {
 async function createPasswordResetTokenInDB(email) {
     // Generate a unique token
     const token = uuidv4();
-
-    // Set expiration time to 1 min from now (Testing)
-    // const expirationTime = new Date(Date.now() + 60 * 1000); 
     // Set expiration time to 1 hour from now
     const expirationTime = new Date(Date.now() + 60 * 60 * 1000);
 
@@ -238,15 +235,6 @@ async function getAllMessages(friend) {
     const [rows] = await db.query(query, values);
     return rows;
 }
-
-/* async function addMessage(friend, message) {
-    const friendFound = await getUserByGamertag(friend.gamertag);
-    const createdDate = new Date().toISOString().split("T")[0];
-
-    const query = 'INSERT INTO messages (sender_id, receiver_id, message, created_at) VALUES (?, ?, ?, ?)';
-    const values = [friend.user_id, friendFound.id, message, createdDate];
-    await db.query(query, values);
-} */
 
 async function addMessage(friend, message) {
     const friendFound = await getUserByGamertag(friend.gamertag);

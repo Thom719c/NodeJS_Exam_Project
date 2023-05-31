@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { link, useNavigate, useLocation } from "svelte-navigator";
-
+    import { serverURL } from "../../stores/stores"; 
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -9,7 +9,6 @@
     let currentPage = 1;
     let pageSize = "10";
     let searchParam;
-    let isImage = true;
 
     onMount(async () => {
         const params = new URLSearchParams($location.search);
@@ -22,7 +21,7 @@
         // `https://api.steampowered.com/ISteamApps/GetAppList/v2/`                     // All games
         // `https://store.steampowered.com/api/appdetails?appids=${appid}&l=english`    // Gets games information by appid and in english
         // `https://steamcdn-a.akamaihd.net/steam/apps/${game.appid}/header.jpg`        // Gets image by appid
-        const url = `http://localhost:3000/api/gameMarket${searchParam}?page=${currentPage}&pageSize=${pageSize}`;
+        const url = $serverURL + `/api/gameMarket${searchParam}?page=${currentPage}&pageSize=${pageSize}`;
         const response = await fetch(url);
         const data = await response.json();
         games = data;

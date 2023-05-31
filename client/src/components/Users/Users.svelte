@@ -1,11 +1,7 @@
 <script>
     import { afterUpdate, onMount } from "svelte";
     import { useNavigate } from "svelte-navigator";
-    import {
-        session,
-        serverURL,
-        serverEndpoints,
-    } from "../../stores/stores.js";
+    import { serverURL, serverEndpoints } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
     import defaultProfileImage from "../../assets/profileDefault.png";
     import AddFriend from "./AddFriend.svelte";
@@ -16,13 +12,9 @@
     export let friends;
     let isFriend = false;
 
-    const showImage = (avatar) => {
-        if (!avatar) {
-            return defaultProfileImage;
-        }
-
-        return `${$serverURL}/images/avatar/${avatar}`;
-    };
+    onMount(() => {
+        handleCheckFriendlist();
+    });
 
     afterUpdate(() => {
         isFriend =
@@ -30,9 +22,13 @@
             undefined;
     });
 
-    onMount(() => {
-        handleCheckFriendlist();
-    });
+    const showImage = (avatar) => {
+        if (!avatar) {
+            return defaultProfileImage;
+        }
+
+        return `${$serverURL}/images/avatar/${avatar}`;
+    };
 
     const handleCheckFriendlist = async () => {
         const url = $serverURL + $serverEndpoints.user.friendlist;

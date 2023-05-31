@@ -1,19 +1,8 @@
 import db from "../database/connection.js";
 import { getUserByGamertag, removePost, removeComment } from "../database/userQueries.js";
-import { Router } from "express"
 
+import { Router } from "express"    
 const router = Router();
-
-
-// Global community chat route
-router.get("/global", (req, res) => {
-    // Handle global community chat logic here
-});
-
-// Private community chat route
-router.get("/private", (req, res) => {
-    // Handle private community chat logic here
-});
 
 router.get("/posts", async (req, res) => {
     const [rows] = await db.query(`SELECT id, user_id, gamertags, title, content, state, DATE_FORMAT(created_at, '%Y-%m-%d') AS created_at, DATE_FORMAT(updated_at, '%Y-%m-%d') AS updated_at FROM posts`);
@@ -122,10 +111,8 @@ router.patch("/comments", async (req, res) => {
         return res.status(404).send({ message: "The comment content cannot be empty." });
     }
     
-    const query = "UPDATE comments SET content = ? WHERE id = ?;";
-    
+    const query = "UPDATE comments SET content = ? WHERE id = ?;";    
     const values = [req.body.content, req.body.id];
-    console.log(values)
 
     await db.query(query, values);
 
@@ -136,7 +123,7 @@ router.delete("/posts/:id", async (req, res) => {
     const postId = req.params.id;
     const postTitle = req.body.title
 
-    if (!req.session.user?.gamertag) {
+    if (!req.session.user?.gamertag || !postTitle) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
     }
 
@@ -149,15 +136,13 @@ router.delete("/comments/:id", async (req, res) => {
     const postId = req.params.id;
     const commentId = req.body.id;
 
-    if (!req.session.user?.gamertag) {
+    if (!req.session.user?.gamertag || !commentId) {
         return res.status(400).send({ message: "Missing the keys in the body or not logged in, if is logged in try login again." });
     }
 
     await removeComment(req.session.user.gamertag, postId, commentId);
 
     res.status(201).send({ message:'Your comment was removed successfully from communityHub' });
-
-
 })
 
 export default router;

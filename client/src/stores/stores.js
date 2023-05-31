@@ -28,6 +28,7 @@ export const serverEndpoints = readable({
         friendlist: "/users/friendlist",
         searchUsers: "/users",
         messages: "/users/messages",
+        message: "/users/message",
     }
 });
 

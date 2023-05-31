@@ -1,14 +1,9 @@
 <script>
     import { onMount, afterUpdate } from "svelte";
-    import {
-        session,
-        serverURL,
-        serverEndpoints,
-    } from "../../stores/stores.js";
-    import { useNavigate, useParams } from "svelte-navigator";
+    import { serverURL, serverEndpoints } from "../../stores/stores.js";
+    import { useParams } from "svelte-navigator";
     import Users from "../../components/Users/Users.svelte";
 
-    const navigate = useNavigate();
     const params = useParams();
 
     let users = [];

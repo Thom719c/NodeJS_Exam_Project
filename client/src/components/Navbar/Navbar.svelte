@@ -1,7 +1,7 @@
 <script>
-    import { Router, Link, link, Route } from "svelte-navigator";
+    import { Router, link, Route } from "svelte-navigator";
     import { session } from "../../stores/stores";
-    import toast, { Toaster } from "svelte-french-toast";
+    import { Toaster } from "svelte-french-toast";
     import Home from "../../pages/Home/Home.svelte";
     import GameMarket from "../../pages/Game/GameMarket.svelte";
     import GameInfo from "../../pages/Game/GameInfo.svelte";

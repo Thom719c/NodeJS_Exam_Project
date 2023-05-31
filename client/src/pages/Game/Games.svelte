@@ -4,7 +4,6 @@
     session,
     selectedGame,
     serverURL,
-    serverEndpoints,
   } from "../../stores/stores.js";
   import toast from "svelte-french-toast";
   import defaultGameImage from "../../assets/defaultGameImage.png";

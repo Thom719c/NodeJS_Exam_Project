@@ -1,4 +1,4 @@
-    import toast, { Toaster } from "svelte-french-toast";
+    import toast from "svelte-french-toast";
 
     export const addToWishlist = (appid, name) => {
         const url = 'http://localhost:3000/users/wishlist';

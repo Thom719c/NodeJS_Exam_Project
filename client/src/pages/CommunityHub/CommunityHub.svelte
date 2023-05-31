@@ -6,16 +6,13 @@
         serverURL,
         serverEndpoints,
     } from "../../stores/stores.js";
-    import { useNavigate } from "svelte-navigator";
     import CreatePost from "../../components/ComunnityHub/CreatePost.svelte";
-
-    const navigate = useNavigate();
 
     let posts = [];
     let showCreatePostPopup = false;
 
     onMount(async () => {
-        const response = await fetch($serverURL + "/communityHub/posts");
+        const response = await fetch($serverURL + $serverEndpoints.communityHub.posts);
 
         if (response.ok) {
             const data = await response.json();

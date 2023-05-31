@@ -6,6 +6,7 @@
         addToWishlist,
         addToOwnedGame,
     } from "../../components/FetchingService/GameListUtils.js";
+    import { serverURL } from "../../stores/stores.js";
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -17,9 +18,7 @@
         const params = new URLSearchParams($location.search);
         appid = params.get("appid");
 
-        const response = await fetch(
-            "http://localhost:3000/api/gameInfo/" + appid
-        );
+        const response = await fetch($serverURL + "/api/gameInfo/" + appid);
         const data = await response.json();
         gameInfo = data[appid].data;
     });
