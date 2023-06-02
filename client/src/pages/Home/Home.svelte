@@ -1,4 +1,5 @@
 <script>
+    import GamingOasisLogo from "../../assets/GamingOasisLogo.png";
 </script>
 
 <div
@@ -11,7 +12,7 @@
     </div>
     <img
         class="img-container img-fluid mx-auto d-block boxshadow"
-        src="src/assets/GamingOasisLogo.png"
+        src={GamingOasisLogo}
         alt="Logo"
     />
 </div>

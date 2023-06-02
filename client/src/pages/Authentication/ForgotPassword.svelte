@@ -2,6 +2,7 @@
     import { serverURL, serverEndpoints } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
     import { useNavigate } from "svelte-navigator";
+    import GamingOasisLogoIconTransparrent from "../../assets/GamingOasisLogoIconTransparrent.png"
 
     const navigate = useNavigate();
 
@@ -48,7 +49,7 @@
             <div class="col-lg-12 mt-5">
                 <img
                     class="img-fluid mx-auto d-block"
-                    src="../src/assets/GamingOasisLogoIconTransparrent.png"
+                    src={GamingOasisLogoIconTransparrent}
                     width="150"
                     alt="Logo"
                 />
