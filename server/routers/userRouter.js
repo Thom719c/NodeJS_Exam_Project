@@ -47,10 +47,10 @@ router.get("/profileImage", async (req, res) => {
 });
 
 /* Owned games */
-router.get("/ownedGames", async (req, res) => {
-    const gamertag = req.session.user?.gamertag;
+router.get("/ownedGames/:gamertag", async (req, res) => {
+    const gamertag = req.params.gamertag;
     if (!gamertag || !req.session.user) {
-        return res.status(400).send({ message: "Need to be logged in!" });
+        return res.status(400).send({ message: "Invalid gamertag or user not authenticated" });
     }
 
     const ownedGames = await getAllOwnedGameByGamertag(gamertag);
@@ -90,10 +90,10 @@ router.delete("/ownedGames", async (req, res) => {
 });
 
 /* Wishlist */
-router.get("/wishlist", async (req, res) => {
-    const gamertag = req.session.user?.gamertag;
+router.get("/wishlist/:gamertag", async (req, res) => {
+    const gamertag = req.params.gamertag;
     if (!gamertag || !req.session.user) {
-        return res.status(400).send({ message: "Need to be logged in!" });
+        return res.status(400).send({ message: "Invalid gamertag or user not authenticated" });
     }
 
     const wishlist = await getAllWishlistGamesByGamertag(gamertag);

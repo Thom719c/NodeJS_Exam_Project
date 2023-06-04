@@ -148,11 +148,11 @@
             <UserList />
         </PrivateRoute>
 
-        <PrivateRoute path="/userGameList">
+        <PrivateRoute path="/userGameList/:gamertag">
             <UserGameList />
         </PrivateRoute>
 
-        <PrivateRoute path="/wishlist">
+        <PrivateRoute path="/wishlist/:gamertag">
             <UserWishlist />
         </PrivateRoute>
 

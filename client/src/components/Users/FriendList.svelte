@@ -36,6 +36,10 @@
     };
 
     const removeUserFromFriendList = async (friend) => {
+        const confirmRemove = confirm("Are you sure you want to remove this friend?");
+        if (!confirmRemove) {
+            return;
+        }
         const url = $serverURL + $serverEndpoints.user.friendlist;
         const removeFriend = {
             id: friend.user_id,

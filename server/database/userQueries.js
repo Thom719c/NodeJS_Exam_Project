@@ -2,7 +2,6 @@ import db from "./connection.js";
 import { v4 as uuidv4 } from 'uuid';
 
 /* Users */
-
 async function getAllUsers(gamertag) {
     const query = 'SELECT gamertag, profile_image, name, email FROM users WHERE gamertag != ?';
     const [rows] = await db.query(query, [gamertag]);
@@ -150,11 +149,10 @@ async function removeGameFromWishlist(gamertag, game) {
 }
 
 /*Community Hub*/
-
 async function removePost(gamertag, postId) {
     const user = await getUserByGamertag(gamertag);
 
-    await removeCommentsByPostId(user, postId);
+    await removeCommentsByPostId(postId);
 
     const query = 'DELETE FROM posts WHERE user_id = ? AND id = ?';
     const values = [user.id, postId];
@@ -169,14 +167,13 @@ async function removeComment(gamertag, postId, commentId) {
     await db.query(query, values);
 }
 
-async function removeCommentsByPostId(user, postId) {
-    const query = 'DELETE FROM comments WHERE user_id = ? AND post_id = ?';
-    const values = [user.id, postId];
+async function removeCommentsByPostId(postId) {
+    const query = 'DELETE FROM comments WHERE post_id = ?';
+    const values = [postId];
     await db.query(query, values);
 }
 
 /* Friendlist */
-
 async function getAllFriendlistByGamertag(gamertag) {
     const query = 'SELECT f.user_id, f.name, f.email, f.gamertag, f.profile_image FROM users u JOIN friendlist f ON u.id = f.user_id WHERE u.gamertag = ?';
     const values = [gamertag];

@@ -39,6 +39,9 @@
     };
 
     const goToAllUserPage = () => {
+        if (!searchQuery) {
+            searchQuery = "all";
+        }
         navigate(`/users/${searchQuery}`, { replace: true });
         searchQuery = "";
     };

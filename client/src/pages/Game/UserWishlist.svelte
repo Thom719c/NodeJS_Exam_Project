@@ -6,14 +6,16 @@
         serverEndpoints,
     } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
-    import { useNavigate } from "svelte-navigator";
+    import { useNavigate, useParams } from "svelte-navigator";
     import { addToOwnedGame } from "../../components/FetchingService/GameListUtils.js";
 
     let games = [];
     const navigate = useNavigate();
+    const params = useParams();
 
     onMount(async () => {
-        const url = $serverURL + $serverEndpoints.user.wishlist;
+        const url =
+            $serverURL + $serverEndpoints.user.wishlist + $params.gamertag;
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
         games = data.data;
@@ -24,10 +26,10 @@
         addToOwnedGame(game.steam_app_id, game.game_name);
         // Show a toast message after successful move
         toast.success(`Game "${game.game_name}" moved to Owned Games.`, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
+            duration: 5000,
+            position: "bottom-right",
+            style: "border-radius: 200px; background: #333; color: #fff;",
+        });
         removeGameFromWishlist(game, true);
     };
 
@@ -52,11 +54,13 @@
             );
             if (!moved) {
                 toast.success(
-                    `Game "${game.game_name}" removed from Wishlist.`, {
-                duration: 5000,
-                position: "bottom-right",
-                style: "border-radius: 200px; background: #333; color: #fff;",
-            });
+                    `Game "${game.game_name}" removed from Wishlist.`,
+                    {
+                        duration: 5000,
+                        position: "bottom-right",
+                        style: "border-radius: 200px; background: #333; color: #fff;",
+                    }
+                );
             }
         } else {
             toast.error("Failed to remove the game from Wishlist.", {
@@ -68,6 +72,10 @@
     };
 
     const goBackToProfile = () => {
+        if ($params.gamertag !== $session.gamertag) {
+            navigate("/profile/" + $params.gamertag);
+            return;
+        }
         navigate("/profile");
     };
 </script>
@@ -78,7 +86,7 @@
             Go Back
         </button>
         <h2 class="title text-gradient">
-            Your wishlist {$session.gamertag}
+            Your wishlist {$params.gamertag}
         </h2>
     </div>
 
@@ -102,16 +110,19 @@
                             {game.game_name}
                         </p>
                         <div class="button-container">
-                            <button
-                                class="move-button"
-                                on:click={() => moveGameToOwned(game)}
-                                >Move to Owned</button
-                            >
-                            <button
-                                class="remove-button"
-                                on:click={() => removeGameFromWishlist(game)}
-                                >Remove</button
-                            >
+                            {#if $params.gamertag === $session.gamertag}
+                                <button
+                                    class="move-button"
+                                    on:click={() => moveGameToOwned(game)}
+                                    >Move to Owned</button
+                                >
+                                <button
+                                    class="remove-button"
+                                    on:click={() =>
+                                        removeGameFromWishlist(game)}
+                                    >Remove</button
+                                >
+                            {/if}
                         </div>
                     </div>
                 </li>
