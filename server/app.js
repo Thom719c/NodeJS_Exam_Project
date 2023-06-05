@@ -56,24 +56,18 @@ io.on("connection", (socket) => {
     console.log("New client connected");
 
     socket.on("joinRoom", (roomId) => {
-        console.log("Client joined", roomId);
         socket.join(roomId);
     });
 
     // Handle new comment submission
-    socket.on("newComment", (roomId, comment) => {
-        // Store the comment in the database
-        console.log(roomId, comment)
-
+    socket.on("newComment", (roomId, comment) => {        
         // Emit the comment to all connected clients
         io.to(roomId).emit("commentAdded", comment);
     });
     socket.on("editComment", (roomId, comment) => {
-        console.log(roomId, comment)
         io.to(roomId).emit("commentEdited", comment);
     })
     socket.on("removeComment", (roomId, comment) => {
-        console.log(roomId, comment)
         io.to(roomId).emit("commentRemoved", comment);
     })
 
