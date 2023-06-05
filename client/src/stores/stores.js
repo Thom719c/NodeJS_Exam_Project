@@ -23,8 +23,8 @@ export const serverEndpoints = readable({
     },
     user: {
         profileimage: "/users/profileImage",
-        ownedGame: "/users/ownedGames",
-        wishlist: "/users/wishlist",
+        ownedGame: "/users/ownedGames/",
+        wishlist: "/users/wishlist/",
         friendlist: "/users/friendlist",
         searchUsers: "/users",
         messages: "/users/messages",

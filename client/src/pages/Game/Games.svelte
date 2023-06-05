@@ -389,7 +389,6 @@
   }
 
   .remove-button {
-    width: 75px;
     height: 35px;
     background-color: #ff0000;
     color: #fff;

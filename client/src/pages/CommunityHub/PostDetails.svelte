@@ -265,9 +265,6 @@
                     >
                         <i class="bi bi-x-circle" />
                     </button>
-                    <button class="small-button btn btn-outline-primary">
-                        <i class="bi bi-pencil-square" />
-                    </button>
                 {/if}
             </div>
         </div>

@@ -69,11 +69,11 @@
     };
 
     function ownedGames() {
-        navigate("/userGameList", { replace: true });
+        navigate("/userGameList/" + gamertag, { replace: true });
     }
 
     function wishlist() {
-        navigate("/wishlist", { replace: true });
+        navigate("/wishlist/" + gamertag, { replace: true });
     }
 </script>
 
@@ -210,6 +210,7 @@
         border-color: #e5e047;
         font-weight: bold;
         letter-spacing: 1px;
+        width: 170px;
     }
 
     .btn-outline-primary:hover {

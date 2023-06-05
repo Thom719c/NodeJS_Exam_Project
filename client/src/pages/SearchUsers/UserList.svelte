@@ -34,6 +34,11 @@
     });
 
     const searchUsers = () => {
+        if (searchQuery.toLowerCase() === "all") {
+            filteredUsers = users;
+            return;
+        }
+        
         filteredUsers = users.filter((user) => {
             const query = searchQuery.toLowerCase();
             const isMatch = user.name.toLowerCase().includes(query);

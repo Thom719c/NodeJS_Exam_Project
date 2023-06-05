@@ -6,13 +6,15 @@
         serverEndpoints,
     } from "../../stores/stores.js";
     import toast from "svelte-french-toast";
-    import { useNavigate } from "svelte-navigator";
+    import { useNavigate, useParams } from "svelte-navigator";
 
     let games = [];
     const navigate = useNavigate();
+    const params = useParams();
 
     onMount(async () => {
-        const url = $serverURL + $serverEndpoints.user.ownedGame;
+        const url =
+            $serverURL + $serverEndpoints.user.ownedGame + $params.gamertag;
         const response = await fetch(url, { credentials: "include" });
         const data = await response.json();
         games = data.data;
@@ -33,7 +35,7 @@
             credentials: "include",
         });
         const data = await response.json();
-        
+
         if (response.ok) {
             games = games.filter(
                 (g) => g.steam_app_id !== removeGame.steamAppId
@@ -53,6 +55,10 @@
     };
 
     const goBackToProfile = () => {
+        if ($params.gamertag !== $session.gamertag) {
+            navigate("/profile/" + $params.gamertag);
+            return;
+        }
         navigate("/profile");
     };
 </script>
@@ -63,7 +69,7 @@
             Go Back
         </button>
         <h2 class="title text-gradient">
-            The games you own {$session.gamertag}
+            The games you own {$params.gamertag}
         </h2>
     </div>
     {#if games.length === 0}
@@ -86,12 +92,14 @@
                             {game.game_name}
                         </p>
                         <div class="button-container">
-                            <button
-                                class="remove-button"
-                                on:click={() => removeGameFromList(game)}
-                            >
-                                Remove
-                            </button>
+                            {#if $params.gamertag === $session.gamertag}
+                                <button
+                                    class="remove-button"
+                                    on:click={() => removeGameFromList(game)}
+                                >
+                                    Remove
+                                </button>
+                            {/if}
                         </div>
                     </div>
                 </li>

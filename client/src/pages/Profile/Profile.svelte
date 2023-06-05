@@ -180,11 +180,11 @@
     }
 
     function ownedGames() {
-        navigate("/userGameList", { replace: true });
+        navigate("/userGameList/" + $session.gamertag, { replace: true });
     }
 
     function wishlist() {
-        navigate("/wishlist", { replace: true });
+        navigate("/wishlist/" + $session.gamertag, { replace: true });
     }
 
     function friendList() {
@@ -309,10 +309,6 @@
                 {/if}
 
                 {#if !isEditMode}
-                    <div class="col-lg-12 profile-button">
-                        <Logout />
-                    </div>
-
                     <div class="col-lg-12 title text-gradient profile-button">
                         <button
                             class="btn btn-outline-primary"
@@ -332,6 +328,10 @@
                             <i class="bi bi-person-fill-add" />
                             Friends
                         </button>
+                    </div>
+
+                    <div class="col-lg-12 profile-button">
+                        <Logout />
                     </div>
                 {/if}
             </div>
