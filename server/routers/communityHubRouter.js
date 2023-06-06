@@ -82,6 +82,10 @@ router.post("/comments", async (req, res) => {
         return res.status(404).send({ message: "The comment content cannot be empty." });
     }
 
+    if (req.body.content.length > 255) {
+        return res.status(400).send({ message: "The comment content is too long." });
+    }
+
     const createdDate = new Date().toISOString().split("T")[0];
 
     const user = await getUserByGamertag(gamertag);
